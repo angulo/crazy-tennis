@@ -2,7 +2,7 @@ SUBDIRS = code
 
 DIST_SUBDIRS = code
 
-crazytennisdocdir = ${prefix}/doc/crazy-tennis
+crazytennisdocdir = ${prefix}/doc/CrazyTennis
 
 crazytennisdoc_DATA = \
 	README\

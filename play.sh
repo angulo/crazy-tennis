@@ -1,6 +1,6 @@
-if [ -f "code/crazy-tennis" ]
+if [ -f "code/CrazyTennis" ]
 then
-	cd config; ../code/crazy-tennis;
+	cd config; ../code/CrazyTennis;
 else
 	echo "Project not built, first run:"
 	echo "$ sh ./autogen.sh"

@@ -14,10 +14,10 @@ AM_CFLAGS =\
 
 AM_LDFLAGS = -I /usr/local/lib $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
 
-bin_PROGRAMS = crazy-tennis
+bin_PROGRAMS = CrazyTennis
 
-crazy-tennis_SOURCES = \
+CrazyTennis_SOURCES = \
 	src/main.cpp
 
-crazy-tennis_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
-crazy-tennis_LDADD = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
+CrazyTennis_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
+CrazyTennis_LDADD = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
