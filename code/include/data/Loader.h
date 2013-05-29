@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * Loader.h -- Data loader header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,31 +16,34 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <OGF/OGF.h>
+#include <stdlib.h>
+#include <string>
 
-#include "data/Loader.h"
+#include <libxml++/libxml++.h>
+#include <libxml++/parsers/textreader.h>
 
-int
-main(int argc, char **argv)
-{
-	CrazyTennis::Data::Loader *loader = new CrazyTennis::Data::Loader("../data/game");
-	loader->loadPlayers("players.xml");
+#include "data/Player.h"
+#include "data/Tournament.h"
 
-	/*
-	OGF::ISceneFactory *sceneFactory = new CamelRace::SceneFactory();
+namespace CrazyTennis {
+	
+	namespace Data {
+	
+		class Loader {
+			
+			private:
+				
+				std::string _path;
+			
+			public:
+				
+				Loader(const std::string &path);
+				~Loader();
+			
+				std::list<Player *> loadPlayers(const std::string &fileName);
 
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", APPLICATION_WINDOW_NAME, sceneFactory, CamelRace::Scene::MENU_MAIN)) {
-		return 1;
-	}
+		};
 
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
+	};
 
-	OGF::ModelFactory::getSingletonPtr()->initialize(CamelRace::Model::getModelMap());
-
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
-
-	*/
-
-	return 0;
-}
+};

@@ -15,6 +15,7 @@ LT_INIT
 PKG_CHECK_MODULES(OGF, [OGF])
 PKG_CHECK_MODULES(OgreBullet, [OgreBullet])
 PKG_CHECK_MODULES(bullet, [bullet])
+PKG_CHECK_MODULES(xml, [libxml++-2.6])
 
 AC_OUTPUT([
 	Makefile
