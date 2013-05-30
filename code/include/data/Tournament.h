@@ -16,6 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _DATA_TOURNAMENT_H_
+#define _DATA_TOURNAMENT_H_
+
 #include <list>
 
 namespace CrazyTennis {
@@ -38,3 +41,5 @@ namespace CrazyTennis {
 	};
 
 };
+
+#endif

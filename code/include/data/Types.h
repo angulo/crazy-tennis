@@ -1,5 +1,5 @@
 /* 
- * Loader.h -- Data loader header file
+ * Types.h -- Data types definition
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,41 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DATA_LOADER_H_
-#define _DATA_LOADER_H_
+#ifndef _DATA_TYPES_H_
+#define _DATA_TYPES_H_
 
-#include <fstream>
-#include <locale>
-#include <stdlib.h>
+#include <map>
 #include <string>
 
-#include <json/json.h>
-
-#include "data/Player.h"
-#include "data/Tournament.h"
-#include "data/Types.h"
-
-namespace CrazyTennis {
-	
-	namespace Data {
-	
-		class Loader {
-			
-			private:
-				
-				std::string _path;
-			
-			public:
-				
-				Loader(const std::string &path);
-				~Loader();
-
-				std::list<Player *> loadPlayers(const std::string &fileName);
-
-		};
-
-	};
-
-};
+typedef std::map<std::string, float> SkillSet;
 
 #endif

@@ -1,0 +1,31 @@
+{
+	"players": [
+		{
+			"id": 1,
+			"name": "Javier Angulo",
+			"skills": {
+				"speed": 0.8,
+				"precision": 0.8,
+				"power": 0.8
+			}
+		},
+		{
+			"id": 2,
+			"name": "Gabriel Alises",
+			"skills": {
+				"speed": 0.4,
+				"precision": 0.4,
+				"power": 0.4
+			}
+		},
+		{
+			"id": 3,
+			"name": "Sergio García",
+			"skills": {
+				"speed": 0.2,
+				"precision": 0.2,
+				"power": 0.2
+			}
+		}
+	]
+}

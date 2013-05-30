@@ -17,16 +17,13 @@
  */
 
 #include "data/Loader.h"
-#include <iostream>
 
 using namespace CrazyTennis::Data;
 
 Loader::Loader(const std::string &path)
 	:	_path(path)
 {
-	// Set the global C and C++ locale to the user-configured locale,
-  // so we can use std::cout with UTF-8, via Glib::ustring, without exceptions.
-	std::locale::global(std::locale(""));
+
 }
 
 Loader::~Loader()
@@ -39,36 +36,33 @@ Loader::loadPlayers(const std::string &fileName)
 {
 	std::list<Player *> result;
 	std::string filePath = _path + "/" + fileName;
-	xmlpp::TextReader reader(filePath);
 
-	reader.read();
-	reader.move_to_element();
+	Json::Value root;
+	Json::Reader reader;
+	std::ifstream inputStream(filePath.c_str(), std::ifstream::in);
 
-	while(reader.read()) {
 
-		int id;
-		std::string name;
-
-		if (reader.has_attributes()) {
-			reader.move_to_first_attribute();
-
-			do {
-				std::string attrName = reader.get_name();
-				std::string attrValue = reader.get_value();
-
-				if (attrName == "id") {
-					id = atoi(attrValue.c_str());
-				} else if (attrName == "name") {
-					name = attrValue;
-				}
-
-			} while (reader.move_to_next_attribute());
-
-			result.push_back(new Player(id, name));
-			std::cout << id << " " << name << std::endl;
-			reader.move_to_element();
-		}
+	if (!reader.parse(inputStream, root)) {
+		std::cout  << "Errors when parsing players file\n" << reader.getFormattedErrorMessages();
+		throw "Abort!";
 	}
+
+	const Json::Value players = root["players"];
+
+	for (int i = 0; i < players.size(); i++) {
+		SkillSet skillSet;
+		const Json::Value player = players[i];
+		int id = player["id"].asInt();
+		std::string name = player["name"].asString();
+		
+		const Json::Value skills = player["skills"];
+		skillSet["speed"] = skills["speed"].asFloat();
+		skillSet["precision"] = skills["precision"].asFloat();
+		skillSet["power"] = skills["power"].asFloat();
+
+		result.push_back(new Player(id, name, skillSet));
+	}
+
 
 	return result;
 }

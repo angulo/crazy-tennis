@@ -24,7 +24,7 @@ int
 main(int argc, char **argv)
 {
 	CrazyTennis::Data::Loader *loader = new CrazyTennis::Data::Loader("../data/game");
-	loader->loadPlayers("players.xml");
+	loader->loadPlayers("players.json");
 
 	/*
 	OGF::ISceneFactory *sceneFactory = new CamelRace::SceneFactory();

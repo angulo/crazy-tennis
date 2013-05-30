@@ -16,7 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _DATA_PLAYER_H_
+#define _DATA_PLAYER_H_
+
 #include <string>
+
+#include "data/Types.h"
 
 namespace CrazyTennis {
 	
@@ -28,10 +33,11 @@ namespace CrazyTennis {
 				
 				int _id;
 				std::string _name;
+				SkillSet _skills;
 			
 			public:
 			
-				Player(const int &id, const std::string &name);
+				Player(const int &id, const std::string &name, const SkillSet &skills);
 				~Player();
 
 		};
@@ -39,3 +45,5 @@ namespace CrazyTennis {
 	};
 
 };
+
+#endif
