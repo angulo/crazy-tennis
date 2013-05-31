@@ -41,6 +41,7 @@ namespace CrazyTennis {
 				Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual);
 				~Player();
 
+				std::string getName() const;
 		};
 
 	};

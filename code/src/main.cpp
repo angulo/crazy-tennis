@@ -18,13 +18,10 @@
 
 #include <OGF/OGF.h>
 
-#include "data/Loader.h"
-
 int
 main(int argc, char **argv)
 {
-	CrazyTennis::Data::Loader *loader = new CrazyTennis::Data::Loader("../data/game");
-	loader->loadPlayers("players.json");
+	std::srand(unsigned(std::time(0)));
 
 	/*
 	OGF::ISceneFactory *sceneFactory = new CamelRace::SceneFactory();

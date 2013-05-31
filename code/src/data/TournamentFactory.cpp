@@ -21,6 +21,7 @@
 using namespace CrazyTennis::Data;
 
 TournamentFactory::TournamentFactory(const std::list<Player *> basePlayers)
+	: _basePlayers(basePlayers)
 {
 }
 
@@ -31,5 +32,10 @@ TournamentFactory::~TournamentFactory()
 Tournament *
 TournamentFactory::create(const TournamentConfig &config, PlayerId currentPlayerId)
 {
-	
+	// Shuffle the players
+	std::vector<Player *> basePlayersShuffable(_basePlayers.begin(), _basePlayers.end());
+
+	std::random_shuffle(basePlayersShuffable.begin(), basePlayersShuffable.end());
+
+	return NULL;
 }

@@ -29,3 +29,9 @@ Player::~Player()
 {
 
 }
+
+std::string
+Player::getName() const
+{
+	return _name;
+}
