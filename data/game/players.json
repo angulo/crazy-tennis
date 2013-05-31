@@ -7,6 +7,10 @@
 				"speed": 0.8,
 				"precision": 0.8,
 				"power": 0.8
+			},
+			"visual": {
+				"tshirt": "red",
+				"shorts": "white"
 			}
 		},
 		{
@@ -16,6 +20,10 @@
 				"speed": 0.4,
 				"precision": 0.4,
 				"power": 0.4
+			},
+			"visual": {
+				"tshirt": "white",
+				"shorts": "white"
 			}
 		},
 		{
@@ -25,6 +33,10 @@
 				"speed": 0.2,
 				"precision": 0.2,
 				"power": 0.2
+			},
+			"visual": {
+				"tshirt": "black",
+				"shorts": "black"
 			}
 		}
 	]

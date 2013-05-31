@@ -1,5 +1,5 @@
 /* 
- * Player.h -- Player data header file
+ * TournamentFactory.h -- Header file for the tournament factory
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,35 +16,30 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DATA_PLAYER_H_
-#define _DATA_PLAYER_H_
+#ifndef _DATA_TOURNAMENT_FACTORY_H_
+#define _DATA_TOURNAMENT_FACTORY_H_
 
-#include <string>
+#include <list>
 
+#include "data/Player.h"
+#include "data/Tournament.h"
 #include "data/Types.h"
 
 namespace CrazyTennis {
 	
 	namespace Data {
-
-		class Player {
-			
-			protected:
-				
-				PlayerId _id;
-				std::string _name;
-				SkillSet _skills;
-				VisualSet _visual;
+		
+		class TournamentFactory {
 			
 			public:
-			
-				Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual);
-				~Player();
+				
+				TournamentFactory(const std::list<Player *> basePlayers);
+				~TournamentFactory();
 
+				Tournament *create(const TournamentConfig &config, PlayerId currentPlayerId);
 		};
-
-	};
-
+	}
 };
+
 
 #endif

@@ -51,8 +51,10 @@ Loader::loadPlayers(const std::string &fileName)
 
 	for (int i = 0; i < players.size(); i++) {
 		SkillSet skillSet;
+		VisualSet visualSet;
+
 		const Json::Value player = players[i];
-		int id = player["id"].asInt();
+		PlayerId id = player["id"].asUInt();
 		std::string name = player["name"].asString();
 		
 		const Json::Value skills = player["skills"];
@@ -60,7 +62,11 @@ Loader::loadPlayers(const std::string &fileName)
 		skillSet["precision"] = skills["precision"].asFloat();
 		skillSet["power"] = skills["power"].asFloat();
 
-		result.push_back(new Player(id, name, skillSet));
+		const Json::Value visual = player["visual"];
+		visualSet["tshirt"] = visual["tshirt"].asString();
+		visualSet["shorts"] = visual["tshirt"].asString();
+
+		result.push_back(new Player(id, name, skillSet, visualSet));
 	}
 
 

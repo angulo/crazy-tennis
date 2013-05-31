@@ -22,6 +22,32 @@
 #include <map>
 #include <string>
 
-typedef std::map<std::string, float> SkillSet;
+namespace CrazyTennis {
+
+	typedef unsigned short PlayerId;
+	
+	/** Set of game playing skills */
+	typedef std::map<std::string, float> SkillSet;
+	typedef std::map<std::string, std::string> VisualSet;
+
+	/** Game difficult level */
+	enum Difficulty
+	{
+		DIFFICULTY_EASY = 0,
+		DIFFICULTY_MEDIUM = 1,
+		DIFFICULTY_HARD = 2
+	};
+
+	/** Tournament configuration */
+	struct TournamentConfig
+	{
+		short steps;
+		Difficulty difficulty;
+		short sets;
+		short games;
+		bool tiebreak;
+	};
+
+};
 
 #endif

@@ -16,7 +16,6 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "data/Player.h"
 #include "data/Tournament.h"
 
 using namespace CrazyTennis::Data;

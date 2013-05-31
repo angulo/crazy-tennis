@@ -21,6 +21,8 @@
 
 #include <list>
 
+#include "data/Player.h"
+
 namespace CrazyTennis {
 	
 	namespace Data {
