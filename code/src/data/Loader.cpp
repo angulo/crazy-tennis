@@ -49,11 +49,11 @@ Loader::loadPlayers(const std::string &fileName)
 
 	const Json::Value players = root["players"];
 
-	for (int i = 0; i < players.size(); i++) {
+	for (Json::Value::iterator it = players.begin(); it != players.end(); it++) {
 		SkillSet skillSet;
 		VisualSet visualSet;
 
-		const Json::Value player = players[i];
+		const Json::Value player = *it;
 		PlayerId id = player["id"].asUInt();
 		std::string name = player["name"].asString();
 		
