@@ -22,6 +22,7 @@
 #include <list>
 
 #include "data/Player.h"
+#include "data/Types.h"
 
 namespace CrazyTennis {
 	
@@ -31,11 +32,12 @@ namespace CrazyTennis {
 			
 			protected:
 				
+				TournamentConfig _config;
 				std::list<Player *> _players;
 			
 			public:
 			
-				Tournament();
+				Tournament(const TournamentConfig &config, const std::list<Player *> &players);
 				~Tournament();
 
 		};

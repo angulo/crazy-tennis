@@ -20,7 +20,8 @@
 
 using namespace CrazyTennis::Data;
 
-Tournament::Tournament()
+Tournament::Tournament(const TournamentConfig &config, const std::list<Player *> &players)
+	: _players(players), _config(config)
 {
 }
 

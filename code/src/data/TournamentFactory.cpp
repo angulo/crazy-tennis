@@ -20,6 +20,34 @@
 
 using namespace CrazyTennis::Data;
 
+void
+TournamentFactory::_customizePlayer(Player *player, const Difficulty &difficulty)
+{
+	float multiplier = 1;
+
+	switch(difficulty) {
+		
+		case DIFFICULTY_EASY:
+			multiplier = 0.5;
+			break;
+		default:
+		case DIFFICULTY_MEDIUM:
+			multiplier = 1;
+			break;
+		case DIFFICULTY_HARD:
+			multiplier = 2;
+			break;
+	}
+
+	SkillSet skills = player->getSkills();
+
+	for (SkillSet::iterator it = skills.begin(); it != skills.end(); it++) {
+		it->second = std::min(1.f, it->second * multiplier);
+	}
+
+	player->setSkills(skills);
+}
+
 TournamentFactory::TournamentFactory(const std::list<Player *> basePlayers)
 	: _basePlayers(basePlayers)
 {
@@ -34,8 +62,24 @@ TournamentFactory::create(const TournamentConfig &config, PlayerId currentPlayer
 {
 	// Shuffle the players
 	std::vector<Player *> basePlayersShuffable(_basePlayers.begin(), _basePlayers.end());
-
 	std::random_shuffle(basePlayersShuffable.begin(), basePlayersShuffable.end());
 
-	return NULL;
+	// Select N players from the suffled vector, N == number of steps of the tournament
+	// and customize them with the tournament difficulty
+	std::vector<Player *> result;
+
+	for (std::vector<Player *>::iterator it = basePlayersShuffable.begin();
+		it != basePlayersShuffable.begin() + config.steps; it++) {
+
+		// Implicit copy constructor
+		Player *customizedPlayer = new Player(**it);
+		_customizePlayer(customizedPlayer, config.difficulty);
+
+		result.push_back(customizedPlayer);
+	}
+
+	Tournament *tournament = new Tournament(config,
+		std::list<Player *>(result.begin(), result.end()));
+
+	return tournament;
 }

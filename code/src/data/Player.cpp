@@ -35,3 +35,21 @@ Player::getName() const
 {
 	return _name;
 }
+
+PlayerId
+Player::getId() const
+{
+	return _id;
+}
+
+SkillSet
+Player::getSkills() const
+{
+	return _skills;
+}
+
+void
+Player::setSkills(SkillSet skills)
+{
+	_skills = skills;
+}

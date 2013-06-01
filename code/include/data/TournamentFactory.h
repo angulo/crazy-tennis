@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <functional>
 #include <list>
 #include <vector>
 
@@ -38,6 +39,8 @@ namespace CrazyTennis {
 			private:
 				
 				std::list<Player *> _basePlayers;
+
+				void _customizePlayer(Player *player, const Difficulty &difficulty);
 			
 			public:
 				
