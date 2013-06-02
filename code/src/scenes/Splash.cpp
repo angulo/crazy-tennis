@@ -23,7 +23,7 @@ using namespace CrazyTennis::Scene;
 Splash::Splash()
 {
 	_initConfigReader("scenes/main_menu.cfg");
-	// CEGUI::FontManager::getSingleton().create("MoanLisa-Big.font");
+	CEGUI::FontManager::getSingleton().create("SFSportsNight-70.font");
 }
 
 Splash::~Splash()
