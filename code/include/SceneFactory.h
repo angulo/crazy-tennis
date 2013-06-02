@@ -1,5 +1,5 @@
 /* 
- * Data.h -- Header file including all the data-related header files
+ * SceneFactory.h -- Scene factory header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,12 +16,27 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DATA_H_
-#define _DATA_H_
+#ifndef _SCENE_FACTORY_H_
+#define _SCENE_FACTORY_H_
 
-#include "data/Player.h"
-#include "data/Tournament.h"
-#include "data/TournamentFactory.h"
-#include "data/Types.h"
+#include <OGF/OGF.h>
+
+#include "scenes/Scenes.h"
+
+namespace CrazyTennis {
+
+	namespace Scene {
+		enum { 
+			SPLASH = 0
+		};
+	};
+
+	class SceneFactory : public OGF::ISceneFactory {
+		
+		public:
+
+			OGF::Scene * create(OGF::SceneId sceneId);
+	};
+};
 
 #endif

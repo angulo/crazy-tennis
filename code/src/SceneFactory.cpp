@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * SceneFactory.cpp -- Scene factory implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,22 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <OGF/OGF.h>
-
 #include "SceneFactory.h"
 
-int
-main(int argc, char **argv)
+using namespace CrazyTennis;
+
+OGF::Scene *
+SceneFactory::create(OGF::SceneId sceneId)
 {
-	std::srand(unsigned(std::time(0)));
+	OGF::Scene *scene = NULL;
 
-	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
-
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::SPLASH)) {
-		return 1;
+	switch(sceneId) {
+		case Scene::SPLASH:
+			scene = new Scene::Splash();
+			break;
+		default:
+			break;
 	}
 
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
-
-	//OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
-
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
-
-	return 0;
+	return scene;
 }

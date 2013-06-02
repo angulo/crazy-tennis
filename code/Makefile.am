@@ -18,10 +18,12 @@ bin_PROGRAMS = CrazyTennis
 
 CrazyTennis_SOURCES = \
 	src/main.cpp \
+	src/SceneFactory.cpp \
 	src/data/Loader.cpp \
 	src/data/Player.cpp \
 	src/data/Tournament.cpp \
-	src/data/TournamentFactory.cpp
+	src/data/TournamentFactory.cpp \
+	src/scenes/Splash.cpp
 
 CrazyTennis_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS) $(jsoncpp_LIBS)
 CrazyTennis_LDADD = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS) $(jsoncpp_LIBS)

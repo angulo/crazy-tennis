@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * Splash.h -- Splash screen menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,38 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _SCENE_SPLASH_H_
+#define _SCENE_SPLASH_H_
+
 #include <OGF/OGF.h>
 
 #include "SceneFactory.h"
 
-int
-main(int argc, char **argv)
-{
-	std::srand(unsigned(std::time(0)));
+namespace CrazyTennis {
+	
+	namespace Scene {
 
-	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
+		class Splash: public OGF::Scene {
 
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::SPLASH)) {
-		return 1;
-	}
+			private:
+				
+				CEGUI::Window *_windowBackground;
+				CEGUI::Window *_container;
 
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
+			public:
+				
+				Splash();
+				~Splash();
 
-	//OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
+				void enter();
+				void exit();
+				void pause();
+				void resume();
 
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
+				bool frameStarted(const Ogre::FrameEvent& event);
+				bool keyPressed(const OIS::KeyEvent &event);
+		};
+	};
+};
 
-	return 0;
-}
+#endif

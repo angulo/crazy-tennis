@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * Scenes.h -- Scenes header file to include all of them with a single include
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,9 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <OGF/OGF.h>
+#ifndef _SCENES_SCENES_H_
+#define _SCENES_SCENES_H_
 
-#include "SceneFactory.h"
+#include "scenes/Splash.h"
 
-int
-main(int argc, char **argv)
-{
-	std::srand(unsigned(std::time(0)));
-
-	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
-
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::SPLASH)) {
-		return 1;
-	}
-
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
-
-	//OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
-
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
-
-	return 0;
-}
+#endif

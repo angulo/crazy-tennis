@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * Data.h -- Header file including all the data-related header files
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <OGF/OGF.h>
+#ifndef _DATA_DATA_H_
+#define _DATA_DATA_H_
 
-#include "SceneFactory.h"
+#include "data/Player.h"
+#include "data/Tournament.h"
+#include "data/TournamentFactory.h"
+#include "data/Types.h"
 
-int
-main(int argc, char **argv)
-{
-	std::srand(unsigned(std::time(0)));
-
-	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
-
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::SPLASH)) {
-		return 1;
-	}
-
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
-
-	//OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
-
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
-
-	return 0;
-}
+#endif
