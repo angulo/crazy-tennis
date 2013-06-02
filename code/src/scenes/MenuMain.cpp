@@ -1,5 +1,5 @@
 /* 
- * Splash.cpp -- Splash screen menu scene
+ * MenuMain.cpp -- Main menu scene implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,12 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "scenes/Splash.h"
+#include "scenes/MenuMain.h"
 
 using namespace CrazyTennis::Scene;
 
 CEGUI::Window *
-Splash::_createTitleText(const std::string &text, const int &x, const int &y, const std::string &color)
+MenuMain::_createOptionText(const std::string &text, const int &x, const int &y, const std::string &color)
 {
 	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText");
 	result->setProperty("Text", CEGUI::String("[colour='") + color + "']" + text);
@@ -33,35 +33,20 @@ Splash::_createTitleText(const std::string &text, const int &x, const int &y, co
 	return result;
 }
 
-void
-Splash::_loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText)
+MenuMain::MenuMain()
 {
-	CEGUI::AnimationManager::getSingletonPtr()->loadAnimationsFromXML("Menu.xml");
-
-	CEGUI::AnimationInstance *animationTop = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextTop");
-	animationTop->setTargetWindow(topText);
-
-	CEGUI::AnimationInstance *animationBottom = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextBottom");
-	animationBottom->setTargetWindow(bottomText);
-
-	animationTop->start();
-	animationBottom->start();
-}
-
-Splash::Splash()
-{
-	_initConfigReader("scenes/menus/splash.cfg");
+	_initConfigReader("scenes/menus/main.cfg");
 	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_name") + ".font");
 }
 
-Splash::~Splash()
+MenuMain::~MenuMain()
 {
 }
 
 void
-Splash::enter()
+MenuMain::enter()
 {
-	_container = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "SplashContainer");
+	_container = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "MenuMainContainer");
 
 	_windowBackground = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage");
 	_windowBackground->setProperty("Image", "set:Menus image:Splash");
@@ -69,49 +54,30 @@ Splash::enter()
 
 	_container->addChildWindow(_windowBackground);
 
-	CEGUI::Window *crazyText = _createTitleText("CRAZY", _configValue<int>("crazy_text_x"), _configValue<int>("crazy_text_y"),
-		_configValue<std::string>("crazy_text_font_color"));
-	CEGUI::Window *tennisText = _createTitleText("TENNIS", _configValue<int>("tennis_text_x"), _configValue<int>("tennis_text_y"),
-		_configValue<std::string>("tennis_text_font_color"));
-
-	_container->addChildWindow(crazyText);
-	_container->addChildWindow(tennisText);
-
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
-
-	_loadAnimations(crazyText, tennisText);
 }
 
 void
-Splash::exit()
+MenuMain::exit()
 {
-	CEGUI::AnimationManager::getSingletonPtr()->destroyAnimation("SplashTextTop");
-	CEGUI::AnimationManager::getSingletonPtr()->destroyAnimation("SplashTextBottom");
 	CEGUI::WindowManager::getSingletonPtr()->destroyWindow(_container);
 }
 
 void
-Splash::pause()
+MenuMain::pause()
 {
 	_container->setVisible(false);
 }
 
 void
-Splash::resume()
+MenuMain::resume()
 {
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 	_container->setVisible(true);
 }
 
 bool
-Splash::keyPressed(const OIS::KeyEvent &event)
+MenuMain::keyPressed(const OIS::KeyEvent &event)
 {
-	switch(event.key) {
-
-		default:
-			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
-			break;
-	}
-	
 	return true;
 }

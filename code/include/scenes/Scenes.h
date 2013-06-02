@@ -20,5 +20,6 @@
 #define _SCENES_SCENES_H_
 
 #include "scenes/Splash.h"
+#include "scenes/MenuMain.h"
 
 #endif

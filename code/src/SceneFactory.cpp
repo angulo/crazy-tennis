@@ -29,6 +29,9 @@ SceneFactory::create(OGF::SceneId sceneId)
 		case Scene::SPLASH:
 			scene = new Scene::Splash();
 			break;
+		case Scene::MENU_MAIN:
+			scene = new Scene::MenuMain();
+			break;
 		default:
 			break;
 	}

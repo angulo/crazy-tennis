@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.h -- Scene factory header file
+ * MenuMain.h -- Main menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,38 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENE_FACTORY_H_
-#define _SCENE_FACTORY_H_
+#ifndef _SCENE_MENU_MAIN_H_
+#define _SCENE_MENU_MAIN_H_
 
 #include <OGF/OGF.h>
 
-#include "scenes/Scenes.h"
+#include "SceneFactory.h"
 
 namespace CrazyTennis {
-
+	
 	namespace Scene {
-		enum { 
-			SPLASH = 0,
-			MENU_MAIN = 1,
+
+		class MenuMain: public OGF::Scene {
+
+			private:
+				
+				CEGUI::Window *_windowBackground;
+				CEGUI::Window *_container;
+
+				CEGUI::Window * _createOptionText(const std::string &text, const int &x, const int &y, const std::string &color);
+
+			public:
+				
+				MenuMain();
+				~MenuMain();
+
+				void enter();
+				void exit();
+				void pause();
+				void resume();
+
+				bool keyPressed(const OIS::KeyEvent &event);
 		};
-	};
-
-	class SceneFactory : public OGF::ISceneFactory {
-		
-		public:
-
-			OGF::Scene * create(OGF::SceneId sceneId);
 	};
 };
 
