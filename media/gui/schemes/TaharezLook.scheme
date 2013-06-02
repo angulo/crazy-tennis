@@ -2,7 +2,7 @@
 <GUIScheme Name="TaharezLook">
 	<Imageset Filename="TaharezLook.imageset" />
 	<Imageset Filename="Menus.imageset" />
-	<Font Filename="SFSportsNight-70.font" />
+	<Font Filename="SFSportsNight-80.font" />
 	<LookNFeel Filename="TaharezLook.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
 	<FalagardMapping WindowType="TaharezLook/Button"      TargetType="CEGUI/PushButton"  Renderer="Falagard/Button"       LookNFeel="TaharezLook/Button" />

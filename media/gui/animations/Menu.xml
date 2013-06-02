@@ -1,0 +1,18 @@
+<Animations>
+	<AnimationDefinition name="SplashTextTop" duration="1.5" replayMode="once">
+		<Affector property="UnifiedXPosition" interpolator="UDim" applicationMethod="relative">
+			<KeyFrame position="0.0" value="{0,-1000}" />
+			<KeyFrame position="1.2" value="{0,200}" />
+			<KeyFrame position="1.5" value="{0,0}" />
+		</Affector>
+	</AnimationDefinition>
+	<AnimationDefinition name="SplashTextBottom" duration="2.0" replayMode="once">
+		<Affector property="UnifiedXPosition" interpolator="UDim" applicationMethod="relative">
+			<KeyFrame position="0.0" value="{0,-1000}" />
+			<KeyFrame position="0.5" value="{0,-1000}" />
+			<KeyFrame position="1.7" value="{0,80}" />
+			<KeyFrame position="2.0" value="{0,0}" />
+		</Affector>
+	</AnimationDefinition>
+</Animations>
+

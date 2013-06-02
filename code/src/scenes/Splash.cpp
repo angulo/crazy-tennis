@@ -20,10 +20,38 @@
 
 using namespace CrazyTennis::Scene;
 
+CEGUI::Window *
+Splash::_createTitleText(const std::string &text, const int &x, const int &y, const std::string &color)
+{
+	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText");
+	result->setProperty("Text", CEGUI::String("[colour='") + color + "']" + text);
+	result->setProperty("Font", _configValue<std::string>("font_name"));
+	result->setProperty("UnifiedAreaRect", "{{0," + Ogre::StringConverter::toString(x) 
+		+ "},{0," + Ogre::StringConverter::toString(y) + "},{1,0},{1,0}}");
+	result->setProperty("FrameEnabled", "False");
+
+	return result;
+}
+
+void
+Splash::_loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText)
+{
+	CEGUI::AnimationManager::getSingletonPtr()->loadAnimationsFromXML("Menu.xml");
+
+	CEGUI::AnimationInstance *animationTop = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextTop");
+	animationTop->setTargetWindow(topText);
+
+	CEGUI::AnimationInstance *animationBottom = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextBottom");
+	animationBottom->setTargetWindow(bottomText);
+
+	animationTop->start();
+	animationBottom->start();
+}
+
 Splash::Splash()
 {
-	_initConfigReader("scenes/main_menu.cfg");
-	CEGUI::FontManager::getSingleton().create("SFSportsNight-70.font");
+	_initConfigReader("scenes/menus/splash.cfg");
+	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_name") + ".font");
 }
 
 Splash::~Splash()
@@ -40,7 +68,18 @@ Splash::enter()
 	_windowBackground->setProperty("FrameEnabled", "False");
 
 	_container->addChildWindow(_windowBackground);
+
+	CEGUI::Window *crazyText = _createTitleText("CRAZY", _configValue<int>("crazy_text_x"), _configValue<int>("crazy_text_y"),
+		_configValue<std::string>("crazy_text_font_color"));
+	CEGUI::Window *tennisText = _createTitleText("TENNIS", _configValue<int>("tennis_text_x"), _configValue<int>("tennis_text_y"),
+		_configValue<std::string>("tennis_text_font_color"));
+
+	_container->addChildWindow(crazyText);
+	_container->addChildWindow(tennisText);
+
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
+
+	_loadAnimations(crazyText, tennisText);
 }
 
 void
