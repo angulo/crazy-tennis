@@ -21,11 +21,11 @@
 using namespace CrazyTennis::Scene;
 
 CEGUI::Window *
-Splash::_createTitleText(const std::string &text, const int &x, const int &y, const std::string &color)
+Splash::_createTitleText(const std::string &text, const int &x, const int &y, const std::string &color, const std::string &font)
 {
 	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText");
 	result->setProperty("Text", CEGUI::String("[colour='") + color + "']" + text);
-	result->setProperty("Font", _configValue<std::string>("font_name"));
+	result->setProperty("Font", font);
 	result->setProperty("UnifiedAreaRect", "{{0," + Ogre::StringConverter::toString(x) 
 		+ "},{0," + Ogre::StringConverter::toString(y) + "},{1,0},{1,0}}");
 	result->setProperty("FrameEnabled", "False");
@@ -34,7 +34,7 @@ Splash::_createTitleText(const std::string &text, const int &x, const int &y, co
 }
 
 void
-Splash::_loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText)
+Splash::_loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText, CEGUI::Window *adviceText)
 {
 	CEGUI::AnimationManager::getSingletonPtr()->loadAnimationsFromXML("Menu.xml");
 
@@ -44,14 +44,19 @@ Splash::_loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText)
 	CEGUI::AnimationInstance *animationBottom = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextBottom");
 	animationBottom->setTargetWindow(bottomText);
 
+	CEGUI::AnimationInstance *animationAdvice = CEGUI::AnimationManager::getSingleton().instantiateAnimation("SplashTextAdvice");
+	animationAdvice->setTargetWindow(adviceText);
+
 	animationTop->start();
 	animationBottom->start();
+	animationAdvice->start();
 }
 
 Splash::Splash()
 {
 	_initConfigReader("scenes/menus/splash.cfg");
-	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_name") + ".font");
+	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("title_font_name") + ".font");
+	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("advice_font_name") + ".font");
 }
 
 Splash::~Splash()
@@ -70,16 +75,20 @@ Splash::enter()
 	_container->addChildWindow(_windowBackground);
 
 	CEGUI::Window *crazyText = _createTitleText("CRAZY", _configValue<int>("crazy_text_x"), _configValue<int>("crazy_text_y"),
-		_configValue<std::string>("crazy_text_font_color"));
+		_configValue<std::string>("crazy_text_font_color"), _configValue<std::string>("title_font_name"));
 	CEGUI::Window *tennisText = _createTitleText("TENNIS", _configValue<int>("tennis_text_x"), _configValue<int>("tennis_text_y"),
-		_configValue<std::string>("tennis_text_font_color"));
+		_configValue<std::string>("tennis_text_font_color"), _configValue<std::string>("title_font_name"));
+	
+	CEGUI::Window *adviceText = _createTitleText("PRESS ANY BUTTON TO CONTINUE", _configValue<int>("advice_text_x"),
+		_configValue<int>("advice_text_y"), _configValue<std::string>("advice_text_font_color"), _configValue<std::string>("advice_font_name"));
 
 	_container->addChildWindow(crazyText);
 	_container->addChildWindow(tennisText);
+	_container->addChildWindow(adviceText);
 
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 
-	_loadAnimations(crazyText, tennisText);
+	_loadAnimations(crazyText, tennisText, adviceText);
 }
 
 void
@@ -87,6 +96,7 @@ Splash::exit()
 {
 	CEGUI::AnimationManager::getSingletonPtr()->destroyAnimation("SplashTextTop");
 	CEGUI::AnimationManager::getSingletonPtr()->destroyAnimation("SplashTextBottom");
+	CEGUI::AnimationManager::getSingletonPtr()->destroyAnimation("SplashTextAdvice");
 	CEGUI::WindowManager::getSingletonPtr()->destroyWindow(_container);
 }
 

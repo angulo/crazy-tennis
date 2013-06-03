@@ -34,8 +34,8 @@ namespace CrazyTennis {
 				CEGUI::Window *_windowBackground;
 				CEGUI::Window *_container;
 
-				CEGUI::Window * _createTitleText(const std::string &text, const int &x, const int &y, const std::string &color);
-				void _loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText);
+				CEGUI::Window * _createTitleText(const std::string &text, const int &x, const int &y, const std::string &color, const std::string &font);
+				void _loadAnimations(CEGUI::Window *topText, CEGUI::Window *bottomText, CEGUI::Window *adviceText);
 
 			public:
 				

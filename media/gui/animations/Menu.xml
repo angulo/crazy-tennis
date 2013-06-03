@@ -14,5 +14,20 @@
 			<KeyFrame position="2.0" value="{0,0}" />
 		</Affector>
 	</AnimationDefinition>
+	<AnimationDefinition name="SplashTextAdvice" duration="11.0" replayMode="once">
+		<Affector property="Alpha" interpolator="float" applicationMethod="absolute">
+			<KeyFrame position="0.0" value="0.0" />
+			<KeyFrame position="2.0" value="0.0" />
+			<KeyFrame position="3.0" value="1.0" />
+			<KeyFrame position="4.0" value="0.0" />
+			<KeyFrame position="5.0" value="1.0" />
+			<KeyFrame position="6.0" value="0.0" />
+			<KeyFrame position="7.0" value="1.0" />
+			<KeyFrame position="8.0" value="0.0" />
+			<KeyFrame position="9.0" value="1.0" />
+			<KeyFrame position="10.0" value="0.0" />
+			<KeyFrame position="11.0" value="1.0" />
+		</Affector>
+	</AnimationDefinition>
 </Animations>
 
