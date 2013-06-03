@@ -79,5 +79,6 @@ MenuMain::resume()
 bool
 MenuMain::keyPressed(const OIS::KeyEvent &event)
 {
+	std::cout << event.key << std::endl;
 	return true;
 }
