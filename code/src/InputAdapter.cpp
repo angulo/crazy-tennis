@@ -23,14 +23,23 @@ using namespace CrazyTennis;
 template<> InputAdapter * Ogre::Singleton<InputAdapter>::msSingleton = 0;
 
 void
-InputAdapter::initializeKeyMap(const std::string &configFilePath)
+InputAdapter::_initializeKeyMap(const std::string &configFilePath)
 {
-		
+	// Temporal keymap hardcoded
+	_keyMap[OIS::KC_UP] = Controls::UP;
+	_keyMap[OIS::KC_DOWN] = Controls::DOWN;
+	_keyMap[OIS::KC_LEFT] = Controls::LEFT;
+	_keyMap[OIS::KC_RIGHT] = Controls::RIGHT;
+	_keyMap[OIS::KC_RETURN] = Controls::CONTINUE;
+	_keyMap[OIS::KC_ESCAPE] = Controls::BACK;
+	_keyMap[OIS::KC_SPACE] = Controls::START;
+	_keyMap[OIS::KC_J] = Controls::SHOT_DRIVE;
+	_keyMap[OIS::KC_K] = Controls::SHOT_LOB;
 }
 
 InputAdapter::InputAdapter()
 {
-
+	_initializeKeyMap("");
 }
 
 InputAdapter::~InputAdapter()
@@ -63,7 +72,14 @@ InputAdapter::getSingletonPtr()
 Controls::Action
 InputAdapter::inputToAction(const OIS::KeyEvent &inputEvent)
 {
+	Controls::Action action = Controls::NONE;
 
+	std::map<OIS::KeyCode, Controls::Action>::iterator it = _keyMap.find(inputEvent.key);
+	if (it != _keyMap.end()) {
+		action = it->second;
+	}
+
+	return action;
 }
 
 void

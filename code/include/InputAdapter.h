@@ -51,7 +51,7 @@ namespace CrazyTennis {
 			 * Map that stores the current associations between input events
 			 * and semantic actions
 			 */
-			std::map<OIS::KeyEvent, Controls::Action> _keyMap;
+			std::map<OIS::KeyCode, Controls::Action> _keyMap;
 
 			/**
 			 * Initialize the map between input events and semantic actions
@@ -59,7 +59,7 @@ namespace CrazyTennis {
 			 * @param configFilePath Path to the config file containing the 
 			 *	actions already mapped.
 			 */
-			void initializeKeyMap(const std::string &configFilePath);
+			void _initializeKeyMap(const std::string &configFilePath);
 		
 		public:
 		

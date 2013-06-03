@@ -21,6 +21,7 @@
 
 #include <OGF/OGF.h>
 
+#include "InputAdapter.h"
 #include "SceneFactory.h"
 
 namespace CrazyTennis {
@@ -28,13 +29,26 @@ namespace CrazyTennis {
 	namespace Scene {
 
 		class MenuMain: public OGF::Scene {
+			
+			enum Option {
+				OPTION_PLAY = 0,
+				OPTION_RECORDS = 1,
+				OPTION_SETTINGS = 2,
+				OPTION_EXIT = 3
+			};
 
 			private:
 				
 				CEGUI::Window *_windowBackground;
 				CEGUI::Window *_container;
 
-				CEGUI::Window * _createOptionText(const std::string &text, const int &x, const int &y, const std::string &color);
+				Option _currentOption;
+				std::map<Option, CEGUI::Window *> _optionsMap;
+				bool _exit;
+
+				CEGUI::Window * _createOptionText(const std::string &text, const std::string &font, const int &x, const int &y);
+				void _setCurrentOption(Option option);
+				void _processCurrentOption();
 
 			public:
 				
@@ -46,6 +60,7 @@ namespace CrazyTennis {
 				void pause();
 				void resume();
 
+				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
 		};
 	};
