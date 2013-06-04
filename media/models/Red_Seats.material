@@ -1,0 +1,35 @@
+// Red Seats genrated by blender2ogre 0.6.0
+
+material Red Seats 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass Red Seats
+        {
+            ambient 0.5773178339004517 0.08909230679273605 0.08909230679273605 1.0
+            diffuse 0.4618542740025262 0.0712738464962519 0.0712738464962519 1.0
+            specular 0.0992131158709526 0.0992131158709526 0.0992131158709526 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}
