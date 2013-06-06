@@ -1,12 +1,12 @@
-// Mid Grey genrated by blender2ogre 0.6.0
+// Mid_Grey genrated by blender2ogre 0.6.0
 
-material Mid Grey 
+material Mid_Grey 
 {
     receive_shadows on 
 
     technique
     {
-        pass Mid Grey
+        pass Mid_Grey
         {
             ambient 0.3750176429748535 0.38143956661224365 0.3865419924259186 1.0
             diffuse 0.3000141188504415 0.3051516578369089 0.3092335985486745 1.0

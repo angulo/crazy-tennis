@@ -1,12 +1,12 @@
-// Light Blue genrated by blender2ogre 0.6.0
+// Light_Blue genrated by blender2ogre 0.6.0
 
-material Light Blue 
+material Light_Blue 
 {
     receive_shadows on 
 
     technique
     {
-        pass Light Blue
+        pass Light_Blue
         {
             ambient 0.40837207436561584 0.6083781123161316 0.800000011920929 1.0
             diffuse 0.32669766436066716 0.48670249710533753 0.6400000190734865 1.0

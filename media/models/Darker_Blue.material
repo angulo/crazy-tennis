@@ -1,12 +1,12 @@
-// Darker Blue genrated by blender2ogre 0.6.0
+// Darker_Blue genrated by blender2ogre 0.6.0
 
-material Darker Blue 
+material Darker_Blue 
 {
     receive_shadows on 
 
     technique
     {
-        pass Darker Blue
+        pass Darker_Blue
         {
             ambient 0.17123499512672424 0.33902111649513245 0.6083367466926575 1.0
             diffuse 0.1369879981426596 0.2712168972375526 0.4866694046060651 1.0

@@ -32,6 +32,9 @@ SceneFactory::create(OGF::SceneId sceneId)
 		case Scene::MENU_MAIN:
 			scene = new Scene::MenuMain();
 			break;
+		case Scene::MATCH:
+			scene = new Scene::Match();
+			break;
 		default:
 			break;
 	}

@@ -1,12 +1,12 @@
-// Light Grey genrated by blender2ogre 0.6.0
+// Light_Grey genrated by blender2ogre 0.6.0
 
-material Light Grey 
+material Light_Grey 
 {
     receive_shadows on 
 
     technique
     {
-        pass Light Grey
+        pass Light_Grey
         {
             ambient 0.6192305088043213 0.6298347115516663 0.638259768486023 1.0
             diffuse 0.49538441442525993 0.5038677767495479 0.5106078223974677 1.0

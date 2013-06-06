@@ -19,7 +19,8 @@
 #ifndef _SCENES_SCENES_H_
 #define _SCENES_SCENES_H_
 
-#include "scenes/Splash.h"
+#include "scenes/Match.h"
 #include "scenes/MenuMain.h"
+#include "scenes/Splash.h"
 
 #endif

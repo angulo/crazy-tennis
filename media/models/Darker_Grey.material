@@ -1,12 +1,12 @@
-// Darker Grey genrated by blender2ogre 0.6.0
+// Darker_Grey genrated by blender2ogre 0.6.0
 
-material Darker Grey 
+material Darker_Grey 
 {
     receive_shadows on 
 
     technique
     {
-        pass Darker Grey
+        pass Darker_Grey
         {
             ambient 0.3090343773365021 0.3143264949321747 0.3185311257839203 1.0
             diffuse 0.24722750555317852 0.25146119969280356 0.25482490442432315 1.0

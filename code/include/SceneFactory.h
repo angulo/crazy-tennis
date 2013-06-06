@@ -29,6 +29,7 @@ namespace CrazyTennis {
 		enum { 
 			SPLASH = 0,
 			MENU_MAIN = 1,
+			MATCH = 2
 		};
 	};
 

@@ -1,12 +1,12 @@
-// Door Handles genrated by blender2ogre 0.6.0
+// Door_Handles genrated by blender2ogre 0.6.0
 
-material Door Handles 
+material Door_Handles 
 {
     receive_shadows on 
 
     technique
     {
-        pass Door Handles
+        pass Door_Handles
         {
             ambient 0.3971710205078125 0.4024074673652649 0.39685311913490295 1.0
             diffuse 0.3177368211408975 0.32192597868928274 0.3174825000387802 1.0
