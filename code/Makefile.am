@@ -19,6 +19,7 @@ bin_PROGRAMS = CrazyTennis
 CrazyTennis_SOURCES = \
 	src/main.cpp \
 	src/InputAdapter.cpp \
+	src/Model.cpp \
 	src/SceneFactory.cpp \
 	src/data/Loader.cpp \
 	src/data/Player.cpp \

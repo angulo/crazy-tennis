@@ -21,12 +21,24 @@
 
 #include <OGF/OGF.h>
 
+#include <OgreBulletCollisions.h>
+#include <OgreBulletDynamics.h>
+#include <OgreBulletDynamicsWorld.h>
+#include <OgreBulletDynamicsRigidBody.h>
+
+#include <Debug/OgreBulletCollisionsDebugDrawer.h>
+#include <Shapes/OgreBulletCollisionsTrimeshShape.h>		
+#include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
+
 #include "InputAdapter.h"
+#include "Model.h"
 #include "SceneFactory.h"
 
 namespace CrazyTennis {
 	
 	namespace Scene {
+
+		typedef std::pair<Ogre::SceneNode *, OgreBulletDynamics::RigidBody *> DynamicObjectPair;
 
 		class Match: public OGF::Scene {
 			
@@ -34,8 +46,14 @@ namespace CrazyTennis {
 				
 				Ogre::Camera *_topCamera;
 				Ogre::SceneNode *_topCameraNode;
+
+				OgreBulletCollisions::DebugDrawer * _dynamicWorldDebugDrawer;
+				OgreBulletDynamics::DynamicsWorld * _dynamicWorld;
 				
+				DynamicObjectPair _createDynamicObject(const Ogre::String &name, const OGF::ModelId &modelId);
+				void _createDynamicWorld();
 				void _createScene();
+
 				void _loadCameras();
 				void _loadDynamicObjects();
 				void _loadLights();

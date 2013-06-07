@@ -20,10 +20,55 @@
 
 using namespace CrazyTennis::Scene;
 
+DynamicObjectPair
+Match::_createDynamicObject(const Ogre::String &name, const OGF::ModelId &modelId)
+{
+	DynamicObjectPair result;
+
+	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter =
+		new OgreBulletCollisions::StaticMeshToShapeConverter(); 
+
+	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, modelId));
+	builder->castShadows(true)
+		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode());
+	
+	result.first = builder->buildNode();
+	trimeshConverter->addEntity(static_cast<Ogre::Entity *>(result.first->getAttachedObject(0)));
+
+	result.second = new OgreBulletDynamics::RigidBody(name, _dynamicWorld);
+	result.second->setStaticShape(result.first, trimeshConverter->createTrimesh(), 0.1, 0.8);
+	delete trimeshConverter;
+
+	return result;
+}
+
+void
+Match::_createDynamicWorld()
+{
+	_dynamicWorldDebugDrawer = new OgreBulletCollisions::DebugDrawer();
+	_dynamicWorldDebugDrawer->setDrawWireframe(true);	 
+
+	Ogre::SceneNode *debugNode = _sceneManager->getRootSceneNode()->
+		createChildSceneNode("debugNode", Ogre::Vector3::ZERO);
+	debugNode->attachObject(static_cast<Ogre::SimpleRenderable *>(_dynamicWorldDebugDrawer));
+
+	Ogre::AxisAlignedBox worldBounds = Ogre::AxisAlignedBox(
+		Ogre::Vector3(-300, -300, -300), 
+		Ogre::Vector3(300,  300,  -300)
+	);
+
+	Ogre::Vector3 gravity(0, -9.8, 0);
+
+	_dynamicWorld = new OgreBulletDynamics::DynamicsWorld(_sceneManager, worldBounds, gravity);
+	_dynamicWorld->setDebugDrawer(_dynamicWorldDebugDrawer);
+	_dynamicWorld->setShowDebugShapes(_configValue<bool>("showDynamicWorldDebugShapes"));
+}
 
 void
 Match::_createScene()
 {
+	_createDynamicWorld();
+
 	_loadCameras();
 	_loadLights();
 	_loadStaticObjects();
@@ -35,7 +80,7 @@ Match::_loadCameras()
 {
 	_topCamera = _sceneManager->createCamera("TopCamera");
 
-	_topCamera->setPosition(20, 5, 0);
+	_topCamera->setPosition(20, 50, 0);
 	_topCamera->lookAt(0, 0, 0);
 
 	_topCamera->setNearClipDistance(0.1);
@@ -45,6 +90,7 @@ Match::_loadCameras()
 	_topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
 	_topCameraNode->attachObject(_topCamera);
 	_topCameraNode->setInheritOrientation(false);
+	_sceneManager->getRootSceneNode()->addChild(_topCameraNode);
 
 	Ogre::Viewport *viewport;
 	Ogre::RenderWindow *renderWindow = Ogre::Root::getSingletonPtr()->getAutoCreatedWindow();
@@ -58,13 +104,13 @@ Match::_loadCameras()
 
 	_topCamera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
 		Ogre::Real(viewport->getActualHeight()));
-	
 }
 
 void
 Match::_loadDynamicObjects()
 {
-
+	// Court floor outside the limits of the play court
+	_createDynamicObject("CourtOut", Model::COURT_OUT);
 }
 
 void
@@ -91,18 +137,29 @@ void
 Match::_loadStaticObjects()
 {
 	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager));
+	builder->castShadows(true)->position(Ogre::Vector3::ZERO);
 
-	builder->modelPath("stadium.mesh")
-		->castShadows(true)
-		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode())
-		->position(Ogre::Vector3(0, 0, 0))
-		->queryFlags(1)
-		->buildNode();
-}l
+	Ogre::StaticGeometry *surrounding = _sceneManager->createStaticGeometry("Surrounding");
+	Ogre::Entity *entity;
+
+	// Barrier
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::BARRIER))->buildEntity(),
+		Ogre::Vector3::ZERO);
+	
+	// Seats
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SEATS))->buildEntity(),
+		Ogre::Vector3::ZERO);
+
+	// Stadium
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::STADIUM))->buildEntity(),
+		Ogre::Vector3::ZERO);
+
+	surrounding->build();
+}
 
 Match::Match()
 {
-
+	_initConfigReader("scenes/match.cfg");
 }
 
 Match::~Match()
@@ -125,7 +182,12 @@ Match::enter()
 void
 Match::exit()
 {
-
+	_sceneManager->destroyAllCameras();
+	_sceneManager->destroyAllStaticGeometry();
+	_sceneManager->destroyAllMovableObjects();
+	_sceneManager->destroyAllAnimationStates();
+	_sceneManager->destroyAllLights();
+	_sceneManager->getRootSceneNode()->removeAndDestroyAllChildren();
 }
 
 void

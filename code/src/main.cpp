@@ -18,6 +18,7 @@
 
 #include <OGF/OGF.h>
 
+#include "Model.h"
 #include "SceneFactory.h"
 
 int
@@ -32,8 +33,7 @@ main(int argc, char **argv)
 	}
 
 	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
-
-	//OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
+	OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
 
 	OGF::Bootstrap::getSingletonPtr()->run();
 	OGF::Bootstrap::getSingletonPtr()->shutdown();

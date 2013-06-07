@@ -13,3 +13,9 @@ crazytennisdoc_DATA = \
 	NEWS
 
 EXTRA_DIST = $(crazytennisdoc_DATA)
+
+clean-local:
+	cd media/models/; make clean;
+
+all-local:
+	cd media/models/; make;
