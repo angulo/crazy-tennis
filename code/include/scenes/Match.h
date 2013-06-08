@@ -30,6 +30,8 @@
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>		
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
+#include <vector>
+
 #include "InputAdapter.h"
 #include "Model.h"
 #include "SceneFactory.h"
@@ -49,11 +51,11 @@ namespace CrazyTennis {
 				Ogre::SceneNode *_topCameraNode;
 
 				OgreBulletCollisions::DebugDrawer * _dynamicWorldDebugDrawer;
-				OgreBulletDynamics::DynamicsWorld * _dynamicWorld;
+				OgreBulletDynamics::DynamicsWorld *_dynamicWorld;
 
 				CrazyTennis::Widget::Ball *_ball;
 				
-				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId);
+				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId, const float &restitution = 1.0);
 				void _createDynamicWorld();
 				void _createScene();
 

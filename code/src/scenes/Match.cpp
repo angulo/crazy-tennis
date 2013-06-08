@@ -21,7 +21,7 @@
 using namespace CrazyTennis::Scene;
 
 DynamicObjectPair
-Match::_createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId)
+Match::_createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId, const float &restitution)
 {
 	DynamicObjectPair result;
 
@@ -36,7 +36,7 @@ Match::_createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId
 	trimeshConverter->addEntity(static_cast<Ogre::Entity *>(result.first->getAttachedObject(0)));
 
 	result.second = new OgreBulletDynamics::RigidBody(name, _dynamicWorld);
-	result.second->setStaticShape(result.first, trimeshConverter->createTrimesh(), 1.0, 0.8);
+	result.second->setStaticShape(result.first, trimeshConverter->createTrimesh(), restitution, 0.8);
 
 	delete trimeshConverter;
 
@@ -114,12 +114,12 @@ Match::_loadDynamicObjects()
 	DynamicObjectPair courtIn = _createPhysicObject("CourtIn", Model::COURT_IN);
 	DynamicObjectPair courtOut = _createPhysicObject("CourtOut", Model::COURT_OUT);
 	DynamicObjectPair lines = _createPhysicObject("Lines", Model::LINES);
-	DynamicObjectPair net = _createPhysicObject("Net", Model::NET);
+	DynamicObjectPair net = _createPhysicObject("Net", Model::NET, 0.3);
 
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(5, 3.0, 1);
+	_ball->setPosition(10, 3.0, 1);
 }
 
 void
@@ -191,6 +191,9 @@ Match::enter()
 void
 Match::exit()
 {
+	delete _dynamicWorld->getDebugDrawer();
+	delete _dynamicWorld;
+
 	_sceneManager->destroyAllCameras();
 	_sceneManager->destroyAllStaticGeometry();
 	_sceneManager->destroyAllMovableObjects();

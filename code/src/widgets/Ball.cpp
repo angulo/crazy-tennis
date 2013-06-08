@@ -89,6 +89,16 @@ Ball::frameStarted(const Ogre::FrameEvent &event)
 bool
 Ball::keyPressed(const OIS::KeyEvent &event)
 {
+	if (event.key == OIS::KC_A) {
+		_rigidBody->setLinearVelocity(0, 0, 0);
+		_rigidBody->applyImpulse(Ogre::Vector3(-1, 0.1, 0),
+			Ogre::Vector3(-1, 0, 0));
+	} else if (event.key == OIS::KC_B) {
+		_rigidBody->setLinearVelocity(0, 0, 0);
+		_rigidBody->applyImpulse(Ogre::Vector3(1, 0.1, 0),
+			Ogre::Vector3(-1, 0, 0));
+	}
+
 	return true;
 }
 
