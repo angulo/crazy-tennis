@@ -47,10 +47,8 @@ Ball::enter()
 	
 	Ogre::SceneNode *node = builder->buildNode();
 	OgreBulletCollisions::SphereCollisionShape *shape =
-		new OgreBulletCollisions::SphereCollisionShape(1.0);
+		new OgreBulletCollisions::SphereCollisionShape(_configValue<float>("radius"));
 	
-	//shape->getBulletShape()->setMargin();
-
 	_rigidBody = new OgreBulletDynamics::RigidBody("Ball", _dynamicWorld);
 	_rigidBody->setShape(node, shape, _configValue<float>("restitution"),
 		_configValue<float>("friction"), _configValue<float>("weight"));
@@ -91,11 +89,11 @@ Ball::keyPressed(const OIS::KeyEvent &event)
 {
 	if (event.key == OIS::KC_A) {
 		_rigidBody->setLinearVelocity(0, 0, 0);
-		_rigidBody->applyImpulse(Ogre::Vector3(-1, 0.1, 0),
+		_rigidBody->applyImpulse(Ogre::Vector3(-1, 0.3, 0),
 			Ogre::Vector3(-1, 0, 0));
 	} else if (event.key == OIS::KC_B) {
 		_rigidBody->setLinearVelocity(0, 0, 0);
-		_rigidBody->applyImpulse(Ogre::Vector3(1, 0.1, 0),
+		_rigidBody->applyImpulse(Ogre::Vector3(1, 0.3, 0),
 			Ogre::Vector3(-1, 0, 0));
 	}
 

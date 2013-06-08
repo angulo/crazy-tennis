@@ -87,7 +87,7 @@ Match::_loadCameras()
 
 	_topCamera->setNearClipDistance(0.1);
 	_topCamera->setFarClipDistance(10000);
-	_topCamera->setFOVy(Ogre::Degree(75));
+	_topCamera->setFOVy(Ogre::Degree(45));
 
 	_topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
 	_topCameraNode->attachObject(_topCamera);
@@ -119,23 +119,23 @@ Match::_loadDynamicObjects()
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(10, 3.0, 1);
+	_ball->setPosition(-3, 3.0, 1);
 }
 
 void
 Match::_loadLights()
 {
-	_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_TEXTURE_ADDITIVE);
+	_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 	_sceneManager->setShadowTextureCount(2);
 	_sceneManager->setShadowTextureSize(512);
 
 	_sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5) );
-	_sceneManager->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
+	_sceneManager->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
 	
 	Ogre::Light *sunLight = _sceneManager->createLight("Sun");
-	sunLight->setPosition(20, 10, 20);
+	sunLight->setPosition(20, 100, 20);
 	sunLight->setType(Ogre::Light::LT_DIRECTIONAL);
-	sunLight->setDirection(-20, 0, -20);
+	sunLight->setDirection(20, -100, 20);
 	sunLight->setSpotlightInnerAngle(Ogre::Degree(25.0f));
 	sunLight->setSpotlightOuterAngle(Ogre::Degree(100.0f));
 	sunLight->setSpotlightFalloff(0.0);
