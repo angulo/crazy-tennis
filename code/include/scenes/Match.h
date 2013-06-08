@@ -33,6 +33,7 @@
 #include "InputAdapter.h"
 #include "Model.h"
 #include "SceneFactory.h"
+#include "widgets/Ball.h"
 
 namespace CrazyTennis {
 	
@@ -49,8 +50,10 @@ namespace CrazyTennis {
 
 				OgreBulletCollisions::DebugDrawer * _dynamicWorldDebugDrawer;
 				OgreBulletDynamics::DynamicsWorld * _dynamicWorld;
+
+				CrazyTennis::Widget::Ball *_ball;
 				
-				DynamicObjectPair _createDynamicObject(const Ogre::String &name, const OGF::ModelId &modelId);
+				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId);
 				void _createDynamicWorld();
 				void _createScene();
 
@@ -70,6 +73,7 @@ namespace CrazyTennis {
 				void pause();
 				void resume();
 
+				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
 		};

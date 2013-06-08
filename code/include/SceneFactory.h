@@ -33,6 +33,12 @@ namespace CrazyTennis {
 		};
 	};
 
+	namespace Widget {
+		enum {
+			BALL = 3
+		};
+	};
+
 	class SceneFactory : public OGF::ISceneFactory {
 		
 		public:
