@@ -26,7 +26,9 @@ Model::getModelMap()
 	OGF::ModelMap modelMap;
 
 	modelMap[BARRIER] = "barrier.mesh";
+	modelMap[COURT_IN] = "court_in.mesh";
 	modelMap[COURT_OUT] = "court_out.mesh";
+	modelMap[NET] = "net.mesh";
 	modelMap[SEATS] = "seats.mesh";
 	modelMap[STADIUM] = "stadium.mesh";
 

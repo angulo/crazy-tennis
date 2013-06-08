@@ -80,7 +80,8 @@ Match::_loadCameras()
 {
 	_topCamera = _sceneManager->createCamera("TopCamera");
 
-	_topCamera->setPosition(20, 50, 0);
+	_topCamera->setPosition(_configValue<float>("camera_x"),
+		_configValue<float>("camera_y"), _configValue<float>("camera_z"));
 	_topCamera->lookAt(0, 0, 0);
 
 	_topCamera->setNearClipDistance(0.1);
@@ -110,7 +111,9 @@ void
 Match::_loadDynamicObjects()
 {
 	// Court floor outside the limits of the play court
-	_createDynamicObject("CourtOut", Model::COURT_OUT);
+	DynamicObjectPair courtIn = _createDynamicObject("CourtIn", Model::COURT_IN);
+	DynamicObjectPair courtOut = _createDynamicObject("CourtOut", Model::COURT_OUT);
+	DynamicObjectPair net = _createDynamicObject("Net", Model::NET);
 }
 
 void
