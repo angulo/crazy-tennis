@@ -119,7 +119,7 @@ Match::_loadDynamicObjects()
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(-0.25, 5.0, 0);
+	_ball->setPosition(-11, 5, 0);
 }
 
 void
