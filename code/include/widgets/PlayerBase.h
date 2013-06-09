@@ -1,5 +1,5 @@
 /* 
- * Ball.h -- Ball widget header file
+ * PlayerBase.h -- Base player widget header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,41 +16,41 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _WIDGET_BALL_H_
-#define _WIDGET_BALL_H_
+#ifndef _WIDGET_PLAYER_BASE_H_
+#define _WIDGET_PLAYER_BASE_H_
 
 #include <OGF/OGF.h>
 
 #include <OgreBulletCollisions.h>
 #include <OgreBulletDynamics.h>
-#include <OgreBulletDynamicsWorld.h>
-#include <OgreBulletDynamicsRigidBody.h>
-
-#include <Shapes/OgreBulletCollisionsSphereShape.h>	
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
-#include "Model.h"
+#include "data/Player.h"
 #include "widgets/PhysicalBase.h"
 
 namespace CrazyTennis {
 	
 	namespace Widget {
 
-		class Ball: public PhysicalBase {
+		class PlayerBase: public PhysicalBase {
+			
+			protected:
+				
+				Data::Player *_data;
 			
 			public:
 
-				Ball(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld);
-				~Ball();
+				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Data::Player *data);
+				~PlayerBase();
 
+				/**
+				 * Creates the rigid body of the player using the 
+				 * provided player data as configuration.
+				 */
 				void enter();
 				void exit();
-				void pause();
-				void resume();
 
-				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
-				bool keyPressed(const OIS::KeyEvent &event);
 		};
 	};
 };

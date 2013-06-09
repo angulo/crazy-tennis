@@ -22,18 +22,12 @@ using namespace CrazyTennis::Widget;
 
 
 Ball::Ball(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld)
-	:	_sceneManager(sceneManager), _dynamicWorld(dynamicWorld)
+	:	PhysicalBase(sceneManager, dynamicWorld)
 {
 	_initConfigReader("widgets/ball.cfg");
 }
 
 Ball::~Ball()
-{
-
-}
-
-void
-Ball::preload()
 {
 
 }
@@ -98,19 +92,4 @@ Ball::keyPressed(const OIS::KeyEvent &event)
 	}
 
 	return true;
-}
-
-void
-Ball::setPosition(const Ogre::Vector3 &position)
-{
-	btTransform transform;
-	transform.setIdentity();
-	transform.setOrigin(OgreBulletCollisions::OgreBtConverter::to(position));
-	_rigidBody->getBulletRigidBody()->setWorldTransform(transform);
-}
-
-void
-Ball::setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z)
-{
-	setPosition(Ogre::Vector3(x, y, z));
 }
