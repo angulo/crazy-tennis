@@ -56,7 +56,7 @@ MenuMain::_processCurrentOption()
 {
 	switch(_currentOption) {
 		case OPTION_PLAY:
-			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MATCH);
+			OGF::SceneController::getSingletonPtr()->replace(new CrazyTennis::Scene::Match(NULL));
 			break;
 		case OPTION_SETTINGS:
 			break;

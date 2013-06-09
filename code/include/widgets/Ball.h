@@ -21,15 +21,17 @@
 
 #include <OGF/OGF.h>
 
+#include <cmath>
+
 #include <OgreBulletCollisions.h>
 #include <OgreBulletDynamics.h>
 #include <OgreBulletDynamicsWorld.h>
 #include <OgreBulletDynamicsRigidBody.h>
-
 #include <Shapes/OgreBulletCollisionsSphereShape.h>	
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
 #include "Model.h"
+#include "dynamics/ShotSimulator.h"
 #include "widgets/PhysicalBase.h"
 
 namespace CrazyTennis {

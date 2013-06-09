@@ -119,7 +119,7 @@ Match::_loadDynamicObjects()
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(-3, 3.0, 1);
+	_ball->setPosition(-0.25, 5.0, 0);
 }
 
 void
@@ -235,6 +235,8 @@ Match::keyPressed(const OIS::KeyEvent &event)
 	switch (InputAdapter::getSingletonPtr()->inputToAction(event)) {
 		case Controls::BACK:
 			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
+			break;
+		default:
 			break;
 	}
 

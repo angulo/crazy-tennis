@@ -71,7 +71,7 @@ ShotSimulator::setVelocity(const Ogre::Real &velocity)
 CalculationSet
 ShotSimulator::calculateSet(const int &slices)
 {
-	CalculationSet result(slices);
+	CalculationSet result;
 
 	Ogre::Vector3 origin = _parameters[ORIGIN].point;
 	Ogre::Vector3 destination = _parameters[DESTINATION].point;

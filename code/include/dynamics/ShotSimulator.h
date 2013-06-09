@@ -28,7 +28,7 @@ namespace CrazyTennis {
 	
 	namespace Dynamics {
 		
-		typedef std::vector<std::pair<Ogre::Radian, Ogre::Real> > CalculationSet;
+		typedef std::vector<std::pair<Ogre::Real, Ogre::Real> > CalculationSet;
 
 		class ShotSimulator {
 			
