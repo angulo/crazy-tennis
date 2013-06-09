@@ -22,9 +22,11 @@ CrazyTennis_SOURCES = \
 	src/Model.cpp \
 	src/SceneFactory.cpp \
 	src/data/Loader.cpp \
+	src/data/Match.cpp \
 	src/data/Player.cpp \
 	src/data/Tournament.cpp \
 	src/data/TournamentFactory.cpp \
+	src/dynamics/ShotSimulator.cpp \
 	src/scenes/Match.cpp \
 	src/scenes/MenuMain.cpp \
 	src/scenes/Splash.cpp \

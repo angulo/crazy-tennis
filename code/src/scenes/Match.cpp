@@ -166,7 +166,8 @@ Match::_loadStaticObjects()
 	surrounding->build();
 }
 
-Match::Match()
+Match::Match(Data::Match *data)
+	:	_data(data)
 {
 	_initConfigReader("scenes/match.cfg");
 }

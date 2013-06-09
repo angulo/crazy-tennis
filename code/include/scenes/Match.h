@@ -35,6 +35,7 @@
 #include "InputAdapter.h"
 #include "Model.h"
 #include "SceneFactory.h"
+#include "data/Match.h"
 #include "widgets/Ball.h"
 
 namespace CrazyTennis {
@@ -46,6 +47,8 @@ namespace CrazyTennis {
 		class Match: public OGF::Scene {
 			
 			private:
+				
+				Data::Match *_data;
 				
 				Ogre::Camera *_topCamera;
 				Ogre::SceneNode *_topCameraNode;
@@ -66,7 +69,7 @@ namespace CrazyTennis {
 			
 			public:
 				
-				Match();
+				Match(Data::Match *data);
 				~Match();
 
 				void preload();

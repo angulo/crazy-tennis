@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * Match.cpp -- Match data implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,28 +16,34 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SceneFactory.h"
+#include "data/Match.h"
 
-using namespace CrazyTennis;
+using namespace CrazyTennis::Data;
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
+Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB)
 {
-	OGF::Scene *scene = NULL;
 
-	switch(sceneId) {
-		case Scene::SPLASH:
-			scene = new Scene::Splash();
-			break;
-		case Scene::MENU_MAIN:
-			scene = new Scene::MenuMain();
-			break;
-		case Scene::MATCH:
-		case Widget::BALL:
-			throw "Scene must be created with specific configuration";
-		default:
-			break;
-	}
+}
 
-	return scene;
+Match::~Match()
+{
+
+}
+
+MatchStatus
+Match::wonPoint(const PlayerId &pointWinner)
+{
+
+}
+
+MatchStatus
+Match::missedService()
+{
+
+}
+
+MatchStatus
+Match::getStatus () const
+{
+	
 }

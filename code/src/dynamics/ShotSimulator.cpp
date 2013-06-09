@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * ShotSimulator.cpp -- Simulator of shots implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,28 +16,57 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SceneFactory.h"
+#include "dynamics/ShotSimulator.h"
 
-using namespace CrazyTennis;
+using namespace CrazyTennis::Dynamics;
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
+ShotSimulator::ShotSimulator()
 {
-	OGF::Scene *scene = NULL;
+}
 
-	switch(sceneId) {
-		case Scene::SPLASH:
-			scene = new Scene::Splash();
-			break;
-		case Scene::MENU_MAIN:
-			scene = new Scene::MenuMain();
-			break;
-		case Scene::MATCH:
-		case Widget::BALL:
-			throw "Scene must be created with specific configuration";
-		default:
-			break;
-	}
+ShotSimulator::~ShotSimulator()
+{
 
-	return scene;
+}
+
+void
+ShotSimulator::setOrigin(const Ogre::Vector3 &origin)
+{
+
+}
+
+void
+ShotSimulator::setDestination(const Ogre::Vector3 &origin)
+{
+
+}
+
+void
+ShotSimulator::setAngle(const Ogre::Angle &angle)
+{
+
+}
+
+void
+ShotSimulator::setVelocity(const Ogre::Real &velocity)
+{
+
+}
+
+Ogre::Angle
+ShotSimulator::calculateAngle()
+{
+
+}
+
+Ogre::Real
+ShotSimulator::calculateVelocity()
+{
+
+}
+
+CalculationSet
+ShotSimulator::calculateSet(const int &slices)
+{
+
 }

@@ -21,6 +21,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace CrazyTennis {
 	
@@ -48,6 +49,31 @@ namespace CrazyTennis {
 			short sets;
 			short games;
 			bool tiebreak;
+		};
+		
+		enum PointValue {
+			POINT_0 = 0,
+			POINT_15 = 15,
+			POINT_30 = 30,
+			POINT_40 = 40,
+			POINT_A = 50
+		};
+
+		typedef std::vector<PointValue> GameResult;
+		typedef std::vector<short> SetResult;
+		typedef std::vector<SetResult> MatchResult;
+
+		/**
+			* Current status of a match.
+			*/
+		struct MatchStatus {
+			PlayerId server;
+			PlayerId winner;
+			MatchResult matchResult;
+			GameResult gameResult;
+			bool inTiebreak;
+			bool firstServe;
+			bool isFinished;
 		};
 	};
 };
