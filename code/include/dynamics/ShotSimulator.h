@@ -22,27 +22,48 @@
 #include <OGF/OGF.h>
 
 #include <cmath>
+#include <map>
 
 namespace CrazyTennis {
 	
 	namespace Dynamics {
 		
-		typedef std::vector<std::pair<Ogre::Angle, Ogre::Real> > CalculationSet;
+		typedef std::vector<std::pair<Ogre::Radian, Ogre::Real> > CalculationSet;
 
 		class ShotSimulator {
+			
+			/**
+			 * Shot simulation parameters keys.
+			 */ 
+			enum ParameterKey {
+				ORIGIN = 0,
+				DESTINATION = 1,
+				ANGLE = 2,
+				VELOCITY = 3
+			};
+
+			/**
+			 * Shot simulation parameters values.
+			 */
+			struct ParameterValue {
+				Ogre::Vector3 point;
+				Ogre::Real number;
+			};
+
+			protected:
+				
+				std::map<ParameterKey, ParameterValue> _parameters;
 			
 			public:
 			
 				ShotSimulator();
 				~ShotSimulator();
 
-				void setOrigin(const Ogre::Vector3 &origin);
-				void setDestination(const Ogre::Vector3 &origin);
-				void setAngle(const Ogre::Angle &angle);
-				void setVelocity(const Ogre::Real &velocity);
+				ShotSimulator * setOrigin(const Ogre::Vector3 &origin);
+				ShotSimulator * setDestination(const Ogre::Vector3 &destination);
+				ShotSimulator * setAngle(const Ogre::Real &angle);
+				ShotSimulator * setVelocity(const Ogre::Real &velocity);
 
-				Ogre::Angle calculateAngle();
-				Ogre::Real calculateVelocity();
 				CalculationSet calculateSet(const int &slices);
 		};
 	};

@@ -26,47 +26,71 @@ ShotSimulator::ShotSimulator()
 
 ShotSimulator::~ShotSimulator()
 {
-
 }
 
-void
+ShotSimulator *
 ShotSimulator::setOrigin(const Ogre::Vector3 &origin)
 {
+	ParameterValue value;
+	value.point = origin;
 
+	_parameters[ORIGIN] = value;	
+	return this;
 }
 
-void
-ShotSimulator::setDestination(const Ogre::Vector3 &origin)
+ShotSimulator *
+ShotSimulator::setDestination(const Ogre::Vector3 &destination)
 {
+	ParameterValue value;
+	value.point = destination;
 
+	_parameters[DESTINATION] = value;
+	return this;
 }
 
-void
-ShotSimulator::setAngle(const Ogre::Angle &angle)
+ShotSimulator *
+ShotSimulator::setAngle(const Ogre::Real &angle)
 {
+	ParameterValue value;
+	value.number = angle;
 
+	_parameters[ANGLE] = value;
+	return this;
 }
 
-void
+ShotSimulator *
 ShotSimulator::setVelocity(const Ogre::Real &velocity)
 {
+	ParameterValue value;
+	value.number = velocity;
 
-}
-
-Ogre::Angle
-ShotSimulator::calculateAngle()
-{
-
-}
-
-Ogre::Real
-ShotSimulator::calculateVelocity()
-{
-
+	_parameters[VELOCITY] = value;
+	return this;
 }
 
 CalculationSet
 ShotSimulator::calculateSet(const int &slices)
 {
+	CalculationSet result(slices);
 
+	Ogre::Vector3 origin = _parameters[ORIGIN].point;
+	Ogre::Vector3 destination = _parameters[DESTINATION].point;
+	Ogre::Vector3 positionDiff = destination - origin;
+
+	Ogre::Real sliceAngle = 180 / static_cast<Ogre::Real>(slices + 2);
+
+	for (int i = 1; i < slices + 1; i++) {
+		Ogre::Real angle = Ogre::Degree((i * sliceAngle) - 90.0).valueRadians();
+
+		Ogre::Real velocity =
+			sqrt(
+				(9.8 * pow(positionDiff.x, 2))
+					/
+				(2.0 * pow(cos(angle), 2) * ((positionDiff.x * tan(angle)) - positionDiff.y))
+			);
+
+		result.push_back(std::make_pair(angle, velocity));
+	}
+
+	return result;
 }
