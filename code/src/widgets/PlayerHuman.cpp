@@ -1,5 +1,5 @@
 /* 
- * PlayerBase.h -- Base player widget implementation file
+ * PlayerHuman.cpp -- Human player implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,35 +16,29 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "widgets/PlayerBase.h"
+#include "widgets/PlayerHuman.h"
 
 using namespace CrazyTennis::Widget;
 
-PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PhysicalBase(sceneManager, dynamicWorld), _data(data), _ball(ball)
+PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, data)
 {
 
 }
 
-PlayerBase::~PlayerBase()
-{
-
-}
-
-void
-PlayerBase::enter()
-{
-
-}
-
-void
-PlayerBase::exit()
+PlayerHuman::~PlayerHuman()
 {
 
 }
 
 bool
-PlayerBase::frameStarted(const Ogre::FrameEvent &event)
+PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
+	return true;
+}
 
+bool
+PlayerHuman::keyPressed(const OIS::KeyEvent &event)
+{
+	return true;
 }

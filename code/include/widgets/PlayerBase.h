@@ -26,6 +26,7 @@
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
 #include "data/Player.h"
+#include "widgets/Ball.h"
 #include "widgets/PhysicalBase.h"
 
 namespace CrazyTennis {
@@ -37,10 +38,11 @@ namespace CrazyTennis {
 			protected:
 				
 				Data::Player *_data;
-			
+				Widget::Ball *_ball;
+
 			public:
 
-				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Data::Player *data);
+				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
 				~PlayerBase();
 
 				/**

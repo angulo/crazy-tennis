@@ -1,5 +1,5 @@
 /* 
- * PlayerBase.h -- Base player widget implementation file
+ * ShotBuffer.h -- Header file of the shot buffer
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,35 +16,36 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "widgets/PlayerBase.h"
+#ifndef _WIDGET_SHOT_BUFFER_H_
+#define _WIDGET_SHOT_BUFFER_H_
 
-using namespace CrazyTennis::Widget;
+#include <OGF/OGF.h>
+	
+namespace CrazyTennis {
+	
+	namespace Widget {
+		
+		class ShotBuffer : public OGF::Scene {
+			
+			public:
+				
+				ShotBuffer();
+				~ShotBuffer();
 
-PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PhysicalBase(sceneManager, dynamicWorld), _data(data), _ball(ball)
-{
+				void enter();
+				void exit();
 
-}
+				bool keyReleased(const OIS::KeyEvent &event);
 
-PlayerBase::~PlayerBase()
-{
+				/**
+				 * Notify about a change in the position of the player
+				 * or the ball to update the buffer.
+				 * @param playerPosition Player absolute position.
+				 * @param ballPosition Ball absolute position.
+				 */
+				void notifyPosition(const Ogre::Vector3 &playerPosition, const Ogre::Vector3 &ballPosition);
+		};
+	};
+};
 
-}
-
-void
-PlayerBase::enter()
-{
-
-}
-
-void
-PlayerBase::exit()
-{
-
-}
-
-bool
-PlayerBase::frameStarted(const Ogre::FrameEvent &event)
-{
-
-}
+#endif

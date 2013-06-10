@@ -32,7 +32,8 @@ CrazyTennis_SOURCES = \
 	src/scenes/Splash.cpp \
 	src/widgets/Ball.cpp \
 	src/widgets/PhysicalBase.cpp \
-	src/widgets/PlayerBase.cpp
+	src/widgets/PlayerBase.cpp \
+	src/widgets/PlayerHuman.cpp
 
 CrazyTennis_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS) $(jsoncpp_LIBS)
 CrazyTennis_LDADD = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS) $(jsoncpp_LIBS)
