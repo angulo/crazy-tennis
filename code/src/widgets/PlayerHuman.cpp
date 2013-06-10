@@ -31,6 +31,21 @@ PlayerHuman::~PlayerHuman()
 
 }
 
+void
+PlayerHuman::enter()
+{
+	PlayerBase::enter();
+	
+	_shotBuffer = new Widget::ShotBuffer();
+	_shotBufferId = OGF::SceneController::getSingletonPtr()->addChild(_shotBuffer);
+}
+
+void
+PlayerHuman::exit()
+{
+	OGF::SceneController::getSingletonPtr()->removeChild(_shotBufferId);
+}
+
 bool
 PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {

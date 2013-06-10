@@ -49,7 +49,7 @@ namespace CrazyTennis {
 				 * Creates the rigid body of the player using the 
 				 * provided player data as configuration.
 				 */
-				void enter();
+				virtual void enter();
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);

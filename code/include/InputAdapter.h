@@ -52,6 +52,7 @@ namespace CrazyTennis {
 			 * and semantic actions
 			 */
 			std::map<OIS::KeyCode, Controls::Action> _keyMap;
+			std::map<Controls::Action, OIS::KeyCode> _keyMapInverse;
 
 			/**
 			 * Initialize the map between input events and semantic actions
@@ -76,6 +77,14 @@ namespace CrazyTennis {
 			 * @return Semantic action associated to the input event.
 			 */
 			Controls::Action inputToAction(const OIS::KeyEvent &inputEvent);
+
+			/**
+			 * Get the input needed to generate a certain action.
+			 *
+			 * @param action Domain action.
+			 * @return Input keycode to press to generate the action.
+			 */
+			OIS::KeyCode actionToInput(const Controls::Action &action);
 
 			/**
 			 * Store a new association between an action and a semantic event.

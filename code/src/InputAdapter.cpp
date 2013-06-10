@@ -35,6 +35,12 @@ InputAdapter::_initializeKeyMap(const std::string &configFilePath)
 	_keyMap[OIS::KC_SPACE] = Controls::START;
 	_keyMap[OIS::KC_J] = Controls::SHOT_DRIVE;
 	_keyMap[OIS::KC_K] = Controls::SHOT_LOB;
+
+	for (std::map<OIS::KeyCode, Controls::Action>::iterator it = _keyMap.begin();
+		it != _keyMap.end(); it++) {
+
+		_keyMapInverse[it->second] = it->first;
+	}
 }
 
 InputAdapter::InputAdapter()
@@ -80,6 +86,19 @@ InputAdapter::inputToAction(const OIS::KeyEvent &inputEvent)
 	}
 
 	return action;
+}
+
+OIS::KeyCode
+InputAdapter::actionToInput(const Controls::Action &action)
+{
+	OIS::KeyCode input = OIS::KC_NOCONVERT;
+
+	std::map<Controls::Action, OIS::KeyCode>::iterator it = _keyMapInverse.find(action);
+	if (it != _keyMapInverse.end()) {
+		input = it->second;
+	}
+
+	return input;
 }
 
 void

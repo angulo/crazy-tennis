@@ -33,7 +33,7 @@ material Net
             {
                 texture Tennis_net_2xcf.png
                 tex_address_mode wrap
-                scale 2.0 2.0
+                scale 3.0 3.0
                 colour_op alpha_blend
             }
         }

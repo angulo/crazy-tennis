@@ -113,6 +113,7 @@ Ball::keyPressed(const OIS::KeyEvent &event)
 
 		if (velocity > 0) {
 			_rigidBody->setLinearVelocity(unitary);
+			break;
 		}
 	}
 

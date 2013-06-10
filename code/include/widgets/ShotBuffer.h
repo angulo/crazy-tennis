@@ -20,6 +20,8 @@
 #define _WIDGET_SHOT_BUFFER_H_
 
 #include <OGF/OGF.h>
+
+#include "InputAdapter.h"
 	
 namespace CrazyTennis {
 	
@@ -27,6 +29,19 @@ namespace CrazyTennis {
 		
 		class ShotBuffer : public OGF::Scene {
 			
+			typedef std::map<Controls::Action, Ogre::Real> Buffer;
+			
+			protected:
+				
+				Buffer _buffer;
+
+				Ogre::Real _minRadius;
+				Ogre::Real _maxRadius;
+
+				Ogre::Vector3 _playerPosition;
+				Ogre::Vector3 _ballPosition;
+				bool _outOfRange;
+
 			public:
 				
 				ShotBuffer();
@@ -35,15 +50,24 @@ namespace CrazyTennis {
 				void enter();
 				void exit();
 
-				bool keyReleased(const OIS::KeyEvent &event);
+				bool frameStarted(const Ogre::FrameEvent &event);
 
 				/**
 				 * Notify about a change in the position of the player
 				 * or the ball to update the buffer.
+				 *
 				 * @param playerPosition Player absolute position.
 				 * @param ballPosition Ball absolute position.
 				 */
 				void notifyPosition(const Ogre::Vector3 &playerPosition, const Ogre::Vector3 &ballPosition);
+
+				/**
+				 * Get the buffer value of a certain action
+				 *
+				 * @param action Action to the buffer value from.
+				 * @return Buffer value of the action.
+				 */
+				Ogre::Real getBufferValue(const Controls::Action &action);
 		};
 	};
 };

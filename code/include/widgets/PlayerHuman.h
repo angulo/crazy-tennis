@@ -21,6 +21,7 @@
 
 #include <OGF/OGF.h>
 #include "widgets/PlayerBase.h"
+#include "widgets/ShotBuffer.h"
 
 namespace CrazyTennis {
 	
@@ -28,10 +29,18 @@ namespace CrazyTennis {
 
 		class PlayerHuman : public PlayerBase {
 			
+			protected:
+
+				OGF::SceneId _shotBufferId;
+				Widget::ShotBuffer *_shotBuffer;
+			
 			public:
 				
 				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
 				~PlayerHuman();
+
+				void enter();
+				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
