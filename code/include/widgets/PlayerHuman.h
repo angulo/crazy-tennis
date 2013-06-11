@@ -21,6 +21,7 @@
 
 #include <OGF/OGF.h>
 #include "widgets/PlayerBase.h"
+#include "dynamics/ShotSimulator.h"
 #include "widgets/ShotBuffer.h"
 
 namespace CrazyTennis {

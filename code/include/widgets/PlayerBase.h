@@ -23,11 +23,13 @@
 
 #include <OgreBulletCollisions.h>
 #include <OgreBulletDynamics.h>
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
 #include "data/Player.h"
 #include "widgets/Ball.h"
 #include "widgets/PhysicalBase.h"
+#include "Model.h"
 
 namespace CrazyTennis {
 	

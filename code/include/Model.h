@@ -32,6 +32,7 @@ namespace CrazyTennis {
 			COURT_OUT,
 			LINES,
 			NET,
+			PLAYER,
 			SEATS,
 			STADIUM
 		};

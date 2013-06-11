@@ -43,7 +43,7 @@ PlayerHuman::enter()
 void
 PlayerHuman::exit()
 {
-	OGF::SceneController::getSingletonPtr()->removeChild(_shotBufferId);
+
 }
 
 bool
@@ -55,5 +55,54 @@ PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 bool
 PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 {
+	if ((getPosition() - _ball->getPosition()).length() < 3) {
+		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
+
+		_ball->setLinearVelocity(Ogre::Vector3::ZERO);
+
+		Ogre::Vector3 origin = _ball->getPosition();
+		Ogre::Vector3 destination(0, 0, 0);
+
+		if (event.key == OIS::KC_UP) {
+			destination.x = 8;
+		} else if (event.key == OIS::KC_LEFT) {
+			destination.x = 8;
+			destination.z = -2;
+		} else if (event.key == OIS::KC_RIGHT) {
+			destination.x = 8;
+			destination.z = 2;
+		} else {
+			return true;
+		}
+
+		if (getPosition().x > 0) {
+			destination *= -1;
+		}
+
+		Dynamics::CalculationSet test = simulator->setOrigin(origin)
+			->setDestination(destination)
+			->calculateSet(10);
+
+
+		for (int i = 0; i < 10; i++) {
+			Ogre::Real velocity = test[i].second;
+			Ogre::Real angle = test[i].first;
+
+			if (!isnan(velocity) && !isnan(angle)) {
+
+				Ogre::Vector3 unitary = destination - origin;
+				unitary.y = velocity * sin(angle);
+				unitary.normalise();
+				unitary = velocity * unitary;
+
+				if (unitary.y < 0)
+					continue;
+
+				_ball->setLinearVelocity(unitary);
+				break;
+			}
+		}
+	}
+
 	return true;
 }

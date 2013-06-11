@@ -37,6 +37,7 @@
 #include "SceneFactory.h"
 #include "data/Match.h"
 #include "widgets/Ball.h"
+#include "widgets/PlayerHuman.h"
 
 namespace CrazyTennis {
 	

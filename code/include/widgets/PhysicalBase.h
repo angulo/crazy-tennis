@@ -74,6 +74,12 @@ namespace CrazyTennis {
 				 * @param deltaZ Z-axis increment
 				 */
 				void move(const Ogre::Real &deltaX, const Ogre::Real &deltaY, const Ogre::Real &deltaZ); 
+
+				/**
+				 * Set the velocity of the rigid body.
+				 * @param velocity Vector velocity
+				 */
+				void setLinearVelocity(const Ogre::Vector3 &velocity);
 		};
 	};
 };

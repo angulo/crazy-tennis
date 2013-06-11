@@ -34,7 +34,18 @@ PlayerBase::~PlayerBase()
 void
 PlayerBase::enter()
 {
+	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::PLAYER));
 
+	Ogre::SceneNode *node = builder->castShadows(true)
+		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode())
+		->buildNode();
+	
+	Ogre::Vector3 size = static_cast<Ogre::Entity *>(node->getAttachedObject(0))->getBoundingBox().getSize() / 2.0;
+	OgreBulletCollisions::CollisionShape *bodyShape =
+		new OgreBulletCollisions::BoxCollisionShape(size);
+
+	_rigidBody = new OgreBulletDynamics::RigidBody(_data->getName(), _dynamicWorld);
+	_rigidBody->setShape(node, bodyShape, 0.6, 0.6, 80.0);
 }
 
 void

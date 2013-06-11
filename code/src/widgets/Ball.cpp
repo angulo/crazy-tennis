@@ -81,41 +81,5 @@ Ball::frameStarted(const Ogre::FrameEvent &event)
 bool
 Ball::keyPressed(const OIS::KeyEvent &event)
 {
-	_rigidBody->setLinearVelocity(0, 0, 0);
-
-	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
-
-	Ogre::Vector3 origin = getPosition();
-	Ogre::Vector3 destination(0, 0, 0);
-
-	if (event.key == OIS::KC_UP) {
-		destination.x = 10;
-	} else if (event.key == OIS::KC_LEFT) {
-		destination.x = 10;
-		destination.z = -4;
-	} else if (event.key == OIS::KC_RIGHT) {
-		destination.x = 10;
-		destination.z = 4;
-	}
-
-	Dynamics::CalculationSet test = simulator->setOrigin(getPosition())
-		->setDestination(destination)
-		->calculateSet(10);
-
-	for (int i = 0; i < 10; i++) {
-		Ogre::Real velocity = test[i].second;
-		Ogre::Real angle = test[i].first;
-
-		Ogre::Vector3 unitary = destination - origin;
-		unitary.y = velocity * sin(angle);
-		unitary.normalise();
-		unitary = velocity * unitary;
-
-		if (velocity > 0) {
-			_rigidBody->setLinearVelocity(unitary);
-			break;
-		}
-	}
-
 	return true;
 }

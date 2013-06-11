@@ -55,6 +55,8 @@ namespace CrazyTennis {
 				MatchStatus wonPoint(const PlayerId &pointWinner);
 				MatchStatus missedService();
 				MatchStatus getStatus() const;
+
+				Player *getPlayer(const int &number) const;
 		};
 	};
 };

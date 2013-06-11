@@ -31,6 +31,7 @@ Model::getModelMap()
 	modelMap[COURT_OUT] = "court_out.mesh";
 	modelMap[LINES] = "lines.mesh";
 	modelMap[NET] = "net.mesh";
+	modelMap[PLAYER] = "player.mesh";
 	modelMap[SEATS] = "seats.mesh";
 	modelMap[STADIUM] = "stadium.mesh";
 

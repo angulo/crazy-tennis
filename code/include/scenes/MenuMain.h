@@ -23,6 +23,7 @@
 
 #include "InputAdapter.h"
 #include "SceneFactory.h"
+#include "data/Data.h"
 
 namespace CrazyTennis {
 	

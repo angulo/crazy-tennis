@@ -19,6 +19,8 @@
 #ifndef _DATA_DATA_H_
 #define _DATA_DATA_H_
 
+#include "data/Loader.h"
+#include "data/Match.h"
 #include "data/Player.h"
 #include "data/Tournament.h"
 #include "data/TournamentFactory.h"

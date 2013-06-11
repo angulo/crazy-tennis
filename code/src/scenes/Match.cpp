@@ -119,7 +119,19 @@ Match::_loadDynamicObjects()
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(-11, 5, 0);
+	_ball->setPosition(10, 5, 0);
+
+	Widget::PlayerHuman *player1 = new Widget::PlayerHuman(_sceneManager,
+		_dynamicWorld, _ball, _data->getPlayer(0));
+
+	OGF::SceneController::getSingletonPtr()->addChild(player1);
+	player1->setPosition(12, 1, 0);
+
+	Widget::PlayerHuman *player2 = new Widget::PlayerHuman(_sceneManager,
+		_dynamicWorld, _ball, _data->getPlayer(1));
+
+	OGF::SceneController::getSingletonPtr()->addChild(player2);
+	player2->setPosition(-12, 1, 0);
 }
 
 void

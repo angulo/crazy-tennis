@@ -63,3 +63,9 @@ PhysicalBase::move(const Ogre::Real &deltaX, const Ogre::Real &deltaY, const Ogr
 {
 	move(Ogre::Vector3(deltaX, deltaY, deltaZ));
 }
+
+void
+PhysicalBase::setLinearVelocity(const Ogre::Vector3 &velocity)
+{
+	_rigidBody->setLinearVelocity(velocity);
+}

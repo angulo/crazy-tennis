@@ -21,8 +21,10 @@
 using namespace CrazyTennis::Data;
 
 Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB)
+	:	_hasTiebreak(hasTiebreak)
 {
-
+	_players.push_back(playerA);
+	_players.push_back(playerB);
 }
 
 Match::~Match()
@@ -46,4 +48,10 @@ MatchStatus
 Match::getStatus () const
 {
 	
+}
+
+Player *
+Match::getPlayer(const int &number) const
+{
+	return _players[number];
 }
