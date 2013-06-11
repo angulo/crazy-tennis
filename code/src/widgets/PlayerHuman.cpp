@@ -55,7 +55,7 @@ PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 bool
 PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 {
-	if ((getPosition() - _ball->getPosition()).length() < 3) {
+	if ((getPosition() - _ball->getPosition()).length() < 0.5) {
 		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
 		_ball->setLinearVelocity(Ogre::Vector3::ZERO);
@@ -64,12 +64,12 @@ PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 		Ogre::Vector3 destination(0, 0, 0);
 
 		if (event.key == OIS::KC_UP) {
-			destination.x = 8;
+			destination.x = 5;
 		} else if (event.key == OIS::KC_LEFT) {
-			destination.x = 8;
+			destination.x = 5;
 			destination.z = -2;
 		} else if (event.key == OIS::KC_RIGHT) {
-			destination.x = 8;
+			destination.x = 5;
 			destination.z = 2;
 		} else {
 			return true;
@@ -88,18 +88,15 @@ PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 			Ogre::Real velocity = test[i].second;
 			Ogre::Real angle = test[i].first;
 
+			// Discard impossible angles and directions
 			if (!isnan(velocity) && !isnan(angle)) {
 
 				Ogre::Vector3 unitary = destination - origin;
 				unitary.y = velocity * sin(angle);
 				unitary.normalise();
-				unitary = velocity * unitary;
-
-				if (unitary.y < 0)
-					continue;
+				unitary = velocity * unitary * 0.95;
 
 				_ball->setLinearVelocity(unitary);
-				break;
 			}
 		}
 	}
