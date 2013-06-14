@@ -53,20 +53,29 @@ PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 
 	Ogre::Vector3 currentPosition = getPosition();
-	Ogre::Vector3 movementVector(0, 0, 0);
+	Ogre::Vector3 movement(0, 0, 0);
 
 	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::UP)))
-		movementVector.x = currentPosition.x > 0 ? -1 : 1;
+		movement.x = currentPosition.x > 0 ? -1 : 1;
 	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::DOWN)))
-		movementVector.x = currentPosition.x > 0 ? 1 : -1;
+		movement.x = currentPosition.x > 0 ? 1 : -1;
 	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::LEFT)))
-		movementVector.z = currentPosition.x > 0 ? 1 : -1;
+		movement.z = currentPosition.x > 0 ? 1 : -1;
 	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::RIGHT)))
-		movementVector.z = currentPosition.x > 0 ? -1 : 1;
+		movement.z = currentPosition.x > 0 ? -1 : 1;
 	
-	movementVector = _getSpeed() * movementVector.normalisedCopy();
+	movement = event.timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
 
-	move(movementVector);
+	Ogre::Vector3 destination = currentPosition + movement;
+
+	// Prevent trespassing the net
+	if (currentPosition.x >= 0) {
+		destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
+	} else {
+		destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
+	}
+
+	setPosition(destination);
 
 	return true;
 }
@@ -117,8 +126,6 @@ PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 			direction.z = velocity * cos(angle) * cos(angleToZ);
 			direction.y = velocity * sin(angle);
 			
-			std::cout << "D: " << direction.length() << " V: " << velocity << std::endl;
-
 			if (_ball->getPosition().x > 0) {
 				direction.x = -direction.x;
 				direction.z = -direction.z;

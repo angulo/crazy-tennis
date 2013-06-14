@@ -33,6 +33,7 @@ CrazyTennis_SOURCES = \
 	src/widgets/Ball.cpp \
 	src/widgets/PhysicalBase.cpp \
 	src/widgets/PlayerBase.cpp \
+	src/widgets/PlayerCpu.cpp \
 	src/widgets/PlayerHuman.cpp \
 	src/widgets/ShotBuffer.cpp
 
