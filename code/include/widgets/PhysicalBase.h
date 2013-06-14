@@ -44,7 +44,7 @@ namespace CrazyTennis {
 				 * Set the position of the ball.
 				 * @param position Position
 				 */
-				void setPosition(const Ogre::Vector3 &position);
+				virtual void setPosition(const Ogre::Vector3 &position);
 
 				/**
 				 * Set the position of the ball.
@@ -52,7 +52,7 @@ namespace CrazyTennis {
 				 * @param y Y-axis position
 				 * @param z Z-axis position
 				 */
-				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
+				virtual void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
 
 				/**
 				 * Get the current position of the physic body.

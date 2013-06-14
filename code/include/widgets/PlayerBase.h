@@ -39,8 +39,13 @@ namespace CrazyTennis {
 			
 			protected:
 				
+				Ogre::SceneNode *_sceneNode;
+
 				Data::Player *_data;
 				Widget::Ball *_ball;
+
+				Ogre::Real _speed;
+				Ogre::Real _getSpeed() const;
 
 			public:
 
@@ -55,6 +60,9 @@ namespace CrazyTennis {
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
+
+				void setPosition(const Ogre::Vector3 &position);
+				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
 		};
 	};
 };

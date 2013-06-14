@@ -49,55 +49,83 @@ PlayerHuman::exit()
 bool
 PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
+
+	Ogre::Vector3 currentPosition = getPosition();
+	Ogre::Vector3 movementVector(0, 0, 0);
+
+	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::UP)))
+		movementVector.x = currentPosition.x > 0 ? -1 : 1;
+	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::DOWN)))
+		movementVector.x = currentPosition.x > 0 ? 1 : -1;
+	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::LEFT)))
+		movementVector.z = currentPosition.x > 0 ? 1 : -1;
+	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::RIGHT)))
+		movementVector.z = currentPosition.x > 0 ? -1 : 1;
+	
+	movementVector = _getSpeed() * movementVector.normalisedCopy();
+
+	move(movementVector);
+
 	return true;
 }
 
 bool
 PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 {
-	if ((getPosition() - _ball->getPosition()).length() < 0.5) {
-		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
+	return true;
+	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
-		_ball->setLinearVelocity(Ogre::Vector3::ZERO);
+	_ball->setLinearVelocity(Ogre::Vector3::ZERO);
 
-		Ogre::Vector3 origin = _ball->getPosition();
-		Ogre::Vector3 destination(0, 0, 0);
+	Ogre::Vector3 origin = _ball->getPosition();
+	Ogre::Vector3 destination(0, 0, 0);
 
-		if (event.key == OIS::KC_UP) {
-			destination.x = 5;
-		} else if (event.key == OIS::KC_LEFT) {
-			destination.x = 5;
-			destination.z = -2;
-		} else if (event.key == OIS::KC_RIGHT) {
-			destination.x = 5;
-			destination.z = 2;
-		} else {
-			return true;
-		}
+	if (event.key == OIS::KC_UP) {
+		destination.x = 11;
+	} else if (event.key == OIS::KC_LEFT) {
+		destination.x = 11;
+		destination.z = -2;
+	} else if (event.key == OIS::KC_RIGHT) {
+		destination.x = 11;
+		destination.z = 2;
+	} else {
+		return true;
+	}
 
-		if (getPosition().x > 0) {
-			destination *= -1;
-		}
+	if (_ball->getPosition().x > 0) {
+		destination = (-1) * destination;
+	}
 
-		Dynamics::CalculationSet test = simulator->setOrigin(origin)
-			->setDestination(destination)
-			->calculateSet(10);
+	Dynamics::CalculationSet test = simulator->setOrigin(origin)
+		->setDestination(destination)
+		->calculateSet(10);
+	
+	Ogre::Vector3 direction;
 
+	for (int i = 7; i > 0; i--) {
+		Ogre::Real velocity = test[i].second;
+		Ogre::Real angle = test[i].first;
 
-		for (int i = 0; i < 10; i++) {
-			Ogre::Real velocity = test[i].second;
-			Ogre::Real angle = test[i].first;
+		// Discard impossible angles and directions
+		if (!isnan(velocity) && !isnan(angle) && velocity > 0) {
+			direction = destination - origin;
+			Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
 
-			// Discard impossible angles and directions
-			if (!isnan(velocity) && !isnan(angle)) {
+			direction.x = velocity * cos(angle) * sin(angleToZ);
+			direction.z = velocity * cos(angle) * cos(angleToZ);
+			direction.y = velocity * sin(angle);
+			
+			std::cout << "D: " << direction.length() << " V: " << velocity << std::endl;
 
-				Ogre::Vector3 unitary = destination - origin;
-				unitary.y = velocity * sin(angle);
-				unitary.normalise();
-				unitary = velocity * unitary * 0.95;
-
-				_ball->setLinearVelocity(unitary);
+			if (_ball->getPosition().x > 0) {
+				direction.x = -direction.x;
+				direction.z = -direction.z;
 			}
+
+			_ball->setLinearVelocity(direction);
+			break;
 		}
 	}
 

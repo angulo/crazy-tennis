@@ -37,6 +37,7 @@ PhysicalBase::setPosition(const Ogre::Vector3 &position)
 	transform.setIdentity();
 	transform.setOrigin(OgreBulletCollisions::OgreBtConverter::to(position));
 	_rigidBody->getBulletRigidBody()->setWorldTransform(transform);
+	_rigidBody->getBulletRigidBody()->setCenterOfMassTransform(transform);
 }
 
 void

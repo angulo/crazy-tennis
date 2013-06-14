@@ -75,7 +75,10 @@ ShotSimulator::calculateSet(const int &slices)
 
 	Ogre::Vector3 origin = _parameters[ORIGIN].point;
 	Ogre::Vector3 destination = _parameters[DESTINATION].point;
-	Ogre::Vector3 positionDiff = destination - origin;
+	Ogre::Vector3 pointingVector = destination - origin;
+
+	Ogre::Vector2 shotVector(sqrt(pow(pointingVector.length(), 2) - pow(pointingVector.y, 2)),
+		pointingVector.y);
 
 	// Two more slices to discard -90º and 90º
 	Ogre::Real sliceAngle = 180 / static_cast<Ogre::Real>(slices + 2);
@@ -85,9 +88,9 @@ ShotSimulator::calculateSet(const int &slices)
 
 		Ogre::Real velocity =
 			sqrt(
-				(9.8 * pow(positionDiff.x, 2))
+				(9.8 * pow(shotVector.x, 2) * 2.0 * pow(cos(angle), 2))
 					/
-				(2.0 * pow(cos(angle), 2) * ((abs(positionDiff.x) * tan(angle)) - positionDiff.y))
+				((shotVector.x * tan(angle)) - shotVector.y)
 			);
 
 		result.push_back(std::make_pair(angle, velocity));

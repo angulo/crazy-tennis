@@ -119,7 +119,7 @@ Match::_loadDynamicObjects()
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(10, 5, 0);
+	_ball->setPosition(-10, 5, 0);
 
 	Widget::PlayerHuman *player1 = new Widget::PlayerHuman(_sceneManager,
 		_dynamicWorld, _ball, _data->getPlayer(0));
@@ -230,14 +230,14 @@ Match::resume()
 bool
 Match::frameEnded(const Ogre::FrameEvent& event)
 {
-	_dynamicWorld->stepSimulation(event.timeSinceLastFrame);
+	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 2, 1.0 / 120.0);
 	return true;
 }
 
 bool
 Match::frameStarted(const Ogre::FrameEvent &event)
 {
-	_dynamicWorld->stepSimulation(event.timeSinceLastFrame);
+	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 2, 1.0 / 120.0);
 	return true;
 }
 
