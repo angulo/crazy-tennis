@@ -34,6 +34,7 @@ namespace CrazyTennis {
 			NET,
 			PLAYER,
 			SEATS,
+			SKY,
 			STADIUM
 		};
 

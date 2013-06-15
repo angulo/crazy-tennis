@@ -174,6 +174,13 @@ Match::_loadStaticObjects()
 	// Stadium
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::STADIUM))->buildEntity(),
 		Ogre::Vector3::ZERO);
+	
+	// Sky
+	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();
+	entity->setMaterialName("sky");
+	Ogre::SceneNode *node = _sceneManager->getRootSceneNode()->createChildSceneNode();
+	node->setPosition(0, -300, 0);
+	node->attachObject(entity);
 
 	surrounding->build();
 }

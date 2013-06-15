@@ -1,0 +1,19 @@
+material sky
+{
+	receive_shadows off
+
+	technique
+	{
+		pass
+		{
+			depth_write off
+			lighting off
+			fog_override off
+
+			texture_unit
+			{
+				texture sky.jpg
+			}
+		}
+	}
+}

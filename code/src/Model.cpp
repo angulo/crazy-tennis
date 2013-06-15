@@ -33,6 +33,7 @@ Model::getModelMap()
 	modelMap[NET] = "net.mesh";
 	modelMap[PLAYER] = "player.mesh";
 	modelMap[SEATS] = "seats.mesh";
+	modelMap[SKY] = "sky.mesh";
 	modelMap[STADIUM] = "stadium.mesh";
 
 	return modelMap;
