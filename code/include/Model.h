@@ -28,11 +28,13 @@ namespace CrazyTennis {
 		enum ModelList {
 			BALL,
 			BARRIER,
+			CHAIR,
 			COURT_IN,
 			COURT_OUT,
 			LINES,
 			NET,
 			PLAYER,
+			REFEREE,
 			SEATS,
 			SKY,
 			STADIUM

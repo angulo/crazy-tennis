@@ -27,11 +27,13 @@ Model::getModelMap()
 
 	modelMap[BALL] = "ball.mesh";
 	modelMap[BARRIER] = "barrier.mesh";
+	modelMap[CHAIR] = "chair.mesh";
 	modelMap[COURT_IN] = "court_in.mesh";
 	modelMap[COURT_OUT] = "court_out.mesh";
 	modelMap[LINES] = "lines.mesh";
 	modelMap[NET] = "net.mesh";
 	modelMap[PLAYER] = "player.mesh";
+	modelMap[REFEREE] = "referee.mesh";
 	modelMap[SEATS] = "seats.mesh";
 	modelMap[SKY] = "sky.mesh";
 	modelMap[STADIUM] = "stadium.mesh";

@@ -138,19 +138,13 @@ void
 Match::_loadLights()
 {
 	_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
-	_sceneManager->setShadowTextureCount(2);
-	_sceneManager->setShadowTextureSize(512);
-
-	_sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5) );
-	_sceneManager->setAmbientLight(Ogre::ColourValue(0.4, 0.4, 0.4));
+	_sceneManager->setShadowColour(Ogre::ColourValue(0.0, 0.0, 0.0) );
+	_sceneManager->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	
-	Ogre::Light *sunLight = _sceneManager->createLight("Sun");
+	Ogre::Light *sunLight = _sceneManager->createLight("Light_1");
 	sunLight->setPosition(20, 100, 20);
 	sunLight->setType(Ogre::Light::LT_DIRECTIONAL);
-	sunLight->setDirection(20, -100, 20);
-	sunLight->setSpotlightInnerAngle(Ogre::Degree(25.0f));
-	sunLight->setSpotlightOuterAngle(Ogre::Degree(100.0f));
-	sunLight->setSpotlightFalloff(0.0);
+	sunLight->setDirection(-10, -100, -10);
 	sunLight->setCastShadows(true);
 }
 
@@ -182,6 +176,18 @@ Match::_loadStaticObjects()
 	node->setPosition(0, -300, 0);
 	node->attachObject(entity);
 
+	surrounding->build();
+
+	surrounding = _sceneManager->createStaticGeometry("Surrounding2");
+	// Referee
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::REFEREE))->buildEntity(),
+		Ogre::Vector3::ZERO);
+
+	// Referee chair
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::CHAIR))->buildEntity(),
+		Ogre::Vector3::ZERO);
+	
+	surrounding->setCastShadows(true);
 	surrounding->build();
 }
 
