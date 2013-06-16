@@ -36,7 +36,29 @@ namespace CrazyTennis {
 				OGF::SceneId _shotBufferId;
 				Widget::ShotBuffer *_shotBuffer;
 
-				void _shot(Controls::Action action);
+				/**
+				 * Execute a shot by hitting the ball in the appropiate direction,
+				 * depending on the current shot buffer status.
+				 *
+				 * @param action Action to be executed.
+				 */
+				void _shoot(const Controls::Action &action);
+
+				/**
+				 * Select the shot to be executed depending on the shot buffer status
+				 * and the desired type of shot.
+				 *
+				 * @param action Action to be executed.
+				 * @param availableShots Number of different shots to be selected.
+				 * @return Index of the most appropiate shot to be done at the moment. -1 if no possible shot.
+				 */
+				int _selectShot(const Controls::Action &action, const int &availableShots);
+
+				/**
+				 * Check if the player can shot at the moment.
+				 * @return true if the player can shot, false otherwise.
+				 */
+				bool _canShoot(const Controls::Action &action);
 			
 			public:
 				

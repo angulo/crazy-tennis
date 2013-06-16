@@ -57,40 +57,46 @@ bool
 ShotBuffer::frameStarted(const Ogre::FrameEvent &event)
 {
 	_timeSinceLastUpdate += event.timeSinceLastFrame;
-	if (_timeSinceLastUpdate < _configValue<float>("maxTimeBetweenUpdates"))
-		return true;
-	else
-		_timeSinceLastUpdate = 0;
+	if (_timeSinceLastUpdate >= _configValue<float>("maxTimeBetweenUpdates")) {
+		InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();	
 
-	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();	
-	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
+		Ogre::Real ballPlayerDistance = (_ballPosition - _playerPosition).length();
 
-	// If the ball is in front of the player and the distance is between
-	// the max and the min lenght, update the buffer. Otherwise, reset it
-	Ogre::Real ballPlayerDistance = (_ballPosition - _playerPosition).length();
+			// Check minimum and maximum distance to hit
+		if (ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius &&
+			// Check that the ball and the player are in the same side
+			((_ballPosition.x > 0 && _playerPosition.x > 0) || (_ballPosition.x < 0 && _playerPosition.x < 0)) &&
+			// Check that the player has the ball in front of/side of him
+			((_playerPosition.x < 0 && (_ballPosition.x >= _playerPosition.x)) ||
+			_playerPosition.y >= 0 && (_ballPosition.x <= _playerPosition.x))) {
+				
+			_outOfRange = false;
 
-	if (ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius &&
-		((_playerPosition.x < 0 && (_ballPosition.x >= _playerPosition.x)) ||
-		_playerPosition.y >= 0 && (_ballPosition.x <= _playerPosition.x))) {
-			
-		_outOfRange = true;
+			Ogre::Real increment = _configValue<float>("incrementPerSecond") * 
+				_timeSinceLastUpdate;
 
-		for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
-			if (inputAdapter->isActionActive(it->first)) {
-				it->second = std::min(1.0,
-					it->second + (0.5 * event.timeSinceLastFrame));
-			} else {
-				it->second = std::max(0.0,
-					it->second - (0.5 * event.timeSinceLastFrame));
+			// Update all the buffers with the incremented/decreased value, 
+			// depending on the action input status
+			for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
+				if (inputAdapter->isActionActive(it->first)) {
+					it->second = std::min(Ogre::Real(1.0), it->second + increment);
+				} else {
+					it->second = std::max(Ogre::Real(0.0), it->second - increment);
+				}
+			}
+		// In case the player is out of range, reset the buffers
+		} else if (!_outOfRange) {
+			_outOfRange = true;
+
+			for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
+				it->second = 0;
 			}
 		}
-	} else if (!_outOfRange) {
-		_outOfRange = true;
 
-		for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
-			it->second = 0;
-		}
+		_timeSinceLastUpdate = 0;
 	}
+
+	return true;
 }
 
 void

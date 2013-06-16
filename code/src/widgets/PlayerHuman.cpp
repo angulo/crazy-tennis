@@ -21,7 +21,7 @@
 using namespace CrazyTennis::Widget;
 
 void
-PlayerHuman::_shot(Controls::Action action)
+PlayerHuman::_shoot(const Controls::Action &action)
 {
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
@@ -48,34 +48,63 @@ PlayerHuman::_shot(Controls::Action action)
 		}
 	}
 
-	if (possibleShots.size() > 0) {
-		Ogre::Vector3 direction;
-		Ogre::Real angle, velocity;
+	int availableShots = possibleShots.size();
 
-		_ball->setLinearVelocity(Ogre::Vector3::ZERO);
+	if (availableShots > 0) {
+		int shot = _selectShot(action, availableShots);
 
-		if (action == Controls::SHOT_DRIVE) {
-			angle = possibleShots[possibleShots.size() / 5].first;
-			velocity = possibleShots[possibleShots.size() / 5].second;
-		} else if (action == Controls::SHOT_LOB) {
-			angle = possibleShots[possibleShots.size() / 1.5].first;
-			velocity = possibleShots[possibleShots.size() / 1.5].second;
+		if (shot != -1) {
+			Ogre::Real angle = possibleShots[shot].first;
+			Ogre::Real velocity = possibleShots[shot].second;
+			Ogre::Vector3 direction = destination - origin;
+			Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
+
+			direction.x = velocity * cos(angle) * sin(angleToZ);
+			direction.z = velocity * cos(angle) * cos(angleToZ);
+			direction.y = velocity * sin(angle);
+			
+			if (_ball->getPosition().x > 0) {
+				direction.x = -direction.x;
+				direction.z = -direction.z;
+			}
+
+			_ball->setLinearVelocity(direction);
 		}
-
-		direction = destination - origin;
-		Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
-
-		direction.x = velocity * cos(angle) * sin(angleToZ);
-		direction.z = velocity * cos(angle) * cos(angleToZ);
-		direction.y = velocity * sin(angle);
-		
-		if (_ball->getPosition().x > 0) {
-			direction.x = -direction.x;
-			direction.z = -direction.z;
-		}
-
-		_ball->setLinearVelocity(direction);
 	}
+}
+
+int
+PlayerHuman::_selectShot(const Controls::Action &action, const int &availableShots)
+{
+	int shot, lowLimit, highLimit;
+	Ogre::Real bufferValue = _shotBuffer->getValue(action);
+
+	if (bufferValue == 0) {
+		shot = -1;
+	} else {
+		switch(action) {
+			case Controls::SHOT_DRIVE:
+				lowLimit = _configValue<float>("driveShotLowLimit") * (availableShots - 1);
+				highLimit = _configValue<float>("driveShotHighLimit") * (availableShots - 1);
+				shot = lowLimit + ((1.0 - bufferValue) * (highLimit - lowLimit));
+				break;	
+			case Controls::SHOT_LOB:
+				lowLimit = _configValue<float>("lobShotLowLimit") * (availableShots - 1);
+				highLimit = _configValue<float>("lobShotHighLimit") * (availableShots - 1);
+				shot = lowLimit + (bufferValue * (highLimit - lowLimit));
+				break;
+			default:
+				break;
+		}
+	}
+
+	return shot;
+}
+
+bool
+PlayerHuman::_canShoot(const Controls::Action &action)
+{
+	return _shotBuffer->getValue(action) > 0;	
 }
 
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
@@ -148,7 +177,9 @@ PlayerHuman::keyReleased(const OIS::KeyEvent &event)
 	Controls::Action action = inputAdapter->inputToAction(event);
 
 	if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-		_shot(action);
+		if (_canShoot(action)) {
+			_shoot(action);
+		}
 	}
 
 	return true;
@@ -167,7 +198,9 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	Controls::Action action = inputAdapter->inputToAction(event, button);
 
 	if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-		_shot(action);
+		if (_canShoot(action)) {
+			_shoot(action);
+		}
 	}
 
 	return true;
