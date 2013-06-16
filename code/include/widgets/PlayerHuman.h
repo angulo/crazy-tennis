@@ -20,6 +20,7 @@
 #define _WIDGET_PLAYER_HUMAN_H_
 
 #include <OGF/OGF.h>
+#include "InputAdapter.h"
 #include "widgets/PlayerBase.h"
 #include "dynamics/ShotSimulator.h"
 #include "widgets/ShotBuffer.h"

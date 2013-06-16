@@ -19,6 +19,8 @@
 #ifndef _INPUT_ADAPTER_H_
 #define _INPUT_ADAPTER_H_
 
+#define JOYSTICK_SENSITIVITY 2000
+
 #include <OGF/OGF.h>
 
 namespace CrazyTennis {
@@ -53,6 +55,8 @@ namespace CrazyTennis {
 			 */
 			std::map<OIS::KeyCode, Controls::Action> _keyMap;
 			std::map<Controls::Action, OIS::KeyCode> _keyMapInverse;
+			std::map<int, Controls::Action> _buttonMap;
+			std::map<Controls::Action, int> _buttonMapInverse;
 
 			/**
 			 * Initialize the map between input events and semantic actions
@@ -60,7 +64,7 @@ namespace CrazyTennis {
 			 * @param configFilePath Path to the config file containing the 
 			 *	actions already mapped.
 			 */
-			void _initializeKeyMap(const std::string &configFilePath);
+			void _initializeMaps(const std::string &configFilePath);
 		
 		public:
 		
@@ -79,12 +83,28 @@ namespace CrazyTennis {
 			Controls::Action inputToAction(const OIS::KeyEvent &inputEvent);
 
 			/**
+			 * Get the semantic action associated to a joystick event.
+			 *
+			 * @param inputEvent Input event.
+			 * @return Semantic action associated to the input event.
+			 */
+			Controls::Action inputToAction(const OIS::JoyStickEvent &inputEvent, int button);
+
+			/**
 			 * Get the input needed to generate a certain action.
 			 *
 			 * @param action Domain action.
 			 * @return Input keycode to press to generate the action.
 			 */
-			OIS::KeyCode actionToInput(const Controls::Action &action);
+			OIS::KeyCode actionToKeyInput(const Controls::Action &action);
+
+			/**
+			 * Get the input needed to generate a certain action.
+			 *
+			 * @param action Domain action.
+			 * @return Input keycode to press to generate the action.
+			 */
+			int actionToButtonInput(const Controls::Action &action);
 
 			/**
 			 * Store a new association between an action and a semantic event.

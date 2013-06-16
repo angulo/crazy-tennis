@@ -51,17 +51,27 @@ PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
+	OIS::JoyStick *joystick = OGF::InputManager::getSingletonPtr()->getJoystick();
+	OIS::JoyStickState joystickState;
+
+	if (joystick != NULL) {
+		joystickState = joystick->getJoyStickState();
+	}
 
 	Ogre::Vector3 currentPosition = getPosition();
 	Ogre::Vector3 movement(0, 0, 0);
 
-	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::UP)))
+	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::UP)) ||
+		(joystick && joystickState.mAxes[1].abs < -JOYSTICK_SENSITIVITY))
 		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::DOWN)))
+	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::DOWN)) ||
+		(joystick && joystickState.mAxes[1].abs > JOYSTICK_SENSITIVITY))
 		movement.x = currentPosition.x > 0 ? 1 : -1;
-	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::LEFT)))
+	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::LEFT)) ||
+		(joystick && joystickState.mAxes[0].abs < -JOYSTICK_SENSITIVITY))
 		movement.z = currentPosition.x > 0 ? 1 : -1;
-	if (keyboard->isKeyDown(inputAdapter->actionToInput(Controls::RIGHT)))
+	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::RIGHT)) ||
+		(joystick && joystickState.mAxes[0].abs > JOYSTICK_SENSITIVITY))
 		movement.z = currentPosition.x > 0 ? -1 : 1;
 	
 	movement = event.timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();

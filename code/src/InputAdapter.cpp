@@ -23,7 +23,7 @@ using namespace CrazyTennis;
 template<> InputAdapter * Ogre::Singleton<InputAdapter>::msSingleton = 0;
 
 void
-InputAdapter::_initializeKeyMap(const std::string &configFilePath)
+InputAdapter::_initializeMaps(const std::string &configFilePath)
 {
 	// Temporal keymap hardcoded
 	_keyMap[OIS::KC_UP] = Controls::UP;
@@ -41,11 +41,20 @@ InputAdapter::_initializeKeyMap(const std::string &configFilePath)
 
 		_keyMapInverse[it->second] = it->first;
 	}
+
+	_buttonMap[1] = Controls::SHOT_DRIVE;
+	_buttonMap[2] = Controls::SHOT_LOB;
+
+	for (std::map<int, Controls::Action>::iterator it = _buttonMap.begin();
+		it != _buttonMap.end(); it++) {
+
+		_buttonMapInverse[it->second] = it->first;
+	}
 }
 
 InputAdapter::InputAdapter()
 {
-	_initializeKeyMap("");
+	_initializeMaps("");
 }
 
 InputAdapter::~InputAdapter()
@@ -88,13 +97,39 @@ InputAdapter::inputToAction(const OIS::KeyEvent &inputEvent)
 	return action;
 }
 
+Controls::Action
+InputAdapter::inputToAction(const OIS::JoyStickEvent &event, int button)
+{
+	Controls::Action action = Controls::NONE;
+
+	std::map<int, Controls::Action>::iterator it = _buttonMap.find(button);
+	if (it != _buttonMap.end()) {
+		action = it->second;
+	}
+
+	return action;
+}
+
 OIS::KeyCode
-InputAdapter::actionToInput(const Controls::Action &action)
+InputAdapter::actionToKeyInput(const Controls::Action &action)
 {
 	OIS::KeyCode input = OIS::KC_NOCONVERT;
 
 	std::map<Controls::Action, OIS::KeyCode>::iterator it = _keyMapInverse.find(action);
 	if (it != _keyMapInverse.end()) {
+		input = it->second;
+	}
+
+	return input;
+}
+
+int
+InputAdapter::actionToButtonInput(const Controls::Action &action)
+{
+	int input = -1;
+
+	std::map<Controls::Action, int>::iterator it = _buttonMapInverse.find(action);
+	if (it != _buttonMapInverse.end()) {
 		input = it->second;
 	}
 

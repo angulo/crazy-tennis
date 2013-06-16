@@ -67,7 +67,7 @@ ShotBuffer::frameStarted(const Ogre::FrameEvent &event)
 		ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius) {
 			
 		for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
-			OIS::KeyCode key = inputAdapter->actionToInput(it->first);
+			OIS::KeyCode key = inputAdapter->actionToKeyInput(it->first);
 
 			// Button is pressed
 			if (keyboard->isKeyDown(key)) {
