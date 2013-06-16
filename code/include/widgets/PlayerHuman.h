@@ -35,6 +35,8 @@ namespace CrazyTennis {
 
 				OGF::SceneId _shotBufferId;
 				Widget::ShotBuffer *_shotBuffer;
+
+				void _shot(Controls::Action action);
 			
 			public:
 				
@@ -45,7 +47,9 @@ namespace CrazyTennis {
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
-				bool keyPressed(const OIS::KeyEvent &event);
+				bool keyReleased(const OIS::KeyEvent &event);
+				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
+				bool buttonReleased(const OIS::JoyStickEvent &event, int button);
 		};
 	};
 };

@@ -243,14 +243,14 @@ Match::resume()
 bool
 Match::frameEnded(const Ogre::FrameEvent& event)
 {
-	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 2, 1.0 / 120.0);
+	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 4, 1.0 / 240.0);
 	return true;
 }
 
 bool
 Match::frameStarted(const Ogre::FrameEvent &event)
 {
-	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 2, 1.0 / 120.0);
+	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 4, 1.0 / 240.0);
 	return true;
 }
 
