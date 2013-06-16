@@ -136,6 +136,48 @@ InputAdapter::actionToButtonInput(const Controls::Action &action)
 	return input;
 }
 
+bool
+InputAdapter::isActionActive(const Controls::Action &action)
+{
+	bool isActive = false;
+
+	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
+	OIS::JoyStick *joystick = OGF::InputManager::getSingletonPtr()->getJoystick();
+
+	// First check the keyboard
+	isActive = keyboard->isKeyDown(actionToKeyInput(action));
+
+	// Last check the joystick in case its plugged in
+	if (!isActive && joystick) {
+		OIS::JoyStickState joystickState = joystick->getJoyStickState();
+
+		switch(action) {
+			case Controls::UP:
+				isActive = joystickState.mAxes[1].abs < -JOYSTICK_SENSITIVITY;
+				break;
+			case Controls::DOWN:
+				isActive = joystickState.mAxes[1].abs > JOYSTICK_SENSITIVITY;
+				break;
+			case Controls::LEFT:
+				isActive = joystickState.mAxes[0].abs < -JOYSTICK_SENSITIVITY;
+				break;
+			case Controls::RIGHT:
+				isActive = joystickState.mAxes[0].abs > JOYSTICK_SENSITIVITY;
+				break;
+			default:
+				{
+					int button = actionToButtonInput(action);
+					if (button != -1) {
+						isActive = joystickState.mButtons[button];
+					}
+				}
+				break;
+		}
+	}
+	
+	return isActive;
+}
+
 void
 InputAdapter::store(const OIS::KeyEvent &inputEvent, Controls::Action action)
 {

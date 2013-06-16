@@ -42,6 +42,8 @@ namespace CrazyTennis {
 				Ogre::Vector3 _ballPosition;
 				bool _outOfRange;
 
+				Ogre::Real _timeSinceLastUpdate;
+
 			public:
 				
 				ShotBuffer();
@@ -67,7 +69,7 @@ namespace CrazyTennis {
 				 * @param action Action to the buffer value from.
 				 * @return Buffer value of the action.
 				 */
-				Ogre::Real getBufferValue(const Controls::Action &action);
+				Ogre::Real getValue(const Controls::Action &action);
 		};
 	};
 };

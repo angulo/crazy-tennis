@@ -27,7 +27,7 @@ ShotBuffer::ShotBuffer()
 	_ballPosition = Ogre::Vector3(0, 0, 0);
 	_maxRadius = _configValue<float>("maxRadius");
 	_minRadius = _configValue<float>("minRadius");
-	_outOfRange = true;
+	_outOfRange = false;
 }
 
 ShotBuffer::~ShotBuffer()
@@ -44,6 +44,7 @@ ShotBuffer::enter()
 	_buffer[Controls::RIGHT] = 0;
 	_buffer[Controls::SHOT_DRIVE] = 0;
 	_buffer[Controls::SHOT_LOB] = 0;
+	_timeSinceLastUpdate = 0;
 }
 
 void
@@ -55,6 +56,12 @@ ShotBuffer::exit()
 bool
 ShotBuffer::frameStarted(const Ogre::FrameEvent &event)
 {
+	_timeSinceLastUpdate += event.timeSinceLastFrame;
+	if (_timeSinceLastUpdate < _configValue<float>("maxTimeBetweenUpdates"))
+		return true;
+	else
+		_timeSinceLastUpdate = 0;
+
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();	
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 
@@ -62,15 +69,14 @@ ShotBuffer::frameStarted(const Ogre::FrameEvent &event)
 	// the max and the min lenght, update the buffer. Otherwise, reset it
 	Ogre::Real ballPlayerDistance = (_ballPosition - _playerPosition).length();
 
-	if (((_playerPosition.x < 0 && (_ballPosition.x >= _playerPosition.x)) ||
-		_playerPosition.y >= 0 && (_ballPosition.x <= _playerPosition.x)) &&
-		ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius) {
+	if (ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius &&
+		((_playerPosition.x < 0 && (_ballPosition.x >= _playerPosition.x)) ||
+		_playerPosition.y >= 0 && (_ballPosition.x <= _playerPosition.x))) {
 			
-		for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
-			OIS::KeyCode key = inputAdapter->actionToKeyInput(it->first);
+		_outOfRange = true;
 
-			// Button is pressed
-			if (keyboard->isKeyDown(key)) {
+		for (Buffer::iterator it = _buffer.begin(); it != _buffer.end(); it++) {
+			if (inputAdapter->isActionActive(it->first)) {
 				it->second = std::min(1.0,
 					it->second + (0.5 * event.timeSinceLastFrame));
 			} else {
@@ -95,7 +101,7 @@ ShotBuffer::notifyPosition(const Ogre::Vector3 &playerPosition, const Ogre::Vect
 }
 
 Ogre::Real
-ShotBuffer::getBufferValue(const Controls::Action &action)
+ShotBuffer::getValue(const Controls::Action &action)
 {
 	return _buffer[action];
 }

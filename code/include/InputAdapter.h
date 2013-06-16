@@ -107,6 +107,16 @@ namespace CrazyTennis {
 			int actionToButtonInput(const Controls::Action &action);
 
 			/**
+			 * Check if the provided action is being done right now, that is,
+			 * if the input corresponding to a certain action is pressed/clicked
+			 * right now.
+			 * 
+			 * @param action action to check
+			 * @return true if the action is active, false otherwise
+			 */
+			bool isActionActive(const Controls::Action &ction);
+
+			/**
 			 * Store a new association between an action and a semantic event.
 			 *
 			 * @param inputEvent Input event to map from.

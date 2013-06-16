@@ -25,7 +25,6 @@ PlayerHuman::_shot(Controls::Action action)
 {
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
-
 	Ogre::Vector3 origin = _ball->getPosition();
 	Ogre::Vector3 destination(10, 0, 0);
 
@@ -56,8 +55,8 @@ PlayerHuman::_shot(Controls::Action action)
 		_ball->setLinearVelocity(Ogre::Vector3::ZERO);
 
 		if (action == Controls::SHOT_DRIVE) {
-			angle = possibleShots[possibleShots.size() / 3].first;
-			velocity = possibleShots[possibleShots.size() / 3].second;
+			angle = possibleShots[possibleShots.size() / 5].first;
+			velocity = possibleShots[possibleShots.size() / 5].second;
 		} else if (action == Controls::SHOT_LOB) {
 			angle = possibleShots[possibleShots.size() / 1.5].first;
 			velocity = possibleShots[possibleShots.size() / 1.5].second;
@@ -109,42 +108,35 @@ bool
 PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
-	OIS::JoyStick *joystick = OGF::InputManager::getSingletonPtr()->getJoystick();
-	OIS::JoyStickState joystickState;
-
-	if (joystick != NULL) {
-		joystickState = joystick->getJoyStickState();
-	}
 
 	Ogre::Vector3 currentPosition = getPosition();
 	Ogre::Vector3 movement(0, 0, 0);
 
-	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::UP)) ||
-		(joystick && joystickState.mAxes[1].abs < -JOYSTICK_SENSITIVITY))
+	if (inputAdapter->isActionActive(Controls::UP))
 		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::DOWN)) ||
-		(joystick && joystickState.mAxes[1].abs > JOYSTICK_SENSITIVITY))
+	if (inputAdapter->isActionActive(Controls::DOWN))
 		movement.x = currentPosition.x > 0 ? 1 : -1;
-	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::LEFT)) ||
-		(joystick && joystickState.mAxes[0].abs < -JOYSTICK_SENSITIVITY))
+	if (inputAdapter->isActionActive(Controls::LEFT))
 		movement.z = currentPosition.x > 0 ? 1 : -1;
-	if (keyboard->isKeyDown(inputAdapter->actionToKeyInput(Controls::RIGHT)) ||
-		(joystick && joystickState.mAxes[0].abs > JOYSTICK_SENSITIVITY))
+	if (inputAdapter->isActionActive(Controls::RIGHT))
 		movement.z = currentPosition.x > 0 ? -1 : 1;
 	
-	movement = event.timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
+	// Only update position in case the movement vector has positive length
+	if (movement != Ogre::Vector3::ZERO) {
+		movement = event.timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
+		Ogre::Vector3 destination = currentPosition + movement;
 
-	Ogre::Vector3 destination = currentPosition + movement;
+		// Prevent trespassing the net
+		if (currentPosition.x >= 0) {
+			destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
+		} else {
+			destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
+		}
 
-	// Prevent trespassing the net
-	if (currentPosition.x >= 0) {
-		destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
-	} else {
-		destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
+		setPosition(destination);
 	}
 
-	setPosition(destination);
+	_shotBuffer->notifyPosition(currentPosition, _ball->getPosition());
 
 	return true;
 }
