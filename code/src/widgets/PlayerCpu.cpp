@@ -49,6 +49,52 @@ PlayerCpu::exit()
 bool
 PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 {
+	Ogre::Vector3 ballPosition = _ball->getPosition();
+	Ogre::Vector3 origin = ballPosition;
+
+	if (ballPosition.x <= -11) {
+		Ogre::Vector3 destination(10, 0, 0);
+
+		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
+		Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
+			->setDestination(destination)
+			->calculateSet(20);
+		
+		Dynamics::CalculationSet possibleShots;
+
+		for (int i = 0; i < allShots.size(); i++) {
+			Ogre::Real angle = allShots[i].first;
+			Ogre::Real velocity = allShots[i].second;
+
+			// Discard impossible angles and directions
+			if (!isnan(velocity) && !isnan(angle) && velocity > 0) {
+				possibleShots.push_back(allShots[i]);
+			}
+		}
+
+		int availableShots = possibleShots.size();
+
+		if (availableShots > 0) {
+			int shot = 5;
+
+			Ogre::Real angle = possibleShots[shot].first;
+			Ogre::Real velocity = possibleShots[shot].second;
+			Ogre::Vector3 direction = destination - origin;
+			Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
+
+			direction.x = velocity * cos(angle) * sin(angleToZ);
+			direction.z = velocity * cos(angle) * cos(angleToZ);
+			direction.y = velocity * sin(angle);
+			
+			if (ballPosition.x  > 0) {
+				direction.x = -direction.x;
+				direction.z = -direction.z;
+			}
+
+			_ball->setLinearVelocity(direction);
+		}
+	}
+
 	return true;
 }
 
