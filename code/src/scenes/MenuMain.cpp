@@ -34,21 +34,44 @@ MenuMain::_createOptionText(const std::string &text, const std::string &font, co
 }
 
 void
-MenuMain::_setCurrentOption(Option option)
+MenuMain::_onActionDone(const Controls::Action &action)
 {
-	// Reset the previously selected option
-	CEGUI::Window *currentOptionWindow = _optionsMap[_currentOption];
-	CEGUI::String currentOptionText = currentOptionWindow->getText();
-	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
-		_configValue<std::string>("font_color_unselected")));
+	switch (action) {
+		// Go to next option
+		case Controls::RIGHT:
+		case Controls::DOWN:
+			{
+				Option newOption = static_cast<Option>((_currentOption + 1) % _optionsMap.size());
+				_setCurrentOption(newOption);
+			}
+			break;
+	
+		// Go to previous option
+		case Controls::LEFT:
+		case Controls::UP:
+			{
+				Option newOption;
 
-	_currentOption = option;
+				if (_currentOption == 0) {
+					newOption = static_cast<Option>(_optionsMap.size() - 1);
+				} else {
+					newOption = static_cast<Option>(_currentOption - 1);
+				}
 
-	// Set the new option
-	currentOptionWindow = _optionsMap[_currentOption];
-	currentOptionText = currentOptionWindow->getText();
-	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
-		_configValue<std::string>("font_color_selected")));
+				_setCurrentOption(newOption);
+			}
+			break;
+
+		// Process the current option
+		case Controls::CONTINUE:
+		case Controls::SHOT_DRIVE:
+			_processCurrentOption();
+			break;
+		
+		default:
+		case Controls::NONE:
+			break;
+	}
 }
 
 void
@@ -73,6 +96,24 @@ MenuMain::_processCurrentOption()
 			_exit = true;
 			break;
 	}
+}
+
+void
+MenuMain::_setCurrentOption(const Option &option)
+{
+	// Reset the previously selected option
+	CEGUI::Window *currentOptionWindow = _optionsMap[_currentOption];
+	CEGUI::String currentOptionText = currentOptionWindow->getText();
+	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
+		_configValue<std::string>("font_color_unselected")));
+
+	_currentOption = option;
+
+	// Set the new option
+	currentOptionWindow = _optionsMap[_currentOption];
+	currentOptionText = currentOptionWindow->getText();
+	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
+		_configValue<std::string>("font_color_selected")));
 }
 
 MenuMain::MenuMain()
@@ -140,42 +181,44 @@ MenuMain::frameStarted(const Ogre::FrameEvent &event)
 bool
 MenuMain::keyPressed(const OIS::KeyEvent &event)
 {
-	switch (InputAdapter::getSingletonPtr()->inputToAction(event)) {
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+	_onActionDone(inputAdapter->inputToAction(event));
+	return true;
+}
 
-		// Go to next option
-		case Controls::RIGHT:
-		case Controls::DOWN:
-			{
-				Option newOption = static_cast<Option>((_currentOption + 1) % _optionsMap.size());
-				_setCurrentOption(newOption);
-			}
+bool
+MenuMain::buttonPressed(const OIS::JoyStickEvent &event, int button)
+{
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+	_onActionDone(inputAdapter->inputToAction(event, button));
+	return true;
+}
+
+bool
+MenuMain::axisMoved(const OIS::JoyStickEvent &event, int axis)
+{
+	Controls::Action action;
+	int value = event.state.mAxes[axis].abs;
+
+	switch(axis) {
+		// Horizontal
+		case 0:
+			if (value > 2500)
+				action = Controls::RIGHT;
+			else if (value < -2500)
+				action = Controls::LEFT;
+				break;
+		// Vertical
+		case 1:
+			if (value > 2500)
+				action = Controls::DOWN;
+			else if (value < -2500)
+				action = Controls::UP;
 			break;
-	
-		// Go to previous option
-		case Controls::LEFT:
-		case Controls::UP:
-			{
-				Option newOption;
-
-				if (_currentOption == 0) {
-					newOption = static_cast<Option>(_optionsMap.size() - 1);
-				} else {
-					newOption = static_cast<Option>(_currentOption - 1);
-				}
-
-				_setCurrentOption(newOption);
-			}
-			break;
-
-		// Process the current option
-		case Controls::CONTINUE:
-			_processCurrentOption();
-			break;
-		
 		default:
-		case Controls::NONE:
 			break;
 	}
 
+	_onActionDone(action);
 	return true;
 }

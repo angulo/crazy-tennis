@@ -191,6 +191,18 @@ Match::_loadStaticObjects()
 	surrounding->build();
 }
 
+void
+Match::_onActionDone(const Controls::Action &action)
+{
+	switch (action) {
+		case Controls::BACK:
+			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
+			break;
+		default:
+			break;
+	}
+}
+
 Match::Match(Data::Match *data)
 	:	_data(data)
 {
@@ -257,13 +269,17 @@ Match::frameStarted(const Ogre::FrameEvent &event)
 bool
 Match::keyPressed(const OIS::KeyEvent &event)
 {
-	switch (InputAdapter::getSingletonPtr()->inputToAction(event)) {
-		case Controls::BACK:
-			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
-			break;
-		default:
-			break;
-	}
+	Controls::Action action = InputAdapter::getSingletonPtr()->inputToAction(event);
+	_onActionDone(action);
+
+	return true;
+}
+
+bool
+Match::buttonPressed(const OIS::JoyStickEvent &event, int button)
+{
+	Controls::Action action = InputAdapter::getSingletonPtr()->inputToAction(event, button);
+	_onActionDone(action);
 
 	return true;
 }

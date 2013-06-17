@@ -44,6 +44,7 @@ InputAdapter::_initializeMaps(const std::string &configFilePath)
 
 	_buttonMap[1] = Controls::SHOT_DRIVE;
 	_buttonMap[2] = Controls::SHOT_LOB;
+	_buttonMap[3] = Controls::BACK;
 
 	for (std::map<int, Controls::Action>::iterator it = _buttonMap.begin();
 		it != _buttonMap.end(); it++) {

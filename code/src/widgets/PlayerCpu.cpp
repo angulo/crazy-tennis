@@ -53,7 +53,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 	Ogre::Vector3 origin = ballPosition;
 
 	if (ballPosition.x <= -11) {
-		Ogre::Vector3 destination(10, 0, 0);
+		Ogre::Vector3 destination(11.5, 0, 4);
 
 		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 		Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
@@ -75,7 +75,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 		int availableShots = possibleShots.size();
 
 		if (availableShots > 0) {
-			int shot = 5;
+			int shot = availableShots / 3;
 
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;

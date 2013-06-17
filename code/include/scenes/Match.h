@@ -68,6 +68,8 @@ namespace CrazyTennis {
 				void _loadDynamicObjects();
 				void _loadLights();
 				void _loadStaticObjects();
+
+				void _onActionDone(const Controls::Action &action);
 			
 			public:
 				
@@ -83,6 +85,7 @@ namespace CrazyTennis {
 				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
+				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 		};
 	};
 };

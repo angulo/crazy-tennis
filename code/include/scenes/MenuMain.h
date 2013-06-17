@@ -48,8 +48,10 @@ namespace CrazyTennis {
 				bool _exit;
 
 				CEGUI::Window * _createOptionText(const std::string &text, const std::string &font, const int &x, const int &y);
-				void _setCurrentOption(Option option);
+
+				void _onActionDone(const Controls::Action &action);
 				void _processCurrentOption();
+				void _setCurrentOption(const Option &option);
 
 			public:
 				
@@ -63,6 +65,8 @@ namespace CrazyTennis {
 
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
+				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
+				bool axisMoved(const OIS::JoyStickEvent &event, int axis);
 		};
 	};
 };

@@ -35,14 +35,26 @@ namespace CrazyTennis {
 
 				OGF::SceneId _shotBufferId;
 				Widget::ShotBuffer *_shotBuffer;
+				bool _directionBlocked;
 
 				/**
-				 * Execute a shot by hitting the ball in the appropiate direction,
-				 * depending on the current shot buffer status.
+				 * Calculate the shot destination depending on the current shot
+				 * buffer status.
 				 *
-				 * @param action Action to be executed.
+				 * @return Destination of the shot.
 				 */
-				void _shoot(const Controls::Action &action);
+				Ogre::Vector3 _calculateDestination();
+
+				/**
+				 * Check if the player can shot at the moment.
+				 * @return true if the player can shot, false otherwise.
+				 */
+				bool _canShoot(const Controls::Action &action);
+
+				/**
+				 * Move the player according to the current buffer value.
+				 */
+				void _move(const Ogre::Real &timeSinceLastFrame);
 
 				/**
 				 * Select the shot to be executed depending on the shot buffer status
@@ -53,13 +65,15 @@ namespace CrazyTennis {
 				 * @return Index of the most appropiate shot to be done at the moment. -1 if no possible shot.
 				 */
 				int _selectShot(const Controls::Action &action, const int &availableShots);
-
-				/**
-				 * Check if the player can shot at the moment.
-				 * @return true if the player can shot, false otherwise.
-				 */
-				bool _canShoot(const Controls::Action &action);
 			
+				/**
+				 * Execute a shot by hitting the ball in the appropiate direction,
+				 * depending on the current shot buffer status.
+				 *
+				 * @param action Action to be executed.
+				 */
+				void _shoot(const Controls::Action &action);
+
 			public:
 				
 				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
@@ -69,6 +83,7 @@ namespace CrazyTennis {
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
+				bool keyPressed(const OIS::KeyEvent &event);
 				bool keyReleased(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 				bool buttonReleased(const OIS::JoyStickEvent &event, int button);

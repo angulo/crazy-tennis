@@ -20,17 +20,101 @@
 
 using namespace CrazyTennis::Widget;
 
+Ogre::Vector3 
+PlayerHuman::_calculateDestination()
+{
+	Ogre::Real halfWidth(_configValue<float>("courtWidth") / 2.0);
+	Ogre::Real length(_configValue<float>("courtLength"));
+
+	Ogre::Real horizontalBalance = _shotBuffer->getValue(Controls::RIGHT) - 
+		_shotBuffer->getValue(Controls::LEFT);
+	Ogre::Real verticalBalance = _shotBuffer->getValue(Controls::UP) - 
+		_shotBuffer->getValue(Controls::DOWN) - 0.5;
+	
+	Ogre::Vector3 destination(length * (1 + verticalBalance), 0, halfWidth * horizontalBalance);
+
+	if (_ball->getPosition().x > 0) {
+		destination = (-1) * destination;
+	}
+
+	return destination;
+}
+
+bool
+PlayerHuman::_canShoot(const Controls::Action &action)
+{
+	return _shotBuffer->getValue(action) > 0;	
+}
+
+void
+PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
+{
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+
+	Ogre::Vector3 currentPosition = getPosition();
+	Ogre::Vector3 movement(0, 0, 0);
+
+	if (inputAdapter->isActionActive(Controls::UP))
+		movement.x = currentPosition.x > 0 ? -1 : 1;
+	if (inputAdapter->isActionActive(Controls::DOWN))
+		movement.x = currentPosition.x > 0 ? 1 : -1;
+	if (inputAdapter->isActionActive(Controls::LEFT))
+		movement.z = currentPosition.x > 0 ? 1 : -1;
+	if (inputAdapter->isActionActive(Controls::RIGHT))
+		movement.z = currentPosition.x > 0 ? -1 : 1;
+	
+	// Only update position in case the movement vector has positive length
+	if (movement != Ogre::Vector3::ZERO) {
+		movement = timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
+		Ogre::Vector3 destination = currentPosition + movement;
+
+		// Prevent trespassing the net
+		if (currentPosition.x >= 0) {
+			destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
+		} else {
+			destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
+		}
+
+		setPosition(destination);
+	}
+}
+
+int
+PlayerHuman::_selectShot(const Controls::Action &action, const int &availableShots)
+{
+	int shot, lowLimit, highLimit;
+	Ogre::Real bufferValue = _shotBuffer->getValue(action);
+
+	if (bufferValue == 0) {
+		shot = -1;
+	} else {
+		switch(action) {
+			case Controls::SHOT_DRIVE:
+				lowLimit = _configValue<float>("driveShotLowLimit") * (availableShots - 1);
+				highLimit = _configValue<float>("driveShotHighLimit") * (availableShots - 1);
+				shot = lowLimit + ((1.0 - bufferValue) * (highLimit - lowLimit));
+				break;	
+			case Controls::SHOT_LOB:
+				lowLimit = _configValue<float>("lobShotLowLimit") * (availableShots - 1);
+				highLimit = _configValue<float>("lobShotHighLimit") * (availableShots - 1);
+				shot = lowLimit + (bufferValue * (highLimit - lowLimit));
+				break;
+			default:
+				break;
+		}
+	}
+
+	return shot;
+}
+
+
 void
 PlayerHuman::_shoot(const Controls::Action &action)
 {
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
 	Ogre::Vector3 origin = _ball->getPosition();
-	Ogre::Vector3 destination(10, 0, 0);
-
-	if (_ball->getPosition().x > 0) {
-		destination = (-1) * destination;
-	}
+	Ogre::Vector3 destination = _calculateDestination();
 
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
 		->setDestination(destination)
@@ -65,7 +149,6 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			
 			if (_ball->getPosition().x > 0) {
 				direction.x = -direction.x;
-				direction.z = -direction.z;
 			}
 
 			_ball->setLinearVelocity(direction);
@@ -73,42 +156,8 @@ PlayerHuman::_shoot(const Controls::Action &action)
 	}
 }
 
-int
-PlayerHuman::_selectShot(const Controls::Action &action, const int &availableShots)
-{
-	int shot, lowLimit, highLimit;
-	Ogre::Real bufferValue = _shotBuffer->getValue(action);
-
-	if (bufferValue == 0) {
-		shot = -1;
-	} else {
-		switch(action) {
-			case Controls::SHOT_DRIVE:
-				lowLimit = _configValue<float>("driveShotLowLimit") * (availableShots - 1);
-				highLimit = _configValue<float>("driveShotHighLimit") * (availableShots - 1);
-				shot = lowLimit + ((1.0 - bufferValue) * (highLimit - lowLimit));
-				break;	
-			case Controls::SHOT_LOB:
-				lowLimit = _configValue<float>("lobShotLowLimit") * (availableShots - 1);
-				highLimit = _configValue<float>("lobShotHighLimit") * (availableShots - 1);
-				shot = lowLimit + (bufferValue * (highLimit - lowLimit));
-				break;
-			default:
-				break;
-		}
-	}
-
-	return shot;
-}
-
-bool
-PlayerHuman::_canShoot(const Controls::Action &action)
-{
-	return _shotBuffer->getValue(action) > 0;	
-}
-
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, data)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, data), _directionBlocked(false)
 {
 
 }
@@ -136,36 +185,24 @@ PlayerHuman::exit()
 bool
 PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
+	if (!_directionBlocked)
+		_move(event.timeSinceLastFrame);
+
+	_shotBuffer->notifyPosition(getPosition(), _ball->getPosition());
+	return true;
+}
+
+bool
+PlayerHuman::keyPressed(const OIS::KeyEvent &event)
+{
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-
-	Ogre::Vector3 currentPosition = getPosition();
-	Ogre::Vector3 movement(0, 0, 0);
-
-	if (inputAdapter->isActionActive(Controls::UP))
-		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (inputAdapter->isActionActive(Controls::DOWN))
-		movement.x = currentPosition.x > 0 ? 1 : -1;
-	if (inputAdapter->isActionActive(Controls::LEFT))
-		movement.z = currentPosition.x > 0 ? 1 : -1;
-	if (inputAdapter->isActionActive(Controls::RIGHT))
-		movement.z = currentPosition.x > 0 ? -1 : 1;
+	Controls::Action action = inputAdapter->inputToAction(event);
 	
-	// Only update position in case the movement vector has positive length
-	if (movement != Ogre::Vector3::ZERO) {
-		movement = event.timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
-		Ogre::Vector3 destination = currentPosition + movement;
+	if (!_directionBlocked &&
+		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
 
-		// Prevent trespassing the net
-		if (currentPosition.x >= 0) {
-			destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
-		} else {
-			destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
-		}
-
-		setPosition(destination);
+		_directionBlocked = true;
 	}
-
-	_shotBuffer->notifyPosition(currentPosition, _ball->getPosition());
 
 	return true;
 }
@@ -182,13 +219,24 @@ PlayerHuman::keyReleased(const OIS::KeyEvent &event)
 		}
 	}
 
+	_directionBlocked = false;
+
 	return true;
 }
 
 bool
 PlayerHuman::buttonPressed(const OIS::JoyStickEvent &event, int button)
 {
-	return false;
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+	Controls::Action action = inputAdapter->inputToAction(event, button);
+	
+	if (!_directionBlocked &&
+		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
+
+		_directionBlocked = true;
+	}
+
+	return true;
 }
 
 bool
@@ -202,6 +250,8 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 			_shoot(action);
 		}
 	}
+
+	_directionBlocked = false;
 
 	return true;
 }
