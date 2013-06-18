@@ -30,8 +30,19 @@ SceneFactory::create(OGF::SceneId sceneId)
 			scene = new Scene::Splash();
 			break;
 		case Scene::MENU_MAIN:
-			scene = new Scene::MenuMain();
+			scene = new Scene::Menu::Main();
 			break;
+			/*
+		case Scene::SETTINGS_MAIN:
+			scene = new Scene::Menu::SettingsMain();
+			break;
+		case Scene::SETTINGS_CONTROLS:
+			scene = new Scene::Menu::SettingsControls();
+			break;
+		case Scene::SETTINGS_SOUND:
+			scene = new Scene::Menu::SettingsSound();
+			break;
+		*/
 		case Scene::MATCH:
 		case Widget::BALL:
 			throw "Scene must be created with specific configuration";

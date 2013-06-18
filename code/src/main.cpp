@@ -28,7 +28,7 @@ main(int argc, char **argv)
 
 	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
 
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::MENU_MAIN)) {
+	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", "Crazy Tennis", sceneFactory, CrazyTennis::Scene::SPLASH)) {
 		return 1;
 	}
 

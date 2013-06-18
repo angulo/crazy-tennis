@@ -20,7 +20,7 @@
 #define _SCENES_SCENES_H_
 
 #include "scenes/Match.h"
-#include "scenes/MenuMain.h"
+#include "scenes/menus/Main.h"
 #include "scenes/Splash.h"
 
 #endif

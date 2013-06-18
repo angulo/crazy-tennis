@@ -21,52 +21,38 @@
 
 #include <OGF/OGF.h>
 
-#include "InputAdapter.h"
 #include "SceneFactory.h"
 #include "data/Data.h"
+#include "scenes/menus/Base.h"
 
 namespace CrazyTennis {
 	
 	namespace Scene {
+		
+		namespace Menu {
 
-		class MenuMain: public OGF::Scene {
-			
-			enum Option {
-				OPTION_PLAY = 0,
-				OPTION_RECORDS = 1,
-				OPTION_SETTINGS = 2,
-				OPTION_EXIT = 3
+			class Main: public Base {
+				
+				enum Option {
+					OPTION_PLAY = 0,
+					OPTION_RECORDS = 1,
+					OPTION_SETTINGS = 2,
+					OPTION_EXIT = 3
+				};
+
+				protected:
+					
+					bool _exit;
+					void _processCurrentOption();
+
+				public:
+					
+					Main();
+					~Main();
+
+					void enter();
+					bool frameStarted(const Ogre::FrameEvent &event);
 			};
-
-			private:
-				
-				CEGUI::Window *_windowBackground;
-				CEGUI::Window *_container;
-
-				Option _currentOption;
-				std::map<Option, CEGUI::Window *> _optionsMap;
-				bool _exit;
-
-				CEGUI::Window * _createOptionText(const std::string &text, const std::string &font, const int &x, const int &y);
-
-				void _onActionDone(const Controls::Action &action);
-				void _processCurrentOption();
-				void _setCurrentOption(const Option &option);
-
-			public:
-				
-				MenuMain();
-				~MenuMain();
-
-				void enter();
-				void exit();
-				void pause();
-				void resume();
-
-				bool frameStarted(const Ogre::FrameEvent &event);
-				bool keyPressed(const OIS::KeyEvent &event);
-				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
-				bool axisMoved(const OIS::JoyStickEvent &event, int axis);
 		};
 	};
 };
