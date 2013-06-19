@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * MenuSettingsMain.h -- Settings main menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,39 +16,41 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _SCENE_MENU_SETTINGS_MAIN_H_
+#define _SCENE_MENU_SETTINGS_MAIN_H_
+
+#include <OGF/OGF.h>
+
 #include "SceneFactory.h"
+#include "scenes/menus/Base.h"
 
-using namespace CrazyTennis;
+namespace CrazyTennis {
+	
+	namespace Scene {
+		
+		namespace Menu {
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
-{
-	OGF::Scene *scene = NULL;
+			class SettingsMain: public Base {
+				
+				enum Option {
+					OPTION_CONTROLS = 0,
+					OPTION_SOUND = 1,
+					OPTION_BACK = 2
+				};
 
-	switch(sceneId) {
-		case Scene::SPLASH:
-			scene = new Scene::Splash();
-			break;
-		case Scene::MENU_MAIN:
-			scene = new Scene::Menu::Main();
-			break;
-		case Scene::MENU_SETTINGS_MAIN:
-			scene = new Scene::Menu::SettingsMain();
-			break;
-			/*
-		case Scene::SETTINGS_CONTROLS:
-			scene = new Scene::Menu::SettingsControls();
-			break;
-		case Scene::SETTINGS_SOUND:
-			scene = new Scene::Menu::SettingsSound();
-			break;
-		*/
-		case Scene::MATCH:
-		case Widget::BALL:
-			throw "Scene must be created with specific configuration";
-		default:
-			break;
-	}
+				protected:
+					
+					void _processCurrentOption();
 
-	return scene;
-}
+				public:
+					
+					SettingsMain();
+					~SettingsMain();
+
+					void enter();
+			};
+		};
+	};
+};
+
+#endif

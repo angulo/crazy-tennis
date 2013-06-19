@@ -34,6 +34,7 @@ Main::_processCurrentOption()
 			}
 			break;
 		case OPTION_SETTINGS:
+			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_SETTINGS_MAIN);
 			break;
 		case OPTION_RECORDS:
 			break;
