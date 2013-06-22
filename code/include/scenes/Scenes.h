@@ -21,6 +21,7 @@
 
 #include "scenes/Match.h"
 #include "scenes/menus/Main.h"
+#include "scenes/menus/SettingsControls.h"
 #include "scenes/menus/SettingsMain.h"
 #include "scenes/Splash.h"
 

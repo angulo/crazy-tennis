@@ -38,7 +38,7 @@ namespace CrazyTennis {
 
 	namespace Widget {
 		enum {
-			BALL = 3
+			BALL = 6
 		};
 	};
 

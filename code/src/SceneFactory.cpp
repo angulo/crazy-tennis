@@ -35,10 +35,10 @@ SceneFactory::create(OGF::SceneId sceneId)
 		case Scene::MENU_SETTINGS_MAIN:
 			scene = new Scene::Menu::SettingsMain();
 			break;
-			/*
-		case Scene::SETTINGS_CONTROLS:
+		case Scene::MENU_SETTINGS_CONTROLS:
 			scene = new Scene::Menu::SettingsControls();
 			break;
+			/*
 		case Scene::SETTINGS_SOUND:
 			scene = new Scene::Menu::SettingsSound();
 			break;

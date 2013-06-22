@@ -1,5 +1,5 @@
 /* 
- * MenuSettingsMain.h -- Settings main menu scene header file
+ * SettingsMain.h -- Settings main menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 

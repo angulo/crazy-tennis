@@ -195,7 +195,7 @@ void
 Match::_onActionDone(const Controls::Action &action)
 {
 	switch (action) {
-		case Controls::BACK:
+		case Controls::START:
 			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
 			break;
 		default:

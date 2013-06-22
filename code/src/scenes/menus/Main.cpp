@@ -21,6 +21,17 @@
 using namespace CrazyTennis::Scene::Menu;
 
 void
+Main::_onActionDone(const Controls::Action &action)
+{
+	// Prevent going back to previous menu as we dont have any
+	if (action == Controls::SHOT_LOB) {
+		return;
+	} else {
+		Base::_onActionDone(action);
+	}
+}
+
+void
 Main::_processCurrentOption()
 {
 	switch(_currentOption) {

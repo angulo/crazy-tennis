@@ -25,6 +25,7 @@ SettingsMain::_processCurrentOption()
 {
 	switch(_currentOption) {
 		case OPTION_CONTROLS:
+			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_SETTINGS_CONTROLS);
 			break;
 		case OPTION_SOUND:
 			break;

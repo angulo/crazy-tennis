@@ -19,7 +19,7 @@
 #ifndef _INPUT_ADAPTER_H_
 #define _INPUT_ADAPTER_H_
 
-#define JOYSTICK_SENSITIVITY 2000
+#define JOYSTICK_SENSITIVITY 2500
 
 #include <OGF/OGF.h>
 
@@ -37,11 +37,9 @@ namespace CrazyTennis {
 			DOWN = 2,
 			LEFT = 3,
 			RIGHT = 4,
-			CONTINUE = 5,
-			BACK = 6,
-			START = 7,
-			SHOT_DRIVE = 8,
-			SHOT_LOB = 9
+			SHOT_DRIVE = 5,
+			SHOT_LOB = 6,
+			START = 7
 		};
 	};
 
@@ -57,6 +55,8 @@ namespace CrazyTennis {
 			std::map<Controls::Action, OIS::KeyCode> _keyMapInverse;
 			std::map<int, Controls::Action> _buttonMap;
 			std::map<Controls::Action, int> _buttonMapInverse;
+			std::map<std::pair<int, int>, Controls::Action> _axisMap;
+			std::map<Controls::Action, std::pair<int, int> > _axisMapInverse;
 
 			/**
 			 * Initialize the map between input events and semantic actions
@@ -65,7 +65,7 @@ namespace CrazyTennis {
 			 *	actions already mapped.
 			 */
 			void _initializeMaps(const std::string &configFilePath);
-		
+
 		public:
 		
 			InputAdapter();
@@ -73,6 +73,7 @@ namespace CrazyTennis {
 			
 			static InputAdapter & getSingleton();
 			static InputAdapter * getSingletonPtr();
+			
 
 			/**
 			 * Get the semantic action associated to a key event.
@@ -91,6 +92,15 @@ namespace CrazyTennis {
 			Controls::Action inputToAction(const OIS::JoyStickEvent &inputEvent, int button);
 
 			/**
+			 * Get the semantic action associated to a joystick event.
+			 *
+			 * @param axis Moved axis.
+			 * @param value Value of the axis.
+			 * @return Semantic action associated to the input event.
+			 */
+			Controls::Action inputToAction(int axis, int value);
+
+			/**
 			 * Get the input needed to generate a certain action.
 			 *
 			 * @param action Domain action.
@@ -105,6 +115,15 @@ namespace CrazyTennis {
 			 * @return Input keycode to press to generate the action.
 			 */
 			int actionToButtonInput(const Controls::Action &action);
+
+			/**
+			 * Get the input needed to generate a certain action.
+			 *
+			 * @param action Domain action.
+			 * @return Axis value to generate the provided action.
+			 */
+			std::pair<int, int>
+			actionToAxisInput(const Controls::Action &action);
 
 			/**
 			 * Check if the provided action is being done right now, that is,
@@ -122,7 +141,23 @@ namespace CrazyTennis {
 			 * @param inputEvent Input event to map from.
 			 * @param action Semantic action to map to.
 			 */
-			void store(const OIS::KeyEvent &inputEvent, Controls::Action action);
+			void store(const OIS::KeyEvent &inputEvent, const Controls::Action &action);
+
+			/**
+			 * Store a new association between an action and a semantic event.
+			 *
+			 * @param button Joystick button pressed.
+			 * @param action Semantic action to map to.
+			 */
+			void store(const int &button, const Controls::Action &action);
+
+			/**
+			 * Store a new association between an action and a semantic event.
+			 *
+			 * @param axis Axis identification.
+			 * @param value Value of the axis.
+			 */
+			void store(const int &axis, const int& value, const Controls::Action &action);
 	};
 };
 

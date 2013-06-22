@@ -1,5 +1,5 @@
 /* 
- * MenuMain.h -- Main menu scene header file
+ * SettingsControls.h -- Settings controls menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,13 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENE_MENU_MAIN_H_
-#define _SCENE_MENU_MAIN_H_
+#ifndef _SCENE_MENU_SETTINGS_CONTROLS_H_
+#define _SCENE_MENU_SETTINGS_CONTROLS_H_
 
 #include <OGF/OGF.h>
 
 #include "SceneFactory.h"
-#include "data/Data.h"
 #include "scenes/menus/Base.h"
 
 namespace CrazyTennis {
@@ -31,28 +30,34 @@ namespace CrazyTennis {
 		
 		namespace Menu {
 
-			class Main: public Base {
+			class SettingsControls: public Base {
 				
 				enum Option {
-					OPTION_PLAY = 0,
-					OPTION_RECORDS = 1,
-					OPTION_SETTINGS = 2,
-					OPTION_EXIT = 3
+					OPTION_UP = 0,
+					OPTION_DOWN = 1,
+					OPTION_LEFT = 2,
+					OPTION_RIGHT = 3,
+					OPTION_SHOT_DRIVE = 4,
+					OPTION_SHOT_LOB = 5,
+					OPTION_START = 6,
+					OPTION_BACK = 7
 				};
 
 				protected:
-					
-					bool _exit;
+
+					bool _editing;
 					void _onActionDone(const Controls::Action &action);
 					void _processCurrentOption();
 
 				public:
 					
-					Main();
-					~Main();
+					SettingsControls();
+					~SettingsControls();
 
 					void enter();
-					bool frameStarted(const Ogre::FrameEvent &event);
+					bool keyPressed(const OIS::KeyEvent &event);
+					bool buttonPressed(const OIS::JoyStickEvent &event, int button);
+					bool axisMoved(const OIS::JoyStickEvent &event, int axis);
 			};
 		};
 	};

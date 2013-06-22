@@ -63,13 +63,15 @@ Base::_onActionDone(const Controls::Action &action)
 			break;
 
 		// Process the current option
-		case Controls::CONTINUE:
 		case Controls::SHOT_DRIVE:
+		case Controls::START:
 			_processCurrentOption();
 			break;
-		
+		// Back to the previous menu
+		case Controls::SHOT_LOB:
+			OGF::SceneController::getSingletonPtr()->pop();
+			break;
 		default:
-		case Controls::NONE:
 			break;
 	}
 }
@@ -135,28 +137,7 @@ Base::buttonPressed(const OIS::JoyStickEvent &event, int button)
 bool
 Base::axisMoved(const OIS::JoyStickEvent &event, int axis)
 {
-	Controls::Action action;
-	int value = event.state.mAxes[axis].abs;
-
-	switch(axis) {
-		// Horizontal
-		case 0:
-			if (value > JOYSTICK_SENSITIVITY)
-				action = Controls::RIGHT;
-			else if (value < -JOYSTICK_SENSITIVITY)
-				action = Controls::LEFT;
-				break;
-		// Vertical
-		case 1:
-			if (value > JOYSTICK_SENSITIVITY)
-				action = Controls::DOWN;
-			else if (value < -JOYSTICK_SENSITIVITY)
-				action = Controls::UP;
-			break;
-		default:
-			break;
-	}
-
-	_onActionDone(action);
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+	_onActionDone(inputAdapter->inputToAction(axis, event.state.mAxes[axis].abs));
 	return true;
 }

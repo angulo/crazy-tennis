@@ -25,14 +25,13 @@ template<> InputAdapter * Ogre::Singleton<InputAdapter>::msSingleton = 0;
 void
 InputAdapter::_initializeMaps(const std::string &configFilePath)
 {
-	// Temporal keymap hardcoded
+	// Default keymap
 	_keyMap[OIS::KC_UP] = Controls::UP;
 	_keyMap[OIS::KC_DOWN] = Controls::DOWN;
 	_keyMap[OIS::KC_LEFT] = Controls::LEFT;
 	_keyMap[OIS::KC_RIGHT] = Controls::RIGHT;
-	_keyMap[OIS::KC_RETURN] = Controls::CONTINUE;
-	_keyMap[OIS::KC_ESCAPE] = Controls::BACK;
-	_keyMap[OIS::KC_SPACE] = Controls::START;
+	_keyMap[OIS::KC_ESCAPE] = Controls::START;
+	_keyMap[OIS::KC_RETURN] = Controls::SHOT_DRIVE;
 	_keyMap[OIS::KC_J] = Controls::SHOT_DRIVE;
 	_keyMap[OIS::KC_K] = Controls::SHOT_LOB;
 
@@ -42,14 +41,26 @@ InputAdapter::_initializeMaps(const std::string &configFilePath)
 		_keyMapInverse[it->second] = it->first;
 	}
 
+	// Default button map
 	_buttonMap[1] = Controls::SHOT_DRIVE;
 	_buttonMap[2] = Controls::SHOT_LOB;
-	_buttonMap[3] = Controls::BACK;
 
 	for (std::map<int, Controls::Action>::iterator it = _buttonMap.begin();
 		it != _buttonMap.end(); it++) {
 
 		_buttonMapInverse[it->second] = it->first;
+	}
+
+	// Default axis map
+	_axisMap[std::make_pair(0, JOYSTICK_SENSITIVITY)] = Controls::RIGHT;
+	_axisMap[std::make_pair(0, -JOYSTICK_SENSITIVITY)] = Controls::LEFT;
+	_axisMap[std::make_pair(1, JOYSTICK_SENSITIVITY)] = Controls::DOWN;
+	_axisMap[std::make_pair(1, -JOYSTICK_SENSITIVITY)] = Controls::UP;
+
+	for (std::map<std::pair<int, int>, Controls::Action>::iterator it = _axisMap.begin();
+		it != _axisMap.end(); it++) {
+
+		_axisMapInverse[it->second] = it->first;
 	}
 }
 
@@ -72,7 +83,6 @@ InputAdapter::getSingleton()
 
 	return *msSingleton;
 }
-
 
 InputAdapter *
 InputAdapter::getSingletonPtr()
@@ -111,6 +121,28 @@ InputAdapter::inputToAction(const OIS::JoyStickEvent &event, int button)
 	return action;
 }
 
+Controls::Action
+InputAdapter::inputToAction(int axis, int value)
+{
+	Controls::Action action = Controls::NONE;
+
+	for (std::map<std::pair<int, int>, Controls::Action>::iterator it = _axisMap.begin();
+		it != _axisMap.end(); it++) {
+
+		std::pair<int, int> axisInput = it->first;
+		
+		if (axisInput.first == axis) {
+			if (value < 0 && axisInput.second < 0 && value <= axisInput.second) {
+				action = it->second;
+			} else if (value > 0 && axisInput.second > 0 && value >= axisInput.second) {
+				action = it->second;
+			}
+		}
+	}
+
+	return action;
+}
+
 OIS::KeyCode
 InputAdapter::actionToKeyInput(const Controls::Action &action)
 {
@@ -137,6 +169,19 @@ InputAdapter::actionToButtonInput(const Controls::Action &action)
 	return input;
 }
 
+std::pair<int, int>
+InputAdapter::actionToAxisInput(const Controls::Action &action)
+{
+	std::pair<int,int> input = std::make_pair(-1, -1);
+
+	std::map<Controls::Action, std::pair<int, int> >::iterator it = _axisMapInverse.find(action);
+	if (it != _axisMapInverse.end()) {
+		input = it->second;
+	}
+
+	return input;
+}
+
 bool
 InputAdapter::isActionActive(const Controls::Action &action)
 {
@@ -151,19 +196,16 @@ InputAdapter::isActionActive(const Controls::Action &action)
 	// Last check the joystick in case its plugged in
 	if (!isActive && joystick) {
 		OIS::JoyStickState joystickState = joystick->getJoyStickState();
+		std::pair<int, int> axisInput = actionToAxisInput(action);
 
 		switch(action) {
 			case Controls::UP:
-				isActive = joystickState.mAxes[1].abs < -JOYSTICK_SENSITIVITY;
+			case Controls::LEFT:
+				isActive = joystickState.mAxes[axisInput.first].abs < axisInput.second;
 				break;
 			case Controls::DOWN:
-				isActive = joystickState.mAxes[1].abs > JOYSTICK_SENSITIVITY;
-				break;
-			case Controls::LEFT:
-				isActive = joystickState.mAxes[0].abs < -JOYSTICK_SENSITIVITY;
-				break;
 			case Controls::RIGHT:
-				isActive = joystickState.mAxes[0].abs > JOYSTICK_SENSITIVITY;
+				isActive = joystickState.mAxes[axisInput.first].abs > axisInput.second;
 				break;
 			default:
 				{
@@ -180,7 +222,22 @@ InputAdapter::isActionActive(const Controls::Action &action)
 }
 
 void
-InputAdapter::store(const OIS::KeyEvent &inputEvent, Controls::Action action)
+InputAdapter::store(const OIS::KeyEvent &inputEvent, const Controls::Action &action)
 {
-	
+	_keyMap[inputEvent.key] = action;
+	_keyMapInverse[action] = inputEvent.key;
+}
+
+void
+InputAdapter::store(const int &button, const Controls::Action &action)
+{
+	_buttonMap[button] = action;
+	_buttonMapInverse[action] = button;
+}
+
+void
+InputAdapter::store(const int &axis, const int& value, const Controls::Action &action)
+{
+	_axisMap[std::make_pair(axis, value)] = action;
+	_axisMapInverse[action] = std::make_pair(axis, value);
 }

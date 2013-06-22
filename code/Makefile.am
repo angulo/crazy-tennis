@@ -31,6 +31,7 @@ CrazyTennis_SOURCES = \
 	src/scenes/Splash.cpp \
 	src/scenes/menus/Base.cpp \
 	src/scenes/menus/Main.cpp \
+	src/scenes/menus/SettingsControls.cpp \
 	src/scenes/menus/SettingsMain.cpp \
 	src/widgets/Ball.cpp \
 	src/widgets/PhysicalBase.cpp \
