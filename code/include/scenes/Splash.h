@@ -48,6 +48,7 @@ namespace CrazyTennis {
 				void resume();
 
 				bool keyPressed(const OIS::KeyEvent &event);
+				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 		};
 	};
 };

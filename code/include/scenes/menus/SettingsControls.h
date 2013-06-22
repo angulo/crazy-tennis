@@ -21,6 +21,7 @@
 
 #include <OGF/OGF.h>
 
+#include "InputAdapter.h"
 #include "SceneFactory.h"
 #include "scenes/menus/Base.h"
 
@@ -46,6 +47,29 @@ namespace CrazyTennis {
 				protected:
 
 					bool _editing;
+
+					/**
+					 * @var Input values needed to generate the actions
+					 * that can be configure.
+					 */
+					std::map<int, CEGUI::Window *> _inputValues;
+
+					/**
+					 * Initialize the input values map and create the visual representation
+					 * of each of the input keys.
+					 *
+					 * @param yBase Y-coordinate base to place the input values.
+					 * @param yIncrement Y-coordinate increment after each value.
+					 */
+					void _createInputValues(const int &yBase, const int &yIncrement);
+					
+					/**
+					 * Map from menu options to actions.
+					 * @param option Menu option.
+					 * @return Action corresponding to the menu option.
+					 */
+					CrazyTennis::Controls::Action _optionToAction(const int &option);
+
 					void _onActionDone(const Controls::Action &action);
 					void _processCurrentOption();
 

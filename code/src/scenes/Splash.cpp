@@ -116,12 +116,13 @@ Splash::resume()
 bool
 Splash::keyPressed(const OIS::KeyEvent &event)
 {
-	switch(event.key) {
+	OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
+	return true;
+}
 
-		default:
-			OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
-			break;
-	}
-	
+bool
+Splash::buttonPressed(const OIS::JoyStickEvent &event, int button)
+{
+	OGF::SceneController::getSingletonPtr()->replace(CrazyTennis::Scene::MENU_MAIN);
 	return true;
 }

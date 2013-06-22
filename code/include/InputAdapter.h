@@ -73,8 +73,13 @@ namespace CrazyTennis {
 			
 			static InputAdapter & getSingleton();
 			static InputAdapter * getSingletonPtr();
-			
 
+			/**
+			 * Check if there is a joystick plugged in.
+			 * @return true if there is a joystick plugged in, false otherwise.
+			 */
+			bool hasJoystick() const;
+			
 			/**
 			 * Get the semantic action associated to a key event.
 			 *
@@ -124,6 +129,15 @@ namespace CrazyTennis {
 			 */
 			std::pair<int, int>
 			actionToAxisInput(const Controls::Action &action);
+
+			/**
+			 * Get the textual representation of the necessary input to generate
+			 * a certain action.
+			 * @param action Semantic action.
+			 * @return Textual representation of the input for the provided action.
+			 */
+			std::string
+			actionToInputText(const Controls::Action &action);
 
 			/**
 			 * Check if the provided action is being done right now, that is,

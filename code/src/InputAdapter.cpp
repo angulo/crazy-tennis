@@ -94,6 +94,11 @@ InputAdapter::getSingletonPtr()
 	return msSingleton;
 }
 
+bool
+InputAdapter::hasJoystick() const
+{
+	return OGF::InputManager::getSingletonPtr()->getJoystick() != NULL;
+}
 
 Controls::Action
 InputAdapter::inputToAction(const OIS::KeyEvent &inputEvent)
@@ -180,6 +185,39 @@ InputAdapter::actionToAxisInput(const Controls::Action &action)
 	}
 
 	return input;
+}
+
+std::string
+InputAdapter::actionToInputText(const Controls::Action &action)
+{
+	std::string result = "";
+
+	if (hasJoystick()) {
+		if (action == Controls::UP || action == Controls::DOWN || action == Controls::LEFT || action == Controls::RIGHT) {
+			std::pair<int, int> axisInput = actionToAxisInput(action);
+			if (axisInput.first != -1 && axisInput.second != -1) {
+				result = "AXIS " + Ogre::StringConverter::toString(axisInput.first);
+				result += (axisInput.second > 0 ? " +" :  " -");
+			}
+		} else {
+			int button = actionToButtonInput(action);
+			if (button != -1) {
+				result = "BUTTON " + Ogre::StringConverter::toString(button);
+			}
+		}
+	}
+
+	if (result != "") {
+		result += " or ";
+	}
+	
+	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
+	OIS::KeyCode keyCode = _keyMapInverse[action];
+	if (keyCode != -1) {
+		result += "KEY " + keyboard->getAsString(keyCode);
+	}
+
+	return result;
 }
 
 bool

@@ -21,6 +21,55 @@
 using namespace CrazyTennis::Scene::Menu;
 
 void
+SettingsControls::_createInputValues(const int &yBase, const int &yIncrement)
+{
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+
+	int total = 0;
+	for (std::map<int, CEGUI::Window *>::iterator it = _optionsMap.begin(); it != _optionsMap.end(); it++) {
+		Controls::Action action = _optionToAction(it->first);
+		if (action != Controls::NONE) {
+			std::string textInput = inputAdapter->actionToInputText(_optionToAction(it->first));
+			_inputValues[it->first] = _createOptionText(textInput, _configValue<std::string>("font_input_value"),
+				_configValue<std::string>("font_color_input_value"), _configValue<int>("input_value_x"), yBase + (total++ * yIncrement));
+			_container->addChildWindow(_inputValues[it->first]);
+		}
+	}
+}
+
+CrazyTennis::Controls::Action
+SettingsControls::_optionToAction(const int &option)
+{
+	Controls::Action result = Controls::NONE;
+
+	switch (option) {
+		case OPTION_UP:
+			result = Controls::UP;
+			break;
+		case OPTION_DOWN:
+			result = Controls::DOWN;
+			break;
+		case OPTION_LEFT:
+			result = Controls::LEFT;
+			break;
+		case OPTION_RIGHT:
+			result = Controls::RIGHT;
+			break;
+		case OPTION_SHOT_DRIVE:
+			result = Controls::SHOT_DRIVE;
+			break;
+		case OPTION_SHOT_LOB:
+			result = Controls::SHOT_LOB;
+			break;
+		case OPTION_START:
+			result = Controls::START;
+			break;
+	}
+
+	return result;
+}
+
+void
 SettingsControls::_onActionDone(const Controls::Action &action)
 {
 	if (!_editing) {
@@ -44,6 +93,7 @@ SettingsControls::SettingsControls()
 	_editing = false;
 	_initConfigReader("scenes/menus/settingsControls.cfg");
 	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font") + ".font");
+	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_input_value") + ".font");
 }
 
 SettingsControls::~SettingsControls()
@@ -85,6 +135,8 @@ SettingsControls::enter()
 
 		_container->addChildWindow(it->second);
 	}
+
+	_createInputValues(_configValue<float>("up_y"), abs(_configValue<float>("down_y") - _configValue<float>("up_y")));
 
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 	_setCurrentOption(OPTION_UP);
