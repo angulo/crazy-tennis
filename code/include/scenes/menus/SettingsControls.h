@@ -55,6 +55,10 @@ namespace CrazyTennis {
 					 */
 					std::map<int, CEGUI::Window *> _inputValues;
 
+					std::map<Controls::Action, OIS::KeyCode> _pendingKeyChanges;
+					std::map<Controls::Action, int> _pendingButtonChanges;
+					std::map<Controls::Action, std::pair<int, int> > _pendingAxisChanges;
+
 					/**
 					 * Initialize the input values map and create the visual representation
 					 * of each of the input keys.
@@ -70,6 +74,11 @@ namespace CrazyTennis {
 					 * @return Action corresponding to the menu option.
 					 */
 					CrazyTennis::Controls::Action _optionToAction(const int &option);
+
+					/**
+					 * Process the pending changes buffer to save the controls configuration.
+					 */
+					void _savePendingChanges();
 
 					void _onActionDone(const Controls::Action &action);
 					void _processCurrentOption();

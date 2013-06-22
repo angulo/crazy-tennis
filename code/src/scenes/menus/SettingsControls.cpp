@@ -30,6 +30,9 @@ SettingsControls::_createInputValues(const int &yBase, const int &yIncrement)
 		Controls::Action action = _optionToAction(it->first);
 		if (action != Controls::NONE) {
 			std::string textInput = inputAdapter->actionToInputText(_optionToAction(it->first));
+			if (textInput.length() > _configValue<int>("maxInputValueTextLength")) {
+				textInput = textInput.substr(0, _configValue<int>("maxInputValueTextLength") - 2) + "..";
+			}
 			_inputValues[it->first] = _createOptionText(textInput, _configValue<std::string>("font_input_value"),
 				_configValue<std::string>("font_color_input_value"), _configValue<int>("input_value_x"), yBase + (total++ * yIncrement));
 			_container->addChildWindow(_inputValues[it->first]);
@@ -70,6 +73,30 @@ SettingsControls::_optionToAction(const int &option)
 }
 
 void
+SettingsControls::_savePendingChanges()
+{
+	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
+
+	for (std::map<Controls::Action, OIS::KeyCode>::iterator it =  _pendingKeyChanges.begin();
+		it != _pendingKeyChanges.end(); it++) {
+	
+		inputAdapter->store(it->second, it->first);
+	}
+
+	for (std::map<Controls::Action, int>::iterator it =  _pendingButtonChanges.begin();
+		it != _pendingButtonChanges.end(); it++) {
+
+		inputAdapter->store(it->second, it->first);
+	}
+
+	for (std::map<Controls::Action, std::pair<int, int> >::iterator it =  _pendingAxisChanges.begin();
+		it != _pendingAxisChanges.end(); it++) {
+		
+		inputAdapter->store(it->second.first, it->second.second, it->first);
+	}
+}
+
+void
 SettingsControls::_onActionDone(const Controls::Action &action)
 {
 	if (!_editing) {
@@ -80,10 +107,16 @@ SettingsControls::_onActionDone(const Controls::Action &action)
 void
 SettingsControls::_processCurrentOption()
 {
-	if (_currentOption == OPTION_BACK) {
-		OGF::SceneController::getSingletonPtr()->pop();
-	} else {
-		_editing = true;
+	switch(_currentOption) {
+		case OPTION_SAVE:
+			_savePendingChanges();
+		case OPTION_BACK:
+			OGF::SceneController::getSingletonPtr()->pop();
+			break;
+		default:
+			_editing = true;
+		_inputValues[_currentOption]->setText("[colour='FFFF0000']PRESS KEY OR BUTTON..");
+			break;
 	}
 }
 
@@ -156,8 +189,9 @@ SettingsControls::keyPressed(const OIS::KeyEvent &event)
 	if (!_editing) {
 		Base::keyPressed(event);
 	} else {
-		
+		_pendingKeyChanges[_optionToAction(_currentOption)] = event.key;
 		_editing = false;
+		_inputValues[_currentOption]->setText("[colour='FFFF0000']MODIFIED");
 		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 	
@@ -170,8 +204,9 @@ SettingsControls::buttonPressed(const OIS::JoyStickEvent &event, int button)
 	if (!_editing) {
 		Base::buttonPressed(event, button);
 	} else {
-		
+		_pendingButtonChanges[_optionToAction(_currentOption)] = button;
 		_editing = false;
+		_inputValues[_currentOption]->setText("[colour='FFFF0000']MODIFIED");
 		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 
@@ -184,9 +219,9 @@ SettingsControls::axisMoved(const OIS::JoyStickEvent &event, int axis)
 	if (!_editing) {
 		Base::axisMoved(event, axis);
 	} else {
-		int value = event.state.mAxes[axis].abs;
-
+		_pendingAxisChanges[_optionToAction(_currentOption)] = std::make_pair(axis, event.state.mAxes[axis].abs);
 		_editing = false;
+		_inputValues[_currentOption]->setText("[colour='FFFF0000']MODIFIED");
 		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 	return true;
