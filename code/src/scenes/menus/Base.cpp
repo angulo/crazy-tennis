@@ -43,6 +43,9 @@ Base::_onActionDone(const Controls::Action &action)
 			{
 				int newOption = (_currentOption + 1) % _optionsMap.size();
 				_setCurrentOption(newOption);
+				if (!_optionsMap[newOption]->isVisible()) {
+					_onActionDone(action);
+				}
 			}
 			break;
 	
@@ -59,6 +62,9 @@ Base::_onActionDone(const Controls::Action &action)
 				}
 
 				_setCurrentOption(newOption);
+				if (!_optionsMap[newOption]->isVisible()) {
+					_onActionDone(action);
+				}
 			}
 			break;
 

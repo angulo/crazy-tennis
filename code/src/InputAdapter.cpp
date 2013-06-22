@@ -197,7 +197,6 @@ InputAdapter::actionToInputText(const Controls::Action &action)
 			std::pair<int, int> axisInput = actionToAxisInput(action);
 			if (axisInput.first != -1 && axisInput.second != -1) {
 				result = "AXIS " + Ogre::StringConverter::toString(axisInput.first);
-				result += (axisInput.second > 0 ? " +" :  " -");
 			}
 		} else {
 			int button = actionToButtonInput(action);
@@ -260,10 +259,10 @@ InputAdapter::isActionActive(const Controls::Action &action)
 }
 
 void
-InputAdapter::store(const OIS::KeyEvent &inputEvent, const Controls::Action &action)
+InputAdapter::store(const OIS::KeyCode &inputKey, const Controls::Action &action)
 {
-	_keyMap[inputEvent.key] = action;
-	_keyMapInverse[action] = inputEvent.key;
+	_keyMap[inputKey] = action;
+	_keyMapInverse[action] = inputKey;
 }
 
 void

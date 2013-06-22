@@ -41,7 +41,8 @@ namespace CrazyTennis {
 					OPTION_SHOT_DRIVE = 4,
 					OPTION_SHOT_LOB = 5,
 					OPTION_START = 6,
-					OPTION_BACK = 7
+					OPTION_SAVE = 7,
+					OPTION_BACK = 8
 				};
 
 				protected:

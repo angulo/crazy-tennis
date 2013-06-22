@@ -152,10 +152,10 @@ namespace CrazyTennis {
 			/**
 			 * Store a new association between an action and a semantic event.
 			 *
-			 * @param inputEvent Input event to map from.
+			 * @param inputKey Input key.
 			 * @param action Semantic action to map to.
 			 */
-			void store(const OIS::KeyEvent &inputEvent, const Controls::Action &action);
+			void store(const OIS::KeyCode &inputKey, const Controls::Action &action);
 
 			/**
 			 * Store a new association between an action and a semantic event.

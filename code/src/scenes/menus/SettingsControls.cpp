@@ -113,22 +113,29 @@ SettingsControls::enter()
 
 	const std::string fontColor = _configValue<std::string>("font_color_unselected");
 
+	int offset = 0;
+	int yBase = _configValue<int>("action_y_base");
+	int yIncrement = _configValue<int>("action_y_increment");
+
 	_optionsMap[OPTION_UP] = _createOptionText("UP", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("up_x"), _configValue<int>("up_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_DOWN] = _createOptionText("DOWN", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("down_x"), _configValue<int>("down_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_LEFT] = _createOptionText("LEFT", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("left_x"), _configValue<int>("left_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_RIGHT] = _createOptionText("RIGHT", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("right_x"), _configValue<int>("right_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_SHOT_DRIVE] = _createOptionText("DRIVE", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("drive_x"), _configValue<int>("drive_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_SHOT_LOB] = _createOptionText("LOB", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("lob_x"), _configValue<int>("lob_y"));
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
 	_optionsMap[OPTION_START] = _createOptionText("MENU", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("start_x"), _configValue<int>("start_y"));
-	_optionsMap[OPTION_BACK] = _createOptionText("BACK", _configValue<std::string>("font"), fontColor,
+		_configValue<int>("action_x"), yBase + (yIncrement * offset++));
+	_optionsMap[OPTION_BACK] = _createOptionText("CANCEL", _configValue<std::string>("font_actions_value"), fontColor,
 		_configValue<int>("back_x"), _configValue<int>("back_y"));
+	_optionsMap[OPTION_SAVE] = _createOptionText("SAVE", _configValue<std::string>("font_actions_value"), fontColor,
+		_configValue<int>("save_x"), _configValue<int>("save_y"));
+	_optionsMap[OPTION_SAVE]->setVisible(false);
 
 	for (std::map<int, CEGUI::Window *>::iterator it = _optionsMap.begin();
 		it != _optionsMap.end(); it++) {
@@ -136,7 +143,7 @@ SettingsControls::enter()
 		_container->addChildWindow(it->second);
 	}
 
-	_createInputValues(_configValue<float>("up_y"), abs(_configValue<float>("down_y") - _configValue<float>("up_y")));
+	_createInputValues(yBase, yIncrement);
 
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 	_setCurrentOption(OPTION_UP);
@@ -151,6 +158,7 @@ SettingsControls::keyPressed(const OIS::KeyEvent &event)
 	} else {
 		
 		_editing = false;
+		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 	
 	 return true;
@@ -164,6 +172,7 @@ SettingsControls::buttonPressed(const OIS::JoyStickEvent &event, int button)
 	} else {
 		
 		_editing = false;
+		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 
 	return true;
@@ -175,29 +184,10 @@ SettingsControls::axisMoved(const OIS::JoyStickEvent &event, int axis)
 	if (!_editing) {
 		Base::axisMoved(event, axis);
 	} else {
-		Controls::Action action;
 		int value = event.state.mAxes[axis].abs;
 
-		switch(axis) {
-			// Horizontal
-			case 0:
-				if (value > JOYSTICK_SENSITIVITY)
-					action = Controls::RIGHT;
-				else if (value < -JOYSTICK_SENSITIVITY)
-					action = Controls::LEFT;
-					break;
-			// Vertical
-			case 1:
-				if (value > JOYSTICK_SENSITIVITY)
-					action = Controls::DOWN;
-				else if (value < -JOYSTICK_SENSITIVITY)
-					action = Controls::UP;
-				break;
-			default:
-				break;
-		}
-
 		_editing = false;
+		_optionsMap[OPTION_SAVE]->setVisible(true);
 	}
 	return true;
 }
