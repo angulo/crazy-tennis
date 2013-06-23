@@ -1,5 +1,5 @@
 /* 
- * Scenes.h -- Scenes header file to include all of them with a single include
+ * Score.h -- Score UI widget header file.
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,14 +16,39 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENES_SCENES_H_
-#define _SCENES_SCENES_H_
+#ifndef _WIDGETS_SCORE_H_
+#define _WIDGETS_SCORE_H_
 
-#include "scenes/Match.h"
-#include "scenes/menus/Main.h"
-#include "scenes/menus/SettingsControls.h"
-#include "scenes/menus/SettingsMain.h"
-#include "scenes/Splash.h"
-#include "widgets/Score.h"
+#include <OGF/OGF.h>
+
+#include "data/MatchListener.h"
+#include "data/Types.h"
+
+namespace CrazyTennis {
+	
+	namespace Widget {
+		
+		class Score : public OGF::Scene, public Data::MatchListener {
+			
+			protected:
+
+				CEGUI::Window *_container;
+
+			public:
+				
+				Score();
+				~Score();
+
+				void enter();
+				void exit();
+				void pause();
+				void resume();
+
+
+				bool frameStarted(const Ogre::FrameEvent &event);
+				void onMatchEvent(Data::MatchStatus matchStatus);
+		};
+	};
+};
 
 #endif

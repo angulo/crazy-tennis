@@ -50,18 +50,11 @@ namespace CrazyTennis {
 			short games;
 			bool tiebreak;
 		};
-		
-		enum PointValue {
-			POINT_0 = 0,
-			POINT_15 = 15,
-			POINT_30 = 30,
-			POINT_40 = 40,
-			POINT_A = 50
-		};
 
-		typedef std::vector<PointValue> GameResult;
-		typedef std::vector<short> SetResult;
-		typedef std::vector<SetResult> MatchResult;
+		typedef short PointValue;
+		typedef std::vector<PointValue> GameScore;
+		typedef std::vector<short> SetScore;
+		typedef std::vector<SetScore> MatchScore;
 
 		/**
 			* Current status of a match.
@@ -69,8 +62,8 @@ namespace CrazyTennis {
 		struct MatchStatus {
 			PlayerId server;
 			PlayerId winner;
-			MatchResult matchResult;
-			GameResult gameResult;
+			MatchScore matchScore;
+			GameScore gameScore;
 			bool inTiebreak;
 			bool firstServe;
 			bool isFinished;

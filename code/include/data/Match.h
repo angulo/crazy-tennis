@@ -19,8 +19,11 @@
 #ifndef _DATA_MATCH_H_
 #define _DATA_MATCH_H_
 
+#include <cmath>
+#include <list>
 #include <vector>
 
+#include "data/MatchListener.h"
 #include "data/Player.h"
 #include "data/Types.h"
 
@@ -35,17 +38,25 @@ namespace CrazyTennis {
 			protected:
 				
 				PlayersPair _players;
-				PlayersPair::iterator _currentServer;
+				Player *_currentServer;
 
-				MatchResult _matchResult;
-				MatchResult::iterator _currentSet;
-				GameResult _gameResult;
-				SetResult _tiebreakResult;
+				MatchScore _matchScore;
+				MatchScore::iterator _currentSet;
+				GameScore _gameScore;
+				SetScore _tiebreakScore;
 
 				bool _hasTiebreak;
+				bool _inTiebreak;
 				bool _firstServe;
 				bool _isFinished;
-				PlayersPair::iterator _winner;
+				Player *_winner;
+
+				std::list<MatchListener *> _listeners;
+
+				void _notifyListeners();
+				bool _isGameFinished() const;
+				bool _isSetFinished() const;
+				bool _isMatchFinished() const;
 				
 			public:
 				
@@ -57,6 +68,7 @@ namespace CrazyTennis {
 				MatchStatus getStatus() const;
 
 				Player *getPlayer(const int &number) const;
+				void addListener(MatchListener *matchListener);
 		};
 	};
 };

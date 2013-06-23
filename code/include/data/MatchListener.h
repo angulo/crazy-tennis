@@ -1,5 +1,5 @@
 /* 
- * Scenes.h -- Scenes header file to include all of them with a single include
+ * MatchListener.h -- Match listener header file.
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,14 +16,23 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENES_SCENES_H_
-#define _SCENES_SCENES_H_
+#ifndef _DATA_MATCH_LISTENER_H_
+#define _DATA_MATCH_LISTENER_H_
 
-#include "scenes/Match.h"
-#include "scenes/menus/Main.h"
-#include "scenes/menus/SettingsControls.h"
-#include "scenes/menus/SettingsMain.h"
-#include "scenes/Splash.h"
-#include "widgets/Score.h"
+#include "data/Types.h"
+
+namespace CrazyTennis {
+	
+	namespace Data {
+		
+		class MatchListener {
+			
+			public:
+				
+				virtual void onMatchEvent(MatchStatus status) = 0;
+		};
+	};
+};
+
 
 #endif

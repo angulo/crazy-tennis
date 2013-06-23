@@ -43,6 +43,9 @@ SceneFactory::create(OGF::SceneId sceneId)
 			scene = new Scene::Menu::SettingsSound();
 			break;
 		*/
+		case Widget::SCORE:
+			scene = new Widget::Score();
+			break;
 		case Scene::MATCH:
 		case Widget::BALL:
 			throw "Scene must be created with specific configuration";
