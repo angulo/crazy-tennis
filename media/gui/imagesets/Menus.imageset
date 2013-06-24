@@ -1,4 +1,7 @@
 <?xml version="1.0" ?>
 <Imageset Name="Menus" Imagefile="images/menus.png" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
 	<Image Name="Splash" XPos="0" YPos="0" Width="1024" Height="768" />
+	<Image Name="Score_1" XPos="0" YPos="768" Width="198" Height="96" />
+	<Image Name="Score_3" XPos="198" YPos="768" Width="266" Height="96" />
+	<Image Name="Score_5" XPos="464" YPos="768" Width="355" Height="96" />
 </Imageset>

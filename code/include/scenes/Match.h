@@ -37,6 +37,7 @@
 #include "SceneFactory.h"
 #include "data/Match.h"
 #include "widgets/Ball.h"
+#include "widgets/Score.h"
 #include "widgets/PlayerCpu.h"
 #include "widgets/PlayerHuman.h"
 
@@ -68,6 +69,7 @@ namespace CrazyTennis {
 				void _loadDynamicObjects();
 				void _loadLights();
 				void _loadStaticObjects();
+				void _loadUserInterface();
 
 				void _onActionDone(const Controls::Action &action);
 			

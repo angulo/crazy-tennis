@@ -74,6 +74,7 @@ Match::_createScene()
 	_loadLights();
 	_loadStaticObjects();
 	_loadDynamicObjects();
+	_loadUserInterface();
 }
 
 void
@@ -189,6 +190,14 @@ Match::_loadStaticObjects()
 	
 	surrounding->setCastShadows(true);
 	surrounding->build();
+}
+
+void
+Match::_loadUserInterface()
+{
+	Widget::Score *scoreWidget = new Widget::Score(_data);
+	OGF::SceneController::getSingletonPtr()->addChild(scoreWidget);
+	_data->addListener(scoreWidget);
 }
 
 void

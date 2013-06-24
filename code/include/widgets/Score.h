@@ -21,6 +21,7 @@
 
 #include <OGF/OGF.h>
 
+#include "data/Match.h"
 #include "data/MatchListener.h"
 #include "data/Types.h"
 
@@ -32,11 +33,13 @@ namespace CrazyTennis {
 			
 			protected:
 
+				Data::Match *_matchData;
 				CEGUI::Window *_container;
+				CEGUI::Window *_pointsBackground;
 
 			public:
 				
-				Score();
+				Score(Data::Match *matchData);
 				~Score();
 
 				void enter();

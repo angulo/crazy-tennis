@@ -40,7 +40,7 @@ Main::_processCurrentOption()
 				Data::Loader *dataLoader = new Data::Loader("../data/game");
 				std::list<Data::Player *> players = dataLoader->loadPlayers("players.json");
 				
-				Data::Match *matchData = new Data::Match(3, false, players.front(), players.back());
+				Data::Match *matchData = new Data::Match(5, false, players.front(), players.back());
 				OGF::SceneController::getSingletonPtr()->replace(new CrazyTennis::Scene::Match(matchData));
 			}
 			break;

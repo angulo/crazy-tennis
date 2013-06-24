@@ -50,10 +50,21 @@ Match::_isMatchFinished() const
 }
 
 Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB)
-	:	_hasTiebreak(hasTiebreak)
+	:	_hasTiebreak(hasTiebreak), _inTiebreak(false), _firstServe(true), _isFinished(false)
 {
 	_players.push_back(playerA);
 	_players.push_back(playerB);
+	_currentServer = playerA;
+
+	for (int i = 0; i < games; i++) {
+		SetScore setScore;
+		setScore.push_back(0);
+		setScore.push_back(0);
+		_matchScore.push_back(setScore);
+	}
+
+	_gameScore.push_back(0);
+	_gameScore.push_back(0);
 }
 
 Match::~Match()
