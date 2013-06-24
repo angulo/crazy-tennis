@@ -34,8 +34,21 @@ namespace CrazyTennis {
 			protected:
 
 				Data::Match *_matchData;
+
 				CEGUI::Window *_container;
-				CEGUI::Window *_pointsBackground;
+				CEGUI::Window *_background;
+				CEGUI::Window *_serverMark;
+
+				std::vector<CEGUI::Window *> _names;;
+				std::vector<CEGUI::Window *> _games;
+				std::vector<CEGUI::Window *> _points;
+
+				void _createBackground();
+				void _createGames();
+				void _createNames();
+				void _createPoints();
+				void _createServerMark();
+				CEGUI::Window * _createText(const std::string &text, const float &xRel, const float &yRel, const std::string &font);
 
 			public:
 				
