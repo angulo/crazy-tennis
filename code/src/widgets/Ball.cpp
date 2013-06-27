@@ -46,6 +46,7 @@ Ball::enter()
 	_rigidBody = new OgreBulletDynamics::RigidBody("Ball", _dynamicWorld);
 	_rigidBody->setShape(node, shape, _configValue<float>("restitution"),
 		_configValue<float>("friction"), _configValue<float>("weight"));
+	_rigidBody->disableDeactivation();
 }
 
 void

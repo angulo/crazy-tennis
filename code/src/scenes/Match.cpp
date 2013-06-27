@@ -114,7 +114,6 @@ Match::_loadDynamicObjects()
 {
 	DynamicObjectPair courtIn = _createPhysicObject("CourtIn", Model::COURT_IN);
 	DynamicObjectPair courtOut = _createPhysicObject("CourtOut", Model::COURT_OUT);
-	DynamicObjectPair lines = _createPhysicObject("Lines", Model::LINES);
 	DynamicObjectPair net = _createPhysicObject("Net", Model::NET, 0.3);
 
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
@@ -126,13 +125,13 @@ Match::_loadDynamicObjects()
 		_dynamicWorld, _ball, _data->getPlayer(0));
 
 	OGF::SceneController::getSingletonPtr()->addChild(player1);
-	player1->setPosition(12, 1, 0);
+	player1->setPosition(12, 2, 0);
 
 	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager,
 		_dynamicWorld, _ball, _data->getPlayer(1));
 
 	OGF::SceneController::getSingletonPtr()->addChild(player2);
-	player2->setPosition(-12, 1, 0);
+	player2->setPosition(-12, 2, 0);
 }
 
 void
@@ -169,6 +168,10 @@ Match::_loadStaticObjects()
 	// Stadium
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::STADIUM))->buildEntity(),
 		Ogre::Vector3::ZERO);
+	
+	// Lines
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::LINES))->buildEntity(),
+		Ogre::Vector3(0, 0.025, 0));
 	
 	// Sky
 	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();

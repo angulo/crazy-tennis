@@ -47,12 +47,21 @@ PlayerBase::enter()
 		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode())
 		->buildNode();
 	
-	Ogre::Vector3 size = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getBoundingBox().getSize() / 2.0;
+	Ogre::Vector3 size = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getBoundingBox().getHalfSize();
 	OgreBulletCollisions::CollisionShape *bodyShape =
 		new OgreBulletCollisions::BoxCollisionShape(size);
-
+	
 	_rigidBody = new OgreBulletDynamics::RigidBody(_data->getName(), _dynamicWorld);
 	_rigidBody->setShape(_sceneNode, bodyShape, 0.6, 0.6, 80.0);
+	_rigidBody->disableDeactivation();
+
+	/*
+		Ogre::AnimationState *animState = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getAnimationState("shot");
+		animState->setLength(5);
+		animState->setEnabled(true);
+		animState->setLoop(true);
+		animState->setTimePosition(0.0);
+	*/
 }
 
 void
@@ -64,7 +73,17 @@ PlayerBase::exit()
 bool
 PlayerBase::frameStarted(const Ogre::FrameEvent &event)
 {
+	/*
+	Ogre::AnimationState *animState = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getAnimationState("shot");
+	if (!animState->hasEnded()) {
+		animState->addTime(event.timeSinceLastFrame * 2.0);
+	} else {
+		animState->setEnabled(true);
+		animState->setTimePosition(0.0);
+	}
+	*/
 
+	return true;
 }
 
 void

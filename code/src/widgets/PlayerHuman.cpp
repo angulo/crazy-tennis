@@ -185,6 +185,7 @@ PlayerHuman::exit()
 bool
 PlayerHuman::frameStarted(const Ogre::FrameEvent &event)
 {
+	PlayerBase::frameStarted(event);
 	if (!_directionBlocked)
 		_move(event.timeSinceLastFrame);
 
