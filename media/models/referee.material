@@ -2,7 +2,7 @@
 
 material referee 
 {
-    receive_shadows on
+    receive_shadows on 
 
     technique
     {
@@ -10,7 +10,7 @@ material referee
         {
             ambient 0.58684903383255 0.58684903383255 0.58684903383255 1.0
             diffuse 0.58684903383255 0.58684903383255 0.58684903383255 1.0
-            specular 0.5 0.5 0.5 1.0 12.5
+            specular 0.0 0.0 0.0 1.0 7.0
             emissive 0.0 0.0 0.0 1.0
 
             alpha_to_coverage off
@@ -34,7 +34,8 @@ material referee
             {
                 texture OMO1.PNG
                 tex_address_mode wrap
-                filtering trilinear
+                scale 1.0 1.0
+                colour_op modulate
             }
         }
     }

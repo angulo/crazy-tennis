@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mesh>
     <sharedgeometry vertexcount="92">
-        <vertexbuffer colours_diffuse="False" texture_coords="1" positions="true" normals="true">
+        <vertexbuffer normals="true" colours_diffuse="False" texture_coords="1" positions="true">
             <vertex>
                 <position z="-4.088751" y="0.000000" x="-6.319305"/>
                 <normal z="0.000000" y="1.000000" x="0.000000"/>
@@ -465,7 +465,7 @@
         </vertexbuffer>
     </sharedgeometry>
     <submeshes>
-        <submesh usesharedvertices="true" material="White" operationtype="triangle_list" use32bitindexes="False">
+        <submesh operationtype="triangle_list" use32bitindexes="False" usesharedvertices="true" material="White">
             <faces count="74">
                 <face v2="1" v3="2" v1="0"/>
                 <face v2="2" v3="3" v1="0"/>
@@ -545,7 +545,7 @@
         </submesh>
     </submeshes>
     <submeshnames>
-        <submesh index="0" name="White">
+        <submesh name="White" index="0">
         </submesh>
     </submeshnames>
 </mesh>

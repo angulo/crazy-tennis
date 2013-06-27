@@ -171,7 +171,7 @@ Match::_loadStaticObjects()
 	
 	// Lines
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::LINES))->buildEntity(),
-		Ogre::Vector3(0, 0.025, 0));
+		Ogre::Vector3(0, 0.015, 0));
 	
 	// Sky
 	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();
@@ -182,17 +182,12 @@ Match::_loadStaticObjects()
 
 	surrounding->build();
 
-	surrounding = _sceneManager->createStaticGeometry("Surrounding2");
-	// Referee
-	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::REFEREE))->buildEntity(),
-		Ogre::Vector3::ZERO);
+	builder->parent(_sceneManager->getRootSceneNode()->createChildSceneNode());
 
+	// Referee
+	builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::REFEREE))->buildNode();
 	// Referee chair
-	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::CHAIR))->buildEntity(),
-		Ogre::Vector3::ZERO);
-	
-	surrounding->setCastShadows(true);
-	surrounding->build();
+	builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::CHAIR))->buildNode();
 }
 
 void
