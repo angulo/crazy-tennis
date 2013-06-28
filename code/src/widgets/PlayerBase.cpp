@@ -98,3 +98,10 @@ PlayerBase::setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Re
 {
 	setPosition(Ogre::Vector3(x, y, z));
 }
+
+void
+PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
+{
+	PhysicalBase::rotate(axis, angle);
+	_sceneNode->rotate(axis, Ogre::Radian(angle));
+}

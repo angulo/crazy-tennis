@@ -63,6 +63,8 @@ namespace CrazyTennis {
 
 				void setPosition(const Ogre::Vector3 &position);
 				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
+
+        void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);
 		};
 	};
 };

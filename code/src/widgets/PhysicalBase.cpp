@@ -33,11 +33,13 @@ PhysicalBase::~PhysicalBase()
 void
 PhysicalBase::setPosition(const Ogre::Vector3 &position)
 {
-	btTransform transform;
-	transform.setIdentity();
+	btRigidBody *rigidBody = _rigidBody->getBulletRigidBody();
+	btTransform transform = rigidBody->getCenterOfMassTransform();
+
 	transform.setOrigin(OgreBulletCollisions::OgreBtConverter::to(position));
-	_rigidBody->getBulletRigidBody()->setWorldTransform(transform);
-	_rigidBody->getBulletRigidBody()->setCenterOfMassTransform(transform);
+
+	rigidBody->setWorldTransform(transform);
+	rigidBody->setCenterOfMassTransform(transform);
 }
 
 void
@@ -63,6 +65,16 @@ void
 PhysicalBase::move(const Ogre::Real &deltaX, const Ogre::Real &deltaY, const Ogre::Real &deltaZ)
 {
 	move(Ogre::Vector3(deltaX, deltaY, deltaZ));
+}
+void
+PhysicalBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
+{
+	btRigidBody *rigidBody = _rigidBody->getBulletRigidBody();
+	btTransform transform = rigidBody->getCenterOfMassTransform();
+	transform.setRotation(btQuaternion(OgreBulletCollisions::OgreBtConverter::to(axis), angle.valueRadians()));
+
+	rigidBody->setWorldTransform(transform);
+	rigidBody->setCenterOfMassTransform(transform);
 }
 
 void

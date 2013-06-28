@@ -75,6 +75,8 @@ namespace CrazyTennis {
 				 */
 				void move(const Ogre::Real &deltaX, const Ogre::Real &deltaY, const Ogre::Real &deltaZ); 
 
+        void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);
+
 				/**
 				 * Set the velocity of the rigid body.
 				 * @param velocity Vector velocity

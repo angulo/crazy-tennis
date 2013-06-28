@@ -126,6 +126,7 @@ Match::_loadDynamicObjects()
 
 	OGF::SceneController::getSingletonPtr()->addChild(player1);
 	player1->setPosition(12, 2, 0);
+	player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
 
 	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager,
 		_dynamicWorld, _ball, _data->getPlayer(1));
