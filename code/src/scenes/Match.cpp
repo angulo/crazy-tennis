@@ -122,14 +122,14 @@ Match::_loadDynamicObjects()
 	_ball->setPosition(10, 5, 0);
 
 	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,
-		_dynamicWorld, _ball, _data->getPlayer(0));
+		_dynamicWorld, _ball, _data->getPlayer(0), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player1);
 	player1->setPosition(12, 2, 0);
 	player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
 
 	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager,
-		_dynamicWorld, _ball, _data->getPlayer(1));
+		_dynamicWorld, _ball, _data->getPlayer(1), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player2);
 	player2->setPosition(-12, 2, 0);
@@ -231,12 +231,16 @@ Match::preload()
 void
 Match::enter()
 {
+	_pointStateMachine = new Data::PointState::Machine();
+	_pointStateMachine->addListener(this);
+
 	_createScene();
 }
 
 void
 Match::exit()
 {
+	delete _pointStateMachine;
 	delete _dynamicWorld->getDebugDrawer();
 	delete _dynamicWorld;
 
@@ -290,4 +294,10 @@ Match::buttonPressed(const OIS::JoyStickEvent &event, int button)
 	_onActionDone(action);
 
 	return true;
+}
+
+void
+Match::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+
 }

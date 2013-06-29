@@ -20,9 +20,11 @@
 #define _WIDGET_PLAYER_HUMAN_H_
 
 #include <OGF/OGF.h>
+
 #include "InputAdapter.h"
-#include "widgets/PlayerBase.h"
+#include "data/PointStateMachine.h"
 #include "dynamics/ShotSimulator.h"
+#include "widgets/PlayerBase.h"
 #include "widgets/ShotBuffer.h"
 
 namespace CrazyTennis {
@@ -76,7 +78,7 @@ namespace CrazyTennis {
 
 			public:
 				
-				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
+				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine);
 				~PlayerHuman();
 
 				void enter();
@@ -87,6 +89,8 @@ namespace CrazyTennis {
 				bool keyReleased(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 				bool buttonReleased(const OIS::JoyStickEvent &event, int button);
+
+				void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

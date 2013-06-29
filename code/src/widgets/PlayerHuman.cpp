@@ -152,12 +152,13 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			}
 
 			_ball->setLinearVelocity(direction);
+			_pointStateMachine->onEvent(Data::PointState::EVENT_BALL_HIT);
 		}
 	}
 }
 
-PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, data), _directionBlocked(false)
+PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, data, pointStateMachine), _directionBlocked(false)
 {
 
 }
@@ -255,4 +256,10 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	_directionBlocked = false;
 
 	return true;
+}
+
+void
+PlayerHuman::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+	
 }

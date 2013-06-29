@@ -35,6 +35,7 @@
 #include "InputAdapter.h"
 #include "Model.h"
 #include "SceneFactory.h"
+#include "data/PointStateListener.h"
 #include "data/Match.h"
 #include "widgets/Ball.h"
 #include "widgets/Score.h"
@@ -47,11 +48,12 @@ namespace CrazyTennis {
 
 		typedef std::pair<Ogre::SceneNode *, OgreBulletDynamics::RigidBody *> DynamicObjectPair;
 
-		class Match: public OGF::Scene {
-			
+		class Match: public OGF::Scene, Data::PointState::Listener {
+
 			private:
 				
 				Data::Match *_data;
+				Data::PointState::Machine *_pointStateMachine;
 				
 				Ogre::Camera *_topCamera;
 				Ogre::SceneNode *_topCameraNode;
@@ -70,7 +72,7 @@ namespace CrazyTennis {
 				void _loadLights();
 				void _loadStaticObjects();
 				void _loadUserInterface();
-
+				
 				void _onActionDone(const Controls::Action &action);
 			
 			public:
@@ -86,8 +88,11 @@ namespace CrazyTennis {
 
 				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
+
 				bool keyPressed(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
+
+				void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

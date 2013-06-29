@@ -20,8 +20,10 @@
 #define _WIDGET_PLAYER_CPU_H_
 
 #include <OGF/OGF.h>
-#include "widgets/PlayerBase.h"
+
+#include "data/PointStateMachine.h"
 #include "dynamics/ShotSimulator.h"
+#include "widgets/PlayerBase.h"
 #include "widgets/ShotBuffer.h"
 
 namespace CrazyTennis {
@@ -37,7 +39,7 @@ namespace CrazyTennis {
 			
 			public:
 				
-				PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
+				PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine);
 				~PlayerCpu();
 
 				void enter();
@@ -45,6 +47,7 @@ namespace CrazyTennis {
 
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
+				void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

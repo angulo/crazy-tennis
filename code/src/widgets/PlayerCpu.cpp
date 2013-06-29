@@ -20,8 +20,8 @@
 
 using namespace CrazyTennis::Widget;
 
-PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, data)
+PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, data, pointStateMachine)
 {
 
 }
@@ -102,4 +102,10 @@ bool
 PlayerCpu::keyPressed(const OIS::KeyEvent &event)
 {
 	return true;
+}
+
+void
+PlayerCpu::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+		
 }

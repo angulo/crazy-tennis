@@ -26,11 +26,12 @@ PlayerBase::_getSpeed() const
 	return _speed;
 }
 
-PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data)
-	:	PhysicalBase(sceneManager, dynamicWorld), _data(data), _ball(ball)
+PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
+	:	PhysicalBase(sceneManager, dynamicWorld), _data(data), _ball(ball), _pointStateMachine(pointStateMachine)
 {
 	_initConfigReader("widgets/player.cfg");
 	_speed = _data->getSkills()["speed"] * _configValue<float>("maximumRunSpeed");
+	_pointStateMachine->addListener(this);
 }
 
 PlayerBase::~PlayerBase()
@@ -104,4 +105,10 @@ PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 {
 	PhysicalBase::rotate(axis, angle);
 	_sceneNode->rotate(axis, Ogre::Radian(angle));
+}
+
+void
+PlayerBase::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+	
 }

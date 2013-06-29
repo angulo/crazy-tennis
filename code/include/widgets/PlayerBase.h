@@ -27,6 +27,8 @@
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
 #include "data/Player.h"
+#include "data/PointStateListener.h"
+#include "data/PointStateMachine.h"
 #include "widgets/Ball.h"
 #include "widgets/PhysicalBase.h"
 #include "Model.h"
@@ -35,13 +37,15 @@ namespace CrazyTennis {
 	
 	namespace Widget {
 
-		class PlayerBase: public PhysicalBase {
+		class PlayerBase: public PhysicalBase, public Data::PointState::Listener {
 			
 			protected:
 				
 				Ogre::SceneNode *_sceneNode;
 
 				Data::Player *_data;
+				Data::PointState::Machine *_pointStateMachine;
+
 				Widget::Ball *_ball;
 
 				Ogre::Real _speed;
@@ -49,7 +53,7 @@ namespace CrazyTennis {
 
 			public:
 
-				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data);
+				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine);
 				~PlayerBase();
 
 				/**
@@ -65,6 +69,8 @@ namespace CrazyTennis {
 				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
 
         void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);
+
+				virtual void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };
