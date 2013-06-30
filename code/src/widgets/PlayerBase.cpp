@@ -106,9 +106,3 @@ PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 	PhysicalBase::rotate(axis, angle);
 	_sceneNode->rotate(axis, Ogre::Radian(angle));
 }
-
-void
-PlayerBase::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
-{
-	
-}

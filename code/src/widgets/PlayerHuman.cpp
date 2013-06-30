@@ -152,7 +152,6 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			}
 
 			_ball->setLinearVelocity(direction);
-			_pointStateMachine->onEvent(Data::PointState::EVENT_BALL_HIT);
 		}
 	}
 }
@@ -256,10 +255,4 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	_directionBlocked = false;
 
 	return true;
-}
-
-void
-PlayerHuman::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
-{
-	
 }

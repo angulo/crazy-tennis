@@ -21,12 +21,28 @@
 using namespace CrazyTennis::Data::PointState;
 
 void
-Machine::_notifyAll() const
+Machine::_hasLost(const PlayerId &loser)
 {
+	_hasWon(loser == _playerA ? _playerB : _playerA);
 }
 
-Machine::Machine()
-	:	_current(STATE_IN_SERVE), _previous(STATE_IN_SERVE)
+void
+Machine::_hasWon(const PlayerId &winner)
+{
+	setCurrentState(STATE_AFTER_POINT);
+	_winner = winner;
+}
+
+void
+Machine::_swapTurn()
+{
+	_turn = (_turn == _playerA ? _playerB : _playerA);
+}
+
+Machine::Machine(const PlayerId &playerA, const PlayerId &playerB)
+	:	_playerA(playerA), _playerB(playerB), _turn(playerA),
+		_currentState(STATE_BEFORE_SERVE), _previousState(STATE_BEFORE_SERVE),
+		_bounceCount(0)
 {
 }
 
@@ -43,70 +59,95 @@ Machine::addListener(Listener *listener)
 State
 Machine::getCurrentState() const
 {
-	return _current;
+	return _currentState;
 }
 
 void
 Machine::setCurrentState(const State &state)
 {
-	bool shouldNotify = state != _current;
-	_previous = _current;
-	_current = state;
+	bool shouldNotify = state != _currentState;
+	_previousState = _currentState;
+	_currentState = state;
 }
 
-State
-Machine::onEvent(const Event &event)
+void
+Machine::reset(const PlayerId &server, const BouncePlace &whereToServe)
 {
-	switch(_current) {
-		case STATE_BEFORE_SERVE:
-			switch(event) {
-				case EVENT_CONTINUE:
-					setCurrentState(STATE_IN_SERVE);
-					break;
-			}
-			break;
+	setTurn(server);
+	setCurrentState(STATE_BEFORE_SERVE);
+	_whereToServe = whereToServe;
+	_bounceCount = 0;
+}
 
-		case STATE_IN_SERVE:
-			switch(event) {
-				case EVENT_BALL_HIT:
-					setCurrentState(STATE_WAITING_FOR_SERVE_RESULT);
-					break;
-			}
-			break;
+void
+Machine::setTurn(const PlayerId &playerToHit)
+{
+	_turn = playerToHit;
+}
 
-		case STATE_WAITING_FOR_SERVE_RESULT:
-			switch(event) {
-				case EVENT_BALL_IN_SERVE_AREA:
-					setCurrentState(STATE_IN_POINT);
-					break;
-				case EVENT_BALL_IN_COURT_AREA:
-				case EVENT_BALL_OUT:
-					setCurrentState(STATE_BEFORE_SERVE);
-					break;
-			}
-			break;
+void
+Machine::onBallHit(const PlayerId &hitter)
+{
+	if (_currentState == STATE_IN_POINT) {
+		if (_turn == hitter) {
+			_swapTurn();
+		} else {
+			_hasWon(_turn);
+		}
+	} else if (_currentState == STATE_IN_SERVE) {
+		setCurrentState(STATE_WAITING_FOR_SERVE_RESULT);
+		_swapTurn();
+	} else if (_currentState == STATE_WAITING_FOR_SERVE_RESULT) {
+		_hasLost(_turn);
+	}
+}
 
-		case STATE_IN_POINT:
-			switch(event) {
-				case EVENT_BALL_OUT:
-					setCurrentState(STATE_AFTER_POINT);
-					break;
+void
+Machine::onBallBounce(const PlayerId &courtOwner, const BouncePlace &where)
+{
+	if (_currentState == STATE_WAITING_FOR_SERVE_RESULT) {
+		if (courtOwner != _turn || where != _whereToServe) {
+			_hasLost(_turn);
+		} else {
+			setCurrentState(STATE_IN_POINT);
+			_swapTurn();
+			_bounceCount++;
+		}
+	} else if (_currentState == STATE_IN_POINT) {
+		if (_turn != courtOwner) {
+			_hasWon(_turn);
+		} else {
+			if (where == BOUNCE_OUT) {
+				_hasWon(_turn);
+			} else {
+				if (++_bounceCount > 1) {
+					_hasLost(_turn);
+				}
 			}
+		}
+	}
+}
 
-		case STATE_AFTER_POINT:
-			switch(event) {
-				case EVENT_CONTINUE:
-					setCurrentState(STATE_BEFORE_SERVE);
-					break;
-			}
-			
-			break;
-		case STATE_PAUSE:
-			switch(event) {
-				case EVENT_GAME_RESUMED:
-					setCurrentState(_previous);
-					break;
-			}
-			break;
-	};
+void
+Machine::onContinue(const PlayerId &author)
+{
+	if (_currentState == STATE_BEFORE_SERVE) {
+		setCurrentState(STATE_IN_SERVE);
+	}
+}
+
+void
+Machine::onGamePaused()
+{
+	if (_currentState != STATE_PAUSE) {
+		setCurrentState(STATE_PAUSE);
+	}
+}
+
+void
+Machine::onGameResumed()
+{
+	if (_currentState == STATE_PAUSE) {
+		setCurrentState(_previousState);
+	}
 }

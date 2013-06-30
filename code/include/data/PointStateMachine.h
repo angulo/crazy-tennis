@@ -23,6 +23,7 @@
 
 #include "data/PointState.h"
 #include "data/PointStateListener.h"
+#include "data/Types.h"
 
 namespace CrazyTennis {
 	
@@ -34,50 +35,109 @@ namespace CrazyTennis {
 				
 				private:
 					
-					State _current;
-					State _previous;
+					PlayerId _playerA;
+					PlayerId _playerB;
+					PlayerId _turn;
+					PlayerId _winner;
+
+					BouncePlace _whereToServe;
+					long int _bounceCount;
+
+					State _currentState;
+					State _previousState;
 
 					std::list<Listener *> _listeners;
 					
 					/**
-					* Notify all the listeners about a change in the 
-					* current state.
-					*/
-					void _notifyAll() const;
+					 * Handle that a player has lost the point.
+					 *
+					 * @param loser Player that lost the point.
+					 */
+					void _hasLost(const PlayerId &loser);
+
+					/**
+					 * Handle that a player has won the point.
+					 *
+					 * @param winner Player that won the point.
+					 */
+					void _hasWon(const PlayerId &winner);
+
+					/**
+					 * Swap the turn.
+					 */
+					void _swapTurn();
 
 				public:
 					
-					Machine();
+					Machine(const PlayerId &playerA, const PlayerId &playerB);
 					~Machine();
 
 					/**
-					* Add a listener for the current state changes.
-					*
-					* @param listener Point state listener.
-					*/
+					 * Add a listener for the current state changes.
+					 *
+					 * @param listener Point state listener.
+					 */
 					void addListener(Listener *listener);
 
 					/**
-					* Get the current point state.
-					*
-					* @return Current point state.
-					*/
+					 * Get the current point state.
+					 *
+					 * @return Current point state.
+					 */
 					State getCurrentState() const;
 
-					/**
-					* Set the current point status.
-					*
-					* @param state State to be set.
-					*/
+				  /**
+					 * Set the current point status.
+					 *
+					 * @param state State to be set.
+					 */
 					void setCurrentState(const State &state);
 
 					/**
-					* Update the state machine with an event that has happened.
-					*
-					* @param event Event that has happened recently.
-					* @return New status after the update.
-					*/
-					State onEvent(const Event &event);
+					 * Reset the machine state.
+					 *
+					 * @param server Player to server.
+					 */
+					void reset(const PlayerId &server, const BouncePlace &whereToServe);
+
+					/**
+					 * Set the player that should hit the ball.
+					 *
+					 * @param playerToHit Player to hit the ball.
+					 */
+					void setTurn(const PlayerId &playerToHit);
+
+					/**
+					 * Handle a ball hit.
+					 *
+					 * @param hitter Player who hit the ball.
+					 */
+					void onBallHit(const PlayerId &hitter);
+
+					/**
+					 * Handle a ball bounce.
+					 *
+					 * @param courtOwner Owner of the court where the ball bounced.
+					 * @param where Position where the ball bounced.
+					 */
+					void onBallBounce(const PlayerId &courtOwner, const BouncePlace &where); 
+
+					/**
+					 * Handle a continue event done by a player.
+					 *
+					 * @param author Player that made the forced continue.
+					 */
+					void onContinue(const PlayerId &author);
+
+					/**
+					 * Handle a pause event.
+					 */
+					void onGamePaused();
+
+					/**
+					 * Handle a resume event.
+					 */
+					void onGameResumed();
 			};
 		};
 	};

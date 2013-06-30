@@ -112,14 +112,14 @@ Match::_loadCameras()
 void
 Match::_loadDynamicObjects()
 {
-	DynamicObjectPair courtIn = _createPhysicObject("CourtIn", Model::COURT_IN);
-	DynamicObjectPair courtOut = _createPhysicObject("CourtOut", Model::COURT_OUT);
+	_courtIn = _createPhysicObject("CourtIn", Model::COURT_IN);
+	_courtOut = _createPhysicObject("CourtOut", Model::COURT_OUT);
 	DynamicObjectPair net = _createPhysicObject("Net", Model::NET, 0.3);
 
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
 	OGF::SceneController::getSingletonPtr()->addChild(_ball);
 
-	_ball->setPosition(10, 5, 0);
+	_ball->setPosition(_configValue<float>("court_middle_x"), 5, _configValue<float>("court_middle_z"));
 
 	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,
 		_dynamicWorld, _ball, _data->getPlayer(0), _pointStateMachine);
@@ -211,6 +211,50 @@ Match::_onActionDone(const Controls::Action &action)
 	}
 }
 
+void
+Match::_checkBallStatus()
+{
+	// Dont check for ball collisions until being near the floor
+	Ogre::Vector3 ballPosition = _ball->getPosition();
+	if (ballPosition.y >= 0.1) {
+		return;
+	}
+
+	bool bounce = false, bounceIn = false, bounceOut = false;
+
+	Ogre::Vector3 collisionPoint;
+	btCollisionWorld *bulletWorld = _dynamicWorld->getBulletCollisionWorld();
+	int totalCollisions = bulletWorld->getDispatcher()->getNumManifolds();
+
+	for (int i = 0; i < totalCollisions; i++) {
+		btPersistentManifold *collision = bulletWorld->getDispatcher()->getManifoldByIndexInternal(i);
+		btCollisionObject *objectA = const_cast<btCollisionObject *>(collision->getBody0());
+		btCollisionObject *objectB = const_cast<btCollisionObject *>(collision->getBody1());
+    
+		OgreBulletCollisions::Object *collisionObjectA = _dynamicWorld->findObject(objectA);
+		OgreBulletCollisions::Object *collisionObjectB = _dynamicWorld->findObject(objectB);
+
+		if (collisionObjectA == _ball->getRigidBody() || collisionObjectB == _ball->getRigidBody()) {
+			if (collisionObjectA == _courtIn.second || collisionObjectB == _courtIn.second) {
+				bounceIn = bounce = true;
+				if (collisionObjectA == _courtIn.second) {
+					collisionPoint = OgreBulletCollisions::BtOgreConverter::to(collision->getContactPoint(0).getPositionWorldOnA());
+				} else {
+					collisionPoint = OgreBulletCollisions::BtOgreConverter::to(collision->getContactPoint(0).getPositionWorldOnB());
+				}
+			} else if (collisionObjectA == _courtOut.second || collisionObjectB == _courtOut.second) {
+				bounceOut = bounce = true;
+			}
+		}
+  }
+
+	if (bounce) {
+		if (bounceIn) {
+		} else {
+		}
+	}
+}
+
 Match::Match(Data::Match *data)
 	:	_data(data)
 {
@@ -231,7 +275,7 @@ Match::preload()
 void
 Match::enter()
 {
-	_pointStateMachine = new Data::PointState::Machine();
+	_pointStateMachine = new Data::PointState::Machine(_data->getPlayer(0)->getId(), _data->getPlayer(1)->getId());
 	_pointStateMachine->addListener(this);
 
 	_createScene();
@@ -267,7 +311,6 @@ Match::resume()
 bool
 Match::frameEnded(const Ogre::FrameEvent& event)
 {
-	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 4, 1.0 / 240.0);
 	return true;
 }
 
@@ -275,6 +318,8 @@ bool
 Match::frameStarted(const Ogre::FrameEvent &event)
 {
 	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 4, 1.0 / 240.0);
+	_checkBallStatus();
+
 	return true;
 }
 
@@ -294,10 +339,4 @@ Match::buttonPressed(const OIS::JoyStickEvent &event, int button)
 	_onActionDone(action);
 
 	return true;
-}
-
-void
-Match::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
-{
-
 }

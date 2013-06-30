@@ -89,8 +89,6 @@ namespace CrazyTennis {
 				bool keyReleased(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 				bool buttonReleased(const OIS::JoyStickEvent &event, int button);
-
-				void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

@@ -20,6 +20,12 @@
 
 using namespace CrazyTennis::Widget;
 
+OgreBulletDynamics::RigidBody *
+PhysicalBase::getRigidBody() const
+{
+	return _rigidBody;
+}
+
 PhysicalBase::PhysicalBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld)
 	:	OGF::Widget(sceneManager), _dynamicWorld(dynamicWorld)
 {

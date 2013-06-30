@@ -40,6 +40,8 @@ namespace CrazyTennis {
 				PhysicalBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld);
 				virtual ~PhysicalBase();
 
+				OgreBulletDynamics::RigidBody * getRigidBody() const;
+
 				/**
 				 * Set the position of the ball.
 				 * @param position Position

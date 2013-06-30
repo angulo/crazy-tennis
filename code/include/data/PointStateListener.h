@@ -29,7 +29,6 @@ namespace CrazyTennis {
 		
 			class Listener {
 				
-				virtual void onChangePointState(const PointState::State &previousState, const PointState::State &currentState) = 0;
 			};
 		};
 	};

@@ -62,6 +62,8 @@ namespace CrazyTennis {
 				OgreBulletDynamics::DynamicsWorld *_dynamicWorld;
 
 				CrazyTennis::Widget::Ball *_ball;
+				DynamicObjectPair _courtIn;
+				DynamicObjectPair _courtOut;
 				
 				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId, const float &restitution = 1.0);
 				void _createDynamicWorld();
@@ -74,6 +76,8 @@ namespace CrazyTennis {
 				void _loadUserInterface();
 				
 				void _onActionDone(const Controls::Action &action);
+
+				void _checkBallStatus();
 			
 			public:
 				
@@ -91,8 +95,6 @@ namespace CrazyTennis {
 
 				bool keyPressed(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
-
-				void onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

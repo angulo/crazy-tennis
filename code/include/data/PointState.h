@@ -27,7 +27,14 @@ namespace CrazyTennis {
 	
 	namespace Data {
 
-		 namespace PointState {
+		namespace PointState {
+
+			enum BouncePlace {
+				BOUNCE_IN_LEFT_SERVE_AREA = 0,
+				BOUNCE_IN_RIGHT_SERVE_AREA = 1,
+				BOUNCE_IN_COURT = 2,
+				BOUNCE_OUT = 3
+			};
 			
 			enum State {
 				// Point preparation, players reaching the serve position
@@ -42,23 +49,6 @@ namespace CrazyTennis {
 				STATE_AFTER_POINT = 4,
 				// The game has been paused
 				STATE_PAUSE = 5
-			};
-
-			enum Event {
-				// The player has done a continue action
-				EVENT_CONTINUE = 0,
-				// The player has hit the ball
-				EVENT_BALL_HIT = 1,
-				// The ball has hit the serve area
-				EVENT_BALL_IN_SERVE_AREA = 2,
-				// The ball has hit the court
-				EVENT_BALL_IN_COURT_AREA = 3,
-				// The player has missed the ball
-				EVENT_BALL_OUT = 4,
-				// The game has been paused
-				EVENT_GAME_PAUSED = 6,
-				// The game has been resumed
-				EVENT_GAME_RESUMED = 7
 			};
 		};
 	};

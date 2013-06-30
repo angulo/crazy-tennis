@@ -52,7 +52,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 	Ogre::Vector3 ballPosition = _ball->getPosition();
 	Ogre::Vector3 origin = ballPosition;
 
-	if (ballPosition.x <= -11) {
+	if (ballPosition.x <= -15) {
 		Ogre::Vector3 destination(11.5, 0, 4);
 
 		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
@@ -102,10 +102,4 @@ bool
 PlayerCpu::keyPressed(const OIS::KeyEvent &event)
 {
 	return true;
-}
-
-void
-PlayerCpu::onChangePointState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
-{
-		
 }
