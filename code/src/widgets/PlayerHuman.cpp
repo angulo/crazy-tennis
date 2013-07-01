@@ -29,9 +29,9 @@ PlayerHuman::_calculateDestination()
 	Ogre::Real horizontalBalance = _shotBuffer->getValue(Controls::RIGHT) - 
 		_shotBuffer->getValue(Controls::LEFT);
 	Ogre::Real verticalBalance = _shotBuffer->getValue(Controls::UP) - 
-		_shotBuffer->getValue(Controls::DOWN) - 0.5;
+		_shotBuffer->getValue(Controls::DOWN);
 	
-	Ogre::Vector3 destination(length * (1 + verticalBalance), 0, halfWidth * horizontalBalance);
+	Ogre::Vector3 destination((0.5 * length) * (1 + verticalBalance), 0, halfWidth * horizontalBalance);
 
 	if (_ball->getPosition().x > 0) {
 		destination = (-1) * destination;
@@ -140,18 +140,8 @@ PlayerHuman::_shoot(const Controls::Action &action)
 		if (shot != -1) {
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
-			Ogre::Vector3 direction = destination - origin;
-			Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
-
-			direction.x = velocity * cos(angle) * sin(angleToZ);
-			direction.z = velocity * cos(angle) * cos(angleToZ);
-			direction.y = velocity * sin(angle);
-			
-			if (_ball->getPosition().x > 0) {
-				direction.x = -direction.x;
-			}
-
-			_ball->setLinearVelocity(direction);
+			_ball->shotTo(destination, angle, velocity);
+			_pointStateMachine->onBallHit(_data->getId());
 		}
 	}
 }

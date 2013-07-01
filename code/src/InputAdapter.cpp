@@ -26,10 +26,10 @@ void
 InputAdapter::_initializeMaps(const std::string &configFilePath)
 {
 	// Default keymap
-	_keyMap[OIS::KC_UP] = Controls::UP;
-	_keyMap[OIS::KC_DOWN] = Controls::DOWN;
-	_keyMap[OIS::KC_LEFT] = Controls::LEFT;
-	_keyMap[OIS::KC_RIGHT] = Controls::RIGHT;
+	_keyMap[OIS::KC_W] = Controls::UP;
+	_keyMap[OIS::KC_S] = Controls::DOWN;
+	_keyMap[OIS::KC_A] = Controls::LEFT;
+	_keyMap[OIS::KC_D] = Controls::RIGHT;
 	_keyMap[OIS::KC_ESCAPE] = Controls::START;
 	_keyMap[OIS::KC_RETURN] = Controls::SHOT_DRIVE;
 	_keyMap[OIS::KC_J] = Controls::SHOT_DRIVE;

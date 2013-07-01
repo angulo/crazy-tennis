@@ -222,7 +222,7 @@ Match::_checkBallStatus()
 
 	bool bounce = false, bounceIn = false, bounceOut = false;
 
-	Ogre::Vector3 collisionPoint;
+	Ogre::Vector3 collisionPoint = ballPosition;
 	btCollisionWorld *bulletWorld = _dynamicWorld->getBulletCollisionWorld();
 	int totalCollisions = bulletWorld->getDispatcher()->getNumManifolds();
 
@@ -237,21 +237,33 @@ Match::_checkBallStatus()
 		if (collisionObjectA == _ball->getRigidBody() || collisionObjectB == _ball->getRigidBody()) {
 			if (collisionObjectA == _courtIn.second || collisionObjectB == _courtIn.second) {
 				bounceIn = bounce = true;
-				if (collisionObjectA == _courtIn.second) {
-					collisionPoint = OgreBulletCollisions::BtOgreConverter::to(collision->getContactPoint(0).getPositionWorldOnA());
-				} else {
-					collisionPoint = OgreBulletCollisions::BtOgreConverter::to(collision->getContactPoint(0).getPositionWorldOnB());
-				}
 			} else if (collisionObjectA == _courtOut.second || collisionObjectB == _courtOut.second) {
 				bounceOut = bounce = true;
 			}
 		}
-  }
+	}
 
 	if (bounce) {
+		Data::PlayerId courtOwner = collisionPoint.x > 0 ?
+			_data->getPlayer(0)->getId() : _data->getPlayer(1)->getId();
+
+		Data::PointState::BouncePlace where;
+
 		if (bounceIn) {
+			if (abs(collisionPoint.x) < _configValue<float>("court_middle_x")) {
+				if (collisionPoint.x * collisionPoint.z >= 0) {
+					where = Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA;
+				} else {
+					where = Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA;
+				}
+			} else {
+				where = Data::PointState::BOUNCE_IN_COURT;
+			}
 		} else {
+			where = Data::PointState::BOUNCE_OUT;
 		}
+
+		_pointStateMachine->onBallBounce(courtOwner, where);
 	}
 }
 

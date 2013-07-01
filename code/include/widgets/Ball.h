@@ -53,6 +53,8 @@ namespace CrazyTennis {
 				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
 				bool keyPressed(const OIS::KeyEvent &event);
+
+				void shotTo(const Ogre::Vector3 destination, const Ogre::Real &angle, const Ogre::Real &velocity);
 		};
 	};
 };

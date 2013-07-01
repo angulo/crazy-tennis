@@ -76,22 +76,11 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 
 		if (availableShots > 0) {
 			int shot = availableShots / 3;
-
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
-			Ogre::Vector3 direction = destination - origin;
-			Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
 
-			direction.x = velocity * cos(angle) * sin(angleToZ);
-			direction.z = velocity * cos(angle) * cos(angleToZ);
-			direction.y = velocity * sin(angle);
-			
-			if (ballPosition.x  > 0) {
-				direction.x = -direction.x;
-				direction.z = -direction.z;
-			}
-
-			_ball->setLinearVelocity(direction);
+			_ball->shotTo(destination, angle, velocity);
+			_pointStateMachine->onBallHit(_data->getId());
 		}
 	}
 

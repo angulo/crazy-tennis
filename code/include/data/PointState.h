@@ -20,6 +20,7 @@
 #define _DATA_POINT_STATE_H_
 
 #include <list>
+#include <iostream>
 
 #include "data/PointState.h"
 

@@ -84,3 +84,20 @@ Ball::keyPressed(const OIS::KeyEvent &event)
 {
 	return true;
 }
+
+void
+Ball::shotTo(const Ogre::Vector3 destination, const Ogre::Real &angle, const Ogre::Real &velocity)
+{
+	Ogre::Vector3 direction = destination - getPosition();
+	Ogre::Real angleToZ = Ogre::Vector3(direction.x, 0, direction.z).angleBetween(Ogre::Vector3(0, 0, 1)).valueRadians();
+
+	direction.x = velocity * cos(angle) * sin(angleToZ);
+	direction.z = velocity * cos(angle) * cos(angleToZ);
+	direction.y = velocity * sin(angle);
+	
+	if (getPosition().x > 0) {
+		direction.x = -direction.x;
+	}
+
+	setLinearVelocity(direction);
+}
