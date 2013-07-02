@@ -26,6 +26,28 @@ PlayerBase::_getSpeed() const
 	return _speed;
 }
 
+void
+PlayerBase::_setInReturnState()
+{
+	Ogre::Vector3 returnPosition(0, 1.5, 0);
+	Ogre::Real xOffset = _configValue<float>("courtLength") +
+		_configValue<float>("returnXOffset");
+	Ogre::Real zOffset = _configValue<float>("returnZOffset");
+	
+	Data::PointState::BouncePlace whereToServe = _matchData->getWhereToServe();
+
+	returnPosition.x = getPosition().x > 0 ? xOffset : -xOffset;
+
+	if (whereToServe == Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA) {
+		returnPosition.z = getPosition().x > 0 ? -zOffset : zOffset;
+	} else {
+		returnPosition.z = getPosition().x < 0 ? -zOffset : zOffset;
+	}
+
+	setPosition(returnPosition);
+
+}
+
 void 
 PlayerBase::_setInServeState()
 {
@@ -140,7 +162,7 @@ PlayerBase::onChangeState(const Data::PointState::State &previousState, const Da
 			if (_matchData->getCurrentServer() == _playerData) {
 				_setInServeState();
 			} else {
-				//_setInReturnState();
+				_setInReturnState();
 			}
 			break;
 	}

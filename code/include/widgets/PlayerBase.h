@@ -54,6 +54,7 @@ namespace CrazyTennis {
 				Ogre::Real _speed;
 				Ogre::Real _getSpeed() const;
 
+				void _setInReturnState();
 				void _setInServeState();
 
 			public:
