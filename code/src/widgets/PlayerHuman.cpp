@@ -141,13 +141,14 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
 			_ball->shotTo(destination, angle, velocity);
-			_pointStateMachine->onBallHit(_data->getId());
+			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}
 }
 
-PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, data, pointStateMachine), _directionBlocked(false)
+PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
+	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine), _directionBlocked(false)
 {
 
 }
@@ -164,6 +165,8 @@ PlayerHuman::enter()
 	
 	_shotBuffer = new Widget::ShotBuffer();
 	_shotBufferId = OGF::SceneController::getSingletonPtr()->addChild(_shotBuffer);
+
+	_setInServeState();
 }
 
 void

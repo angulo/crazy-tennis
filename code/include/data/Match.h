@@ -25,6 +25,7 @@
 
 #include "data/MatchListener.h"
 #include "data/Player.h"
+#include "data/PointState.h"
 #include "data/Types.h"
 
 namespace CrazyTennis {
@@ -39,6 +40,7 @@ namespace CrazyTennis {
 				
 				PlayersPair _players;
 				Player *_currentServer;
+				PointState::BouncePlace _whereToServe;
 
 				MatchScore _matchScore;
 				MatchScore::iterator _currentSet;
@@ -67,7 +69,9 @@ namespace CrazyTennis {
 				MatchStatus missedService();
 				MatchStatus getStatus() const;
 
-				Player *getPlayer(const int &number) const;
+				Player * getCurrentServer() const;
+				PointState::BouncePlace getWhereToServe() const;
+				Player * getPlayer(const int &number) const;
 				void addListener(MatchListener *matchListener);
 		};
 	};

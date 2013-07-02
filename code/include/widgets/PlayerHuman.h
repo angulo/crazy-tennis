@@ -22,6 +22,7 @@
 #include <OGF/OGF.h>
 
 #include "InputAdapter.h"
+#include "data/Match.h"
 #include "data/PointStateMachine.h"
 #include "dynamics/ShotSimulator.h"
 #include "widgets/PlayerBase.h"
@@ -78,7 +79,8 @@ namespace CrazyTennis {
 
 			public:
 				
-				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine);
+				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
+					Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
 				~PlayerHuman();
 
 				void enter();

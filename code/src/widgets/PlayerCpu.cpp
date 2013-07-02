@@ -20,8 +20,9 @@
 
 using namespace CrazyTennis::Widget;
 
-PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, data, pointStateMachine)
+PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball,
+	Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine)
 {
 
 }
@@ -80,7 +81,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 			Ogre::Real velocity = possibleShots[shot].second;
 
 			_ball->shotTo(destination, angle, velocity);
-			_pointStateMachine->onBallHit(_data->getId());
+			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}
 

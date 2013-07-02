@@ -50,7 +50,9 @@ Match::_isMatchFinished() const
 }
 
 Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB)
-	:	_hasTiebreak(hasTiebreak), _inTiebreak(false), _firstServe(true), _isFinished(false)
+	:	_hasTiebreak(hasTiebreak), _inTiebreak(false), _firstServe(true), _isFinished(false),
+		_whereToServe(PointState::BOUNCE_IN_RIGHT_SERVE_AREA)
+		
 {
 	_players.push_back(playerA);
 	_players.push_back(playerB);
@@ -124,6 +126,26 @@ Match::getStatus () const
 	status.isFinished = _isFinished;
 
 	return status;
+}
+
+Player *
+Match::getCurrentServer() const
+{
+	return _currentServer;
+}
+
+PointState::BouncePlace
+Match::getWhereToServe() const
+{
+	PointState::BouncePlace whereToServe;
+
+	if (_gameScore[0] + _gameScore[1] % 2 == 0) {
+		whereToServe = PointState::BOUNCE_IN_RIGHT_SERVE_AREA;
+	} else {
+		whereToServe = PointState::BOUNCE_IN_LEFT_SERVE_AREA;
+	}
+
+	return whereToServe;
 }
 
 Player *

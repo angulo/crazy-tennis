@@ -26,12 +26,35 @@ PlayerBase::_getSpeed() const
 	return _speed;
 }
 
-PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine)
-	:	PhysicalBase(sceneManager, dynamicWorld), _data(data), _ball(ball), _pointStateMachine(pointStateMachine)
+void 
+PlayerBase::_setInServeState()
 {
-	_initConfigReader("widgets/player.cfg");
-	_speed = _data->getSkills()["speed"] * _configValue<float>("maximumRunSpeed");
-	_pointStateMachine->addListener(this);
+	Ogre::Vector3 servePosition(0, 1.5, 0);
+	Ogre::Real xOffset = _configValue<float>("courtLength") +
+		_configValue<float>("serveXOffset");
+	Ogre::Real zOffset = _configValue<float>("serveZOffset");
+	
+	Data::PointState::BouncePlace whereToServe = _matchData->getWhereToServe();
+
+	servePosition.x = getPosition().x > 0 ? xOffset : -xOffset;
+
+	if (whereToServe == Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA) {
+		servePosition.z = getPosition().x > 0 ? -zOffset : zOffset;
+	} else {
+		servePosition.z = getPosition().x < 0 ? -zOffset : zOffset;
+	}
+
+	setPosition(servePosition);
+}
+
+PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
+	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData,
+	Data::PointState::Machine *pointStateMachine)
+:	PhysicalBase(sceneManager, dynamicWorld), _matchData(matchData), _playerData(playerData), _ball(ball), _pointStateMachine(pointStateMachine)
+{
+_initConfigReader("widgets/player.cfg");
+_speed = _playerData->getSkills()["speed"] * _configValue<float>("maximumRunSpeed");
+_pointStateMachine->addListener(this);
 }
 
 PlayerBase::~PlayerBase()
@@ -52,7 +75,7 @@ PlayerBase::enter()
 	OgreBulletCollisions::CollisionShape *bodyShape =
 		new OgreBulletCollisions::BoxCollisionShape(size);
 	
-	_rigidBody = new OgreBulletDynamics::RigidBody(_data->getName(), _dynamicWorld);
+	_rigidBody = new OgreBulletDynamics::RigidBody(_playerData->getName(), _dynamicWorld);
 	_rigidBody->setShape(_sceneNode, bodyShape, 0.6, 0.6, 80.0);
 	_rigidBody->disableDeactivation();
 
@@ -105,4 +128,20 @@ PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 {
 	PhysicalBase::rotate(axis, angle);
 	_sceneNode->rotate(axis, Ogre::Radian(angle));
+}
+
+void
+PlayerBase::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+	std::cout << "FROM: " << previousState << " TO " << currentState << std::endl;
+
+	switch(currentState) {
+		case Data::PointState::STATE_BEFORE_SERVE:
+			if (_matchData->getCurrentServer() == _playerData) {
+				_setInServeState();
+			} else {
+				//_setInReturnState();
+			}
+			break;
+	}
 }

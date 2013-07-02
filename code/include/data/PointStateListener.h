@@ -20,6 +20,7 @@
 #define _DATA_POINT_STATE_LISTENER_H_
 
 #include "data/PointState.h"
+#include "data/Types.h"
 	
 namespace CrazyTennis {
 	
@@ -29,6 +30,23 @@ namespace CrazyTennis {
 		
 			class Listener {
 				
+				public:
+				
+					/**
+					* Fired when a point is won.
+					*
+					* @param winner Point winner.
+					*/
+					virtual void onWonPoint(const PlayerId &winner);
+
+					/**
+					* Fired when the point state is changed.
+					*
+					* @param previousState Previous state
+					* @param currentState Current state
+					*/
+					virtual void onChangeState(const State &previousState, const State &currentState);
+
 			};
 		};
 	};

@@ -26,7 +26,9 @@
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
+#include "data/Match.h"
 #include "data/Player.h"
+#include "data/PointState.h"
 #include "data/PointStateListener.h"
 #include "data/PointStateMachine.h"
 #include "widgets/Ball.h"
@@ -43,7 +45,8 @@ namespace CrazyTennis {
 				
 				Ogre::SceneNode *_sceneNode;
 
-				Data::Player *_data;
+				Data::Match *_matchData;
+				Data::Player *_playerData;
 				Data::PointState::Machine *_pointStateMachine;
 
 				Widget::Ball *_ball;
@@ -51,9 +54,12 @@ namespace CrazyTennis {
 				Ogre::Real _speed;
 				Ogre::Real _getSpeed() const;
 
+				void _setInServeState();
+
 			public:
 
-				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball, Data::Player *data, Data::PointState::Machine *pointStateMachine);
+				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball,
+					Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
 				~PlayerBase();
 
 				/**
@@ -67,8 +73,9 @@ namespace CrazyTennis {
 
 				void setPosition(const Ogre::Vector3 &position);
 				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
-
         void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);
+
+				virtual void onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

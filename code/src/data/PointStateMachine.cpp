@@ -68,6 +68,15 @@ Machine::setCurrentState(const State &state)
 	bool shouldNotify = state != _currentState;
 	_previousState = _currentState;
 	_currentState = state;
+
+	for (std::list<Listener *>::iterator it = _listeners.begin(); it != _listeners.end(); it++) {
+		(*it)->onChangeState(_previousState, _currentState);
+
+		if (_currentState == STATE_AFTER_POINT) {
+			(*it)->onWonPoint(_winner);
+		}
+	}
+
 }
 
 void
@@ -89,12 +98,14 @@ void
 Machine::onBallHit(const PlayerId &hitter)
 {
 	if (_currentState == STATE_IN_POINT) {
+		_bounceCount = 0;
 		if (_turn == hitter) {
 			_swapTurn();
 		} else {
 			_hasWon(_turn);
 		}
 	} else if (_currentState == STATE_IN_SERVE) {
+		_bounceCount = 0;
 		setCurrentState(STATE_WAITING_FOR_SERVE_RESULT);
 		_swapTurn();
 	} else if (_currentState == STATE_WAITING_FOR_SERVE_RESULT) {

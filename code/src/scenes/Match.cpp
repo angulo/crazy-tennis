@@ -122,14 +122,14 @@ Match::_loadDynamicObjects()
 	_ball->setPosition(_configValue<float>("court_middle_x"), 5, _configValue<float>("court_middle_z"));
 
 	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,
-		_dynamicWorld, _ball, _data->getPlayer(0), _pointStateMachine);
+		_dynamicWorld, _ball, _data, _data->getPlayer(0), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player1);
 	player1->setPosition(12, 2, 0);
 	player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
 
 	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager,
-		_dynamicWorld, _ball, _data->getPlayer(1), _pointStateMachine);
+		_dynamicWorld, _ball, _data, _data->getPlayer(1), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player2);
 	player2->setPosition(-12, 2, 0);
@@ -291,6 +291,7 @@ Match::enter()
 	_pointStateMachine->addListener(this);
 
 	_createScene();
+	_pointStateMachine->reset(_data->getCurrentServer()->getId(), Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA);
 }
 
 void
