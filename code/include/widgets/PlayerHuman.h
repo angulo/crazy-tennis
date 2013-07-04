@@ -38,7 +38,9 @@ namespace CrazyTennis {
 
 				OGF::SceneId _shotBufferId;
 				Widget::ShotBuffer *_shotBuffer;
+
 				bool _directionBlocked;
+				bool _inServe;
 
 				/**
 				 * Calculate the shot destination depending on the current shot
@@ -91,6 +93,8 @@ namespace CrazyTennis {
 				bool keyReleased(const OIS::KeyEvent &event);
 				bool buttonPressed(const OIS::JoyStickEvent &event, int button);
 				bool buttonReleased(const OIS::JoyStickEvent &event, int button);
+
+				void onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};
 	};
 };

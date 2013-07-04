@@ -54,9 +54,9 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 	Ogre::Vector3 currentPosition = getPosition();
 	Ogre::Vector3 movement(0, 0, 0);
 
-	if (inputAdapter->isActionActive(Controls::UP))
+	if (!_inServe && inputAdapter->isActionActive(Controls::UP))
 		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (inputAdapter->isActionActive(Controls::DOWN))
+	if (!_inServe && inputAdapter->isActionActive(Controls::DOWN))
 		movement.x = currentPosition.x > 0 ? 1 : -1;
 	if (inputAdapter->isActionActive(Controls::LEFT))
 		movement.z = currentPosition.x > 0 ? 1 : -1;
@@ -147,8 +147,10 @@ PlayerHuman::_shoot(const Controls::Action &action)
 }
 
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
-	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine), _directionBlocked(false)
+	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData,
+	Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine),
+		_directionBlocked(false), _inServe(false)
 {
 
 }
@@ -248,4 +250,21 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	_directionBlocked = false;
 
 	return true;
+}
+
+void
+PlayerHuman::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+	PlayerBase::onChangeState(previousState, currentState);
+
+	switch(currentState) {
+		case Data::PointState::STATE_BEFORE_SERVE:
+			if (_matchData->getCurrentServer() == _playerData) {
+				_inServe = true;
+			}
+			break;
+		default:
+			_inServe = false;
+			break;
+	}
 }
