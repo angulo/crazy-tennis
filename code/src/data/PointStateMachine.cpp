@@ -36,7 +36,7 @@ Machine::_hasWon(const PlayerId &winner)
 void
 Machine::_swapTurn()
 {
-	_turn = (_turn == _playerA ? _playerB : _playerA);
+	setTurn(_turn == _playerA ? _playerB : _playerA);
 }
 
 Machine::Machine(const PlayerId &playerA, const PlayerId &playerB)

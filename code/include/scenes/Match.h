@@ -77,7 +77,12 @@ namespace CrazyTennis {
 				
 				void _onActionDone(const Controls::Action &action);
 
-				void _checkBallStatus();
+				/**
+				 * Check the ball status to detect collisions.
+				 *
+				 * @return true if the ball has bounced, false otherwise.
+				 */
+				bool _checkBallStatus();
 			
 			public:
 				

@@ -50,10 +50,14 @@ PlayerCpu::exit()
 bool
 PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 {
+	static float timeSinceLastHit = 0;
+
+	timeSinceLastHit += event.timeSinceLastFrame;
+
 	Ogre::Vector3 ballPosition = _ball->getPosition();
 	Ogre::Vector3 origin = ballPosition;
 
-	if (ballPosition.x <= -13) {
+	if (ballPosition.x <= -13 && timeSinceLastHit > 0.5) {
 		Ogre::Vector3 destination(6, 0, 0);
 
 		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
@@ -82,6 +86,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 
 			_ball->shotTo(destination, angle, velocity);
 			_pointStateMachine->onBallHit(_playerData->getId());
+			timeSinceLastHit = 0;
 		}
 	}
 

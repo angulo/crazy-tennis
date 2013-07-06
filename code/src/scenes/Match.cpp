@@ -211,13 +211,13 @@ Match::_onActionDone(const Controls::Action &action)
 	}
 }
 
-void
+bool
 Match::_checkBallStatus()
 {
 	// Dont check for ball collisions until being near the floor
 	Ogre::Vector3 ballPosition = _ball->getPosition();
 	if (ballPosition.y >= 0.1) {
-		return;
+		return false;
 	}
 
 	bool bounce = false, bounceIn = false, bounceOut = false;
@@ -244,6 +244,7 @@ Match::_checkBallStatus()
 	}
 
 	if (bounce) {
+
 		Data::PlayerId courtOwner = collisionPoint.x > 0 ?
 			_data->getPlayer(0)->getId() : _data->getPlayer(1)->getId();
 
@@ -265,6 +266,8 @@ Match::_checkBallStatus()
 
 		_pointStateMachine->onBallBounce(courtOwner, where);
 	}
+
+	return bounce;
 }
 
 Match::Match(Data::Match *data)
@@ -330,8 +333,21 @@ Match::frameEnded(const Ogre::FrameEvent& event)
 bool
 Match::frameStarted(const Ogre::FrameEvent &event)
 {
+	static float timeSinceLastCheck = 0;
+	static bool lastBallCheckResult = false;
+
 	_dynamicWorld->stepSimulation(event.timeSinceLastFrame, 4, 1.0 / 240.0);
-	_checkBallStatus();
+
+	if (lastBallCheckResult) {
+		timeSinceLastCheck += event.timeSinceLastFrame;
+
+		if (timeSinceLastCheck >= _configValue<float>("timeBetweenBallCollisionChecks")) {
+			lastBallCheckResult = _checkBallStatus();
+			timeSinceLastCheck = 0;
+		}
+	} else {
+		lastBallCheckResult = _checkBallStatus();
+	}
 
 	return true;
 }
@@ -363,9 +379,9 @@ Match::onChangeState(const Data::PointState::State &previousState, const Data::P
 			break;
 		case Data::PointState::STATE_AFTER_POINT:
 			if (previousState == Data::PointState::STATE_WAITING_FOR_SERVE_RESULT) {
-				_data->wonPoint(_pointStateMachine->getWinner());
-			} else {
 				_data->missedService();
+			} else {
+				_data->wonPoint(_pointStateMachine->getWinner());
 			}
 
 			_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());

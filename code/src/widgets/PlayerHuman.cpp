@@ -349,8 +349,6 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 void
 PlayerHuman::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
 {
-	std::cout << "FROM: " << previousState << " TO " << currentState << std::endl;
-
 	PlayerBase::onChangeState(previousState, currentState);
 
 	switch(currentState) {

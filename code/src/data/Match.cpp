@@ -107,12 +107,11 @@ Match::missedService()
 {
 	if (_firstServe) {
 		_firstServe = false;
+		_notifyListeners();
 	} else {
 		int playerOffset = _players[0] == _currentServer? 0 : 1;
 		wonPoint(_players[1 - playerOffset]->getId());
 	}
-
-	_notifyListeners();
 }
 
 MatchStatus
@@ -141,7 +140,7 @@ Match::getWhereToServe() const
 {
 	PointState::BouncePlace whereToServe;
 
-	if (_gameScore[0] + _gameScore[1] % 2 == 0) {
+	if ((_gameScore[0] + _gameScore[1]) % 2 == 0) {
 		whereToServe = PointState::BOUNCE_IN_RIGHT_SERVE_AREA;
 	} else {
 		whereToServe = PointState::BOUNCE_IN_LEFT_SERVE_AREA;
