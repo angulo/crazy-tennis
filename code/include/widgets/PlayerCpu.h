@@ -40,8 +40,8 @@ namespace CrazyTennis {
 			
 			public:
 				
-				PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball,
-					Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
+				PlayerCpu(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
+					Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
 				~PlayerCpu();
 
 				void enter();

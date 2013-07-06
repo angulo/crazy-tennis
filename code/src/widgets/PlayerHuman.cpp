@@ -237,10 +237,9 @@ PlayerHuman::_startToServe()
 	_ball->setLinearVelocity(Ogre::Vector3(0, 7, 0));
 }
 
-PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
-	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData,
-	Data::PointState::Machine *pointStateMachine)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine),
+PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
+	Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, ball, matchData, playerData, pointStateMachine),
 		_directionBlocked(false)
 {
 

@@ -121,18 +121,18 @@ Match::_loadDynamicObjects()
 
 	_ball->setPosition(_configValue<float>("court_middle_x"), 5, _configValue<float>("court_middle_z"));
 
-	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,
-		_dynamicWorld, _ball, _data, _data->getPlayer(0), _pointStateMachine);
+	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,_ball, _data,
+		_data->getPlayer(0), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player1);
-	player1->setPosition(12, 2, 0);
+	player1->setPosition(12, 0, 0);
 	player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
 
-	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager,
-		_dynamicWorld, _ball, _data, _data->getPlayer(1), _pointStateMachine);
+	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager, _ball, _data,
+		_data->getPlayer(1), _pointStateMachine);
 
 	OGF::SceneController::getSingletonPtr()->addChild(player2);
-	player2->setPosition(-12, 2, 0);
+	player2->setPosition(-12, 0, 0);
 }
 
 void

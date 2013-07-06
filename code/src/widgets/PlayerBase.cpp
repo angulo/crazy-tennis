@@ -29,7 +29,7 @@ PlayerBase::_getSpeed() const
 void
 PlayerBase::_setInReturnState()
 {
-	Ogre::Vector3 returnPosition(0, 1.5, 0);
+	Ogre::Vector3 returnPosition(0, 0, 0);
 	Ogre::Real xOffset = _configValue<float>("courtLength") +
 		_configValue<float>("returnXOffset");
 	Ogre::Real zOffset = _configValue<float>("returnZOffset");
@@ -51,7 +51,7 @@ PlayerBase::_setInReturnState()
 void 
 PlayerBase::_setInServeState()
 {
-	Ogre::Vector3 servePosition(0, 1.5, 0);
+	Ogre::Vector3 servePosition(0, 0, 0);
 	Ogre::Real xOffset = _configValue<float>("courtLength") +
 		_configValue<float>("serveXOffset");
 	Ogre::Real zOffset = _configValue<float>("serveZOffset");
@@ -69,10 +69,9 @@ PlayerBase::_setInServeState()
 	setPosition(servePosition);
 }
 
-PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
-	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData,
-	Data::PointState::Machine *pointStateMachine)
-:	PhysicalBase(sceneManager, dynamicWorld), _matchData(matchData), _playerData(playerData), _ball(ball), _pointStateMachine(pointStateMachine)
+PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
+	Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
+:	OGF::Widget(sceneManager), _matchData(matchData), _playerData(playerData), _ball(ball), _pointStateMachine(pointStateMachine)
 {
 _initConfigReader("widgets/player.cfg");
 _speed = _playerData->getSkills()["speed"] * _configValue<float>("maximumRunSpeed");
@@ -93,14 +92,6 @@ PlayerBase::enter()
 		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode())
 		->buildNode();
 	
-	Ogre::Vector3 size = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getBoundingBox().getHalfSize();
-	OgreBulletCollisions::CollisionShape *bodyShape =
-		new OgreBulletCollisions::BoxCollisionShape(size);
-	
-	_rigidBody = new OgreBulletDynamics::RigidBody(_playerData->getName(), _dynamicWorld);
-	_rigidBody->setShape(_sceneNode, bodyShape, 0.6, 0.6, 80.0);
-	_rigidBody->disableDeactivation();
-
 	/*
 		Ogre::AnimationState *animState = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getAnimationState("shot");
 		animState->setLength(5);
@@ -132,11 +123,16 @@ PlayerBase::frameStarted(const Ogre::FrameEvent &event)
 	return true;
 }
 
+Ogre::Vector3
+PlayerBase::getPosition() const
+{
+	return _sceneNode->getPosition();
+}
+
 void
 PlayerBase::setPosition(const Ogre::Vector3 &position)
 {
-	PhysicalBase::setPosition(position);
-	_sceneNode->setPosition(getPosition());
+	_sceneNode->setPosition(position);
 }
 
 void
@@ -148,7 +144,6 @@ PlayerBase::setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Re
 void
 PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 {
-	PhysicalBase::rotate(axis, angle);
 	_sceneNode->rotate(axis, Ogre::Radian(angle));
 }
 

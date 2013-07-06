@@ -39,7 +39,7 @@ namespace CrazyTennis {
 	
 	namespace Widget {
 
-		class PlayerBase: public PhysicalBase, public Data::PointState::Listener {
+		class PlayerBase: public OGF::Widget, public Data::PointState::Listener {
 			
 			protected:
 				
@@ -59,19 +59,16 @@ namespace CrazyTennis {
 
 			public:
 
-				PlayerBase(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball,
+				PlayerBase(Ogre::SceneManager *sceneManager, Widget::Ball *ball,
 					Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
 				~PlayerBase();
 
-				/**
-				 * Creates the rigid body of the player using the 
-				 * provided player data as configuration.
-				 */
 				virtual void enter();
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
 
+				Ogre::Vector3 getPosition() const;
 				void setPosition(const Ogre::Vector3 &position);
 				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
         void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);

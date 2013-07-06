@@ -20,9 +20,9 @@
 
 using namespace CrazyTennis::Widget;
 
-PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld, Widget::Ball *ball,
-	Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
-	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine)
+PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
+	Data::Player *playerData, Data::PointState::Machine *pointStateMachine)
+	:	PlayerBase(sceneManager, ball, matchData, playerData, pointStateMachine)
 {
 
 }

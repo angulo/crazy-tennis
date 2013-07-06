@@ -105,8 +105,8 @@ namespace CrazyTennis {
 			
 			public:
 				
-				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
-					Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
+				PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
+					Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
 				~PlayerHuman();
 
 				void enter();
