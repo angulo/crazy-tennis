@@ -125,7 +125,7 @@ Base::resume()
 }
 
 bool
-Base::keyPressed(const OIS::KeyEvent &event)
+Base::keyReleased(const OIS::KeyEvent &event)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
 	_onActionDone(inputAdapter->inputToAction(event));
@@ -133,7 +133,7 @@ Base::keyPressed(const OIS::KeyEvent &event)
 }
 
 bool
-Base::buttonPressed(const OIS::JoyStickEvent &event, int button)
+Base::buttonReleased(const OIS::JoyStickEvent &event, int button)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
 	_onActionDone(inputAdapter->inputToAction(event, button));

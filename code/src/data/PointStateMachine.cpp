@@ -97,6 +97,7 @@ Machine::setTurn(const PlayerId &playerToHit)
 void
 Machine::onBallHit(const PlayerId &hitter)
 {
+	std::cout << "State: " << _currentState << " Hitter: " << hitter << " Turn: " << _turn << std::endl;
 	if (_currentState == STATE_IN_POINT) {
 		_bounceCount = 0;
 		if (_turn == hitter) {
@@ -121,7 +122,6 @@ Machine::onBallBounce(const PlayerId &courtOwner, const BouncePlace &where)
 			_hasLost(_turn);
 		} else {
 			setCurrentState(STATE_IN_POINT);
-			_swapTurn();
 			_bounceCount++;
 		}
 	} else if (_currentState == STATE_IN_POINT) {

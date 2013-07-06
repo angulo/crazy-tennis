@@ -291,7 +291,7 @@ Match::enter()
 	_pointStateMachine->addListener(this);
 
 	_createScene();
-	_pointStateMachine->reset(_data->getCurrentServer()->getId(), Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA);
+	_pointStateMachine->reset(_data->getCurrentServer()->getId(), Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA);
 }
 
 void
@@ -337,7 +337,7 @@ Match::frameStarted(const Ogre::FrameEvent &event)
 }
 
 bool
-Match::keyPressed(const OIS::KeyEvent &event)
+Match::keyReleased(const OIS::KeyEvent &event)
 {
 	Controls::Action action = InputAdapter::getSingletonPtr()->inputToAction(event);
 	_onActionDone(action);
@@ -346,7 +346,7 @@ Match::keyPressed(const OIS::KeyEvent &event)
 }
 
 bool
-Match::buttonPressed(const OIS::JoyStickEvent &event, int button)
+Match::buttonReleased(const OIS::JoyStickEvent &event, int button)
 {
 	Controls::Action action = InputAdapter::getSingletonPtr()->inputToAction(event, button);
 	_onActionDone(action);

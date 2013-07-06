@@ -40,7 +40,13 @@ namespace CrazyTennis {
 				Widget::ShotBuffer *_shotBuffer;
 
 				bool _directionBlocked;
-				bool _inServe;
+
+				/**
+				 * Calculate the serve destination
+				 *
+				 * @return Destination of the serve.
+				 */
+				Ogre::Vector3 _calculateServeDestination();
 
 				/**
 				 * Calculate the shot destination depending on the current shot
@@ -48,7 +54,7 @@ namespace CrazyTennis {
 				 *
 				 * @return Destination of the shot.
 				 */
-				Ogre::Vector3 _calculateDestination();
+				Ogre::Vector3 _calculateShotDestination();
 
 				/**
 				 * Check if the player can shot at the moment.
@@ -62,6 +68,14 @@ namespace CrazyTennis {
 				void _move(const Ogre::Real &timeSinceLastFrame);
 
 				/**
+				 * Process the result of an action.
+				 *
+				 * @param Action done.
+				 * @return true if the action is handled, false otherwise
+				 */
+				bool _onActionDone(const Controls::Action &action);
+
+				/**
 				 * Select the shot to be executed depending on the shot buffer status
 				 * and the desired type of shot.
 				 *
@@ -70,7 +84,12 @@ namespace CrazyTennis {
 				 * @return Index of the most appropiate shot to be done at the moment. -1 if no possible shot.
 				 */
 				int _selectShot(const Controls::Action &action, const int &availableShots);
-			
+
+				/**
+				 * Serve the ball taking in consideration the serve direction and ball height.
+				 */
+				void _serve();
+
 				/**
 				 * Execute a shot by hitting the ball in the appropiate direction,
 				 * depending on the current shot buffer status.
@@ -79,6 +98,11 @@ namespace CrazyTennis {
 				 */
 				void _shoot(const Controls::Action &action);
 
+				/**
+				 * Throw the ball up to start the serve.
+				 */
+				void _startToServe();
+			
 			public:
 				
 				PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,

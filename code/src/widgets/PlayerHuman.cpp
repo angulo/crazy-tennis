@@ -21,7 +21,13 @@
 using namespace CrazyTennis::Widget;
 
 Ogre::Vector3 
-PlayerHuman::_calculateDestination()
+PlayerHuman::_calculateServeDestination()
+{
+	return Ogre::Vector3(-3, 0, 2);
+}
+
+Ogre::Vector3 
+PlayerHuman::_calculateShotDestination()
 {
 	Ogre::Real halfWidth(_configValue<float>("courtWidth") / 2.0);
 	Ogre::Real length(_configValue<float>("courtLength"));
@@ -53,10 +59,12 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 
 	Ogre::Vector3 currentPosition = getPosition();
 	Ogre::Vector3 movement(0, 0, 0);
+	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
 
-	if (!_inServe && inputAdapter->isActionActive(Controls::UP))
+	if (!beforeServe && inputAdapter->isActionActive(Controls::UP))
 		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (!_inServe && inputAdapter->isActionActive(Controls::DOWN))
+	if (!beforeServe && inputAdapter->isActionActive(Controls::DOWN))
 		movement.x = currentPosition.x > 0 ? 1 : -1;
 	if (inputAdapter->isActionActive(Controls::LEFT))
 		movement.z = currentPosition.x > 0 ? 1 : -1;
@@ -77,6 +85,33 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 
 		setPosition(destination);
 	}
+}
+
+bool
+PlayerHuman::_onActionDone(const Controls::Action &action)
+{
+	bool handled = false;
+
+	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
+	bool inServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
+
+	switch(action) {
+		case Controls::SHOT_DRIVE:
+		case Controls::SHOT_LOB:
+			if (beforeServe) {
+				_pointStateMachine->onContinue(_playerData->getId());
+				_startToServe();
+				handled = true;
+			} else if (inServe) {
+				_serve();
+				handled = true;
+			}
+			break;
+	}
+	
+	return handled;
 }
 
 int
@@ -107,6 +142,44 @@ PlayerHuman::_selectShot(const Controls::Action &action, const int &availableSho
 	return shot;
 }
 
+void
+PlayerHuman::_serve()
+{
+	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
+
+	Ogre::Vector3 origin = _ball->getPosition();
+	Ogre::Vector3 destination = _calculateServeDestination();
+
+	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
+		->setDestination(destination)
+		->calculateSet(20);
+	
+	Dynamics::CalculationSet possibleShots;
+
+	for (int i = 0; i < allShots.size(); i++) {
+		Ogre::Real angle = allShots[i].first;
+		Ogre::Real velocity = allShots[i].second;
+
+		// Discard impossible angles and directions
+		if (!isnan(velocity) && !isnan(angle) && velocity > 0) {
+			possibleShots.push_back(allShots[i]);
+		}
+	}
+
+	int availableShots = possibleShots.size();
+
+	if (availableShots > 0) {
+		// TODO: adjust serve according to player skills
+		int shot = 1;
+
+		if (shot != -1) {
+			Ogre::Real angle = possibleShots[shot].first;
+			Ogre::Real velocity = possibleShots[shot].second;
+			_ball->shotTo(destination, angle, velocity);
+			_pointStateMachine->onBallHit(_playerData->getId());
+		}
+	}
+}
 
 void
 PlayerHuman::_shoot(const Controls::Action &action)
@@ -114,7 +187,7 @@ PlayerHuman::_shoot(const Controls::Action &action)
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
 	Ogre::Vector3 origin = _ball->getPosition();
-	Ogre::Vector3 destination = _calculateDestination();
+	Ogre::Vector3 destination = _calculateShotDestination();
 
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
 		->setDestination(destination)
@@ -146,11 +219,25 @@ PlayerHuman::_shoot(const Controls::Action &action)
 	}
 }
 
+void
+PlayerHuman::_startToServe()
+{
+	Ogre::Vector3 position = getPosition();
+
+	position.x += getPosition().x > 0 ? - _configValue<float>("ballServeXOffset") : 
+		_configValue<float>("ballServeXOffset");
+	position.z += getPosition().x > 0 ? - _configValue<float>("ballServeZOffset") : 
+		_configValue<float>("ballServeZOffset");
+
+	_ball->setPosition(position);
+	_ball->setLinearVelocity(Ogre::Vector3(0, 7, 0));
+}
+
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld,
 	Widget::Ball *ball, Data::Match *matchData, Data::Player *playerData,
 	Data::PointState::Machine *pointStateMachine)
 	:	PlayerBase(sceneManager, dynamicWorld, ball, matchData, playerData, pointStateMachine),
-		_directionBlocked(false), _inServe(false)
+		_directionBlocked(false)
 {
 
 }
@@ -209,9 +296,11 @@ PlayerHuman::keyReleased(const OIS::KeyEvent &event)
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
 	Controls::Action action = inputAdapter->inputToAction(event);
 
-	if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-		if (_canShoot(action)) {
-			_shoot(action);
+	if (!_onActionDone(action)) {
+		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
+			if (_canShoot(action)) {
+				_shoot(action);
+			}
 		}
 	}
 
@@ -241,9 +330,11 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
 	Controls::Action action = inputAdapter->inputToAction(event, button);
 
-	if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-		if (_canShoot(action)) {
-			_shoot(action);
+	if (!_onActionDone(action)) {
+		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
+			if (_canShoot(action)) {
+				_shoot(action);
+			}
 		}
 	}
 
@@ -259,12 +350,10 @@ PlayerHuman::onChangeState(const Data::PointState::State &previousState, const D
 
 	switch(currentState) {
 		case Data::PointState::STATE_BEFORE_SERVE:
-			if (_matchData->getCurrentServer() == _playerData) {
-				_inServe = true;
-			}
+			break;
+		case Data::PointState::STATE_IN_SERVE:
 			break;
 		default:
-			_inServe = false;
 			break;
 	}
 }
