@@ -65,8 +65,8 @@ namespace CrazyTennis {
 				Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB);
 				~Match();
 
-				MatchStatus wonPoint(const PlayerId &pointWinner);
-				MatchStatus missedService();
+				void wonPoint(const PlayerId &pointWinner);
+				void missedService();
 				MatchStatus getStatus() const;
 
 				Player * getCurrentServer() const;

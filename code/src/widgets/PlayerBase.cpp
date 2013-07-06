@@ -155,8 +155,6 @@ PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 void
 PlayerBase::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
 {
-	std::cout << "FROM: " << previousState << " TO " << currentState << std::endl;
-
 	switch(currentState) {
 		case Data::PointState::STATE_BEFORE_SERVE:
 			if (_matchData->getCurrentServer() == _playerData) {

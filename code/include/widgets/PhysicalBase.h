@@ -84,6 +84,13 @@ namespace CrazyTennis {
 				 * @param velocity Vector velocity
 				 */
 				void setLinearVelocity(const Ogre::Vector3 &velocity);
+
+				/**
+				 * Set the visibility of the item.
+				 *
+				 * @param isVisible Whether the item is visible or not.
+				 */
+				void setVisible(const bool &isVisible);
 		};
 	};
 };

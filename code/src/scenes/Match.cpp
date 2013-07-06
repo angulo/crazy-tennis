@@ -291,7 +291,7 @@ Match::enter()
 	_pointStateMachine->addListener(this);
 
 	_createScene();
-	_pointStateMachine->reset(_data->getCurrentServer()->getId(), Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA);
+	_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());
 }
 
 void
@@ -352,4 +352,26 @@ Match::buttonReleased(const OIS::JoyStickEvent &event, int button)
 	_onActionDone(action);
 
 	return true;
+}
+
+void
+Match::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
+{
+	switch(currentState) {
+		case Data::PointState::STATE_BEFORE_SERVE:
+			_ball->setVisible(false);
+			break;
+		case Data::PointState::STATE_AFTER_POINT:
+			if (previousState == Data::PointState::STATE_WAITING_FOR_SERVE_RESULT) {
+				_data->wonPoint(_pointStateMachine->getWinner());
+			} else {
+				_data->missedService();
+			}
+
+			_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());
+			break;
+		default:
+			_ball->setVisible(true);
+			break;
+	}
 }

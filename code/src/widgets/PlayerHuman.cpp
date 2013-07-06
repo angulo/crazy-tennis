@@ -23,7 +23,11 @@ using namespace CrazyTennis::Widget;
 Ogre::Vector3 
 PlayerHuman::_calculateServeDestination()
 {
-	return Ogre::Vector3(-3, 0, 2);
+	if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
+		return Ogre::Vector3(-3, 0, -2);
+	} else {
+		return Ogre::Vector3(-3, 0, 2);
+	}
 }
 
 Ogre::Vector3 
@@ -346,13 +350,11 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 void
 PlayerHuman::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
 {
+	std::cout << "FROM: " << previousState << " TO " << currentState << std::endl;
+
 	PlayerBase::onChangeState(previousState, currentState);
 
 	switch(currentState) {
-		case Data::PointState::STATE_BEFORE_SERVE:
-			break;
-		case Data::PointState::STATE_IN_SERVE:
-			break;
 		default:
 			break;
 	}

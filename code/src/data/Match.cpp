@@ -65,6 +65,8 @@ Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Playe
 		_matchScore.push_back(setScore);
 	}
 
+	_currentSet = _matchScore.begin();
+
 	_gameScore.push_back(0);
 	_gameScore.push_back(0);
 }
@@ -74,7 +76,7 @@ Match::~Match()
 
 }
 
-MatchStatus
+void
 Match::wonPoint(const PlayerId &pointWinner)
 {
 	_firstServe = true;
@@ -100,7 +102,7 @@ Match::wonPoint(const PlayerId &pointWinner)
 	_notifyListeners();
 }
 
-MatchStatus
+void
 Match::missedService()
 {
 	if (_firstServe) {

@@ -94,6 +94,13 @@ namespace CrazyTennis {
 					void setCurrentState(const State &state);
 
 					/**
+					 * Get the player id of the last point winner.
+					 *
+					 * @return Player id of the last point winner.
+					 */
+					PlayerId getWinner() const;
+
+					/**
 					 * Reset the machine state.
 					 *
 					 * @param server Player to server.

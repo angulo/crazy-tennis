@@ -88,3 +88,9 @@ PhysicalBase::setLinearVelocity(const Ogre::Vector3 &velocity)
 {
 	_rigidBody->setLinearVelocity(velocity);
 }
+
+void
+PhysicalBase::setVisible(const bool &isVisible)
+{
+	_rigidBody->getRootNode()->setVisible(isVisible);
+}

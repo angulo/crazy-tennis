@@ -53,8 +53,8 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 	Ogre::Vector3 ballPosition = _ball->getPosition();
 	Ogre::Vector3 origin = ballPosition;
 
-	if (ballPosition.x <= -15) {
-		Ogre::Vector3 destination(11.5, 0, 4);
+	if (ballPosition.x <= -13) {
+		Ogre::Vector3 destination(6, 0, 0);
 
 		Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 		Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
