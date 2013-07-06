@@ -50,6 +50,11 @@ namespace CrazyTennis {
 				void _createServerMark();
 				CEGUI::Window * _createText(const std::string &text, const float &xRel, const float &yRel, const std::string &font);
 
+				void _refresh(const Data::MatchStatus &matchStatus);
+
+				void _refreshGameNumber(CEGUI::Window *item, const int &number);
+				void _refreshGamePoints(CEGUI::Window *item0, CEGUI::Window *item1, const int &number0, const int &number1);
+
 			public:
 				
 				Score(Data::Match *matchData);

@@ -40,8 +40,8 @@ void
 Score::_createGames()
 {
 	std::string fontNumbers = _configValue<std::string>("font_numbers");
-	_games.push_back(_createText("1", 100, 13, fontNumbers));	
-	_games.push_back(_createText("1", 100, 62, fontNumbers));	
+	_games.push_back(_createText("0", 100, 13, fontNumbers));	
+	_games.push_back(_createText("0", 100, 62, fontNumbers));	
 
 	_background->addChildWindow(_games[0]);
 	_background->addChildWindow(_games[1]);
@@ -68,8 +68,8 @@ Score::_createPoints()
 	int sets = _matchData->getStatus().matchScore.size();
 	int pointsPosition = _configValue<int>("points_position_" + Ogre::StringConverter::toString(sets));
 
-	_points.push_back(_createText("15", pointsPosition, 13, fontNumbers));	
-	_points.push_back(_createText("A", pointsPosition, 62, fontNumbers));	
+	_points.push_back(_createText("0", pointsPosition, 13, fontNumbers));	
+	_points.push_back(_createText("0", pointsPosition, 62, fontNumbers));	
 
 	_background->addChildWindow(_points[0]);
 	_background->addChildWindow(_points[1]);
@@ -92,6 +92,55 @@ Score::_createText(const std::string &text, const float &xRel, const float &yRel
 	result->setProperty("HorzFormatting", "LeftAligned");
 
 	return result;
+}
+
+void
+Score::_refresh(const Data::MatchStatus &matchStatus)
+{
+	for (int i = 0, count = 0; i < matchStatus.matchScore.size(); i++, count += 2) {
+		_refreshGameNumber(_games[count], matchStatus.matchScore[i][0]);
+		_refreshGameNumber(_games[count + 1], matchStatus.matchScore[i][1]);
+	}
+
+	_refreshGamePoints(_points[0], _points[1], matchStatus.gameScore[0], matchStatus.gameScore[1]);
+}
+
+void
+Score::_refreshGameNumber(CEGUI::Window *item, const int &number)
+{
+	item->setText(CEGUI::String("[colour='") + _configValue<std::string>("font_color") + "']" + Ogre::StringConverter::toString(number));
+}
+
+void
+Score::_refreshGamePoints(CEGUI::Window *item0, CEGUI::Window *item1, const int &number0, const int &number1)
+{
+	std::string text0, text1;
+	
+	if (number0 > 3 && number1 > 3) {
+		text0 = text1 = "40";
+		if (number0 > number1) {
+			text0 = "A";
+		} else if (number0 < number1) {
+			text1 = "A";
+		}
+	} else {
+		switch(number0) {
+			case 0: text0 = "0"; break;
+			case 1: text0 = "15"; break;
+			case 2: text0 = "30"; break;
+			case 3: text0 = "40"; break;
+		}
+
+		switch(number1) {
+			case 0: text1 = "0"; break;
+			case 1: text1 = "15"; break;
+			case 2: text1 = "30"; break;
+			case 3: text1 = "40"; break;
+		}
+	}
+
+	item0->setText(CEGUI::String("[colour='") + _configValue<std::string>("font_color") + "']" + text0);
+	item1->setText(CEGUI::String("[colour='") + _configValue<std::string>("font_color") + "']" + text1);
 }
 
 Score::Score(Data::Match *matchData)
@@ -148,5 +197,5 @@ Score::frameStarted(const Ogre::FrameEvent &event)
 void
 Score::onMatchEvent(Data::MatchStatus matchStatus)
 {
-
+	_refresh(matchStatus);
 }
