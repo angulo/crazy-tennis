@@ -32,7 +32,7 @@ Score::_createBackground()
 	_background->setProperty("BackgroundEnabled", "False");
 	_background->setProperty("VertFormatting", "LeftAligned");
 	_background->setProperty("HorzFormatting", "LeftAligned");
-	_background->setPosition(CEGUI::UVector2(CEGUI::UDim(0.02, 0), CEGUI::UDim(0.85, 0)));
+	_background->setPosition(CEGUI::UVector2(CEGUI::UDim(0.04, 0), CEGUI::UDim(0.85, 0)));
 	_container->addChildWindow(_background);
 }
 
@@ -78,6 +78,22 @@ Score::_createPoints()
 void
 Score::_createServerMark()
 {
+	_serverMark = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage");
+	_serverMark->setProperty("Image", "set:Menus image:Ball");
+	_serverMark->setProperty("FrameEnabled", "False");
+	_serverMark->setProperty("InheritsAlpha", "False");
+	_serverMark->setProperty("BackgroundEnabled", "False");
+	_serverMark->setProperty("VertFormatting", "LeftAligned");
+	_serverMark->setProperty("HorzFormatting", "LeftAligned");
+
+	if (_matchData->getCurrentServer() == _matchData->getPlayer(0)) {
+		_serverMark->setPosition(CEGUI::UVector2(CEGUI::UDim(0.04, -16), CEGUI::UDim(0.85, 6)));
+	} else {
+		_serverMark->setPosition(CEGUI::UVector2(CEGUI::UDim(0.04, -16), CEGUI::UDim(0.85, 54)));
+	}
+
+	_container->addChildWindow(_serverMark);
+
 }
 
 CEGUI::Window *
@@ -103,6 +119,12 @@ Score::_refresh(const Data::MatchStatus &matchStatus)
 	}
 
 	_refreshGamePoints(_points[0], _points[1], matchStatus.gameScore[0], matchStatus.gameScore[1]);
+
+	if (_matchData->getCurrentServer() == _matchData->getPlayer(0)) {
+		_serverMark->setPosition(CEGUI::UVector2(CEGUI::UDim(0.04, -16), CEGUI::UDim(0.85, 6)));
+	} else {
+		_serverMark->setPosition(CEGUI::UVector2(CEGUI::UDim(0.04, -16), CEGUI::UDim(0.85, 54)));
+	}
 }
 
 void
