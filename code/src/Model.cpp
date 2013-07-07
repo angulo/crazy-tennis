@@ -28,8 +28,7 @@ Model::getModelMap()
 	modelMap[BALL] = "ball.mesh";
 	modelMap[BARRIER] = "barrier.mesh";
 	modelMap[CHAIR] = "chair.mesh";
-	modelMap[COURT_IN] = "court.mesh";
-	modelMap[COURT_OUT] = "court_out.mesh";
+	modelMap[COURT] = "court.mesh";
 	modelMap[LINES] = "lines.mesh";
 	modelMap[NET] = "net.mesh";
 	modelMap[PLAYER] = "shoter.mesh";

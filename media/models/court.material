@@ -34,7 +34,7 @@ material court
             {
                 texture grass.png
                 tex_address_mode wrap
-                scale 0.3 0.3
+                scale 0.1 0.1
                 colour_op modulate
             }
         }

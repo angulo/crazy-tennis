@@ -230,6 +230,7 @@ PlayerHuman::_startToServe()
 
 	position.x += getPosition().x > 0 ? - _configValue<float>("ballServeXOffset") : 
 		_configValue<float>("ballServeXOffset");
+	position.y = 1;
 	position.z += getPosition().x > 0 ? - _configValue<float>("ballServeZOffset") : 
 		_configValue<float>("ballServeZOffset");
 

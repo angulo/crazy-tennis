@@ -62,8 +62,7 @@ namespace CrazyTennis {
 				OgreBulletDynamics::DynamicsWorld *_dynamicWorld;
 
 				CrazyTennis::Widget::Ball *_ball;
-				DynamicObjectPair _courtIn;
-				DynamicObjectPair _courtOut;
+				DynamicObjectPair _court;
 				
 				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId, const float &restitution = 1.0);
 				void _createDynamicWorld();

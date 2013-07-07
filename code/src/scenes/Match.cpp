@@ -112,8 +112,7 @@ Match::_loadCameras()
 void
 Match::_loadDynamicObjects()
 {
-	_courtIn = _createPhysicObject("CourtIn", Model::COURT_IN);
-	_courtOut = _createPhysicObject("CourtOut", Model::COURT_OUT);
+	_court = _createPhysicObject("Court", Model::COURT);
 	DynamicObjectPair net = _createPhysicObject("Net", Model::NET, 0.3);
 
 	_ball = new Widget::Ball(_sceneManager, _dynamicWorld);
@@ -172,7 +171,7 @@ Match::_loadStaticObjects()
 	
 	// Lines
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::LINES))->buildEntity(),
-		Ogre::Vector3(0, 0.015, 0));
+		Ogre::Vector3(0, 0.15, 0));
 	
 	// Sky
 	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();
@@ -235,10 +234,10 @@ Match::_checkBallStatus()
 		OgreBulletCollisions::Object *collisionObjectB = _dynamicWorld->findObject(objectB);
 
 		if (collisionObjectA == _ball->getRigidBody() || collisionObjectB == _ball->getRigidBody()) {
-			if (collisionObjectA == _courtIn.second || collisionObjectB == _courtIn.second) {
-				bounceIn = bounce = true;
-			} else if (collisionObjectA == _courtOut.second || collisionObjectB == _courtOut.second) {
-				bounceOut = bounce = true;
+			if (collisionObjectA == _court.second || collisionObjectB == _court.second) {
+				bounce = true;
+				bounceIn = true;
+				bounceOut = false;
 			}
 		}
 	}
