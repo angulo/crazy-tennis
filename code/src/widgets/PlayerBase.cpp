@@ -106,16 +106,6 @@ PlayerBase::exit()
 bool
 PlayerBase::frameStarted(const Ogre::FrameEvent &event)
 {
-	/*
-	Ogre::AnimationState *animState = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getAnimationState("shot");
-	if (!animState->hasEnded()) {
-		animState->addTime(event.timeSinceLastFrame * 2.0);
-	} else {
-		animState->setEnabled(true);
-		animState->setTimePosition(0.0);
-	}
-	*/
-
 	return true;
 }
 

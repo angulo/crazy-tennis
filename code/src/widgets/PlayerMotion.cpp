@@ -56,7 +56,8 @@ PlayerMotion::enter()
 	_animations[ANIMATION_STAND] = _entity->getAnimationState("stand");
 
 	_disableAllAnimations();
-	_node->setAutoTracking(true, _ball->getRigidBody()->getRootNode());
+	stand();
+	std::cout << "standing..." << std::endl;
 }
 
 void
@@ -68,6 +69,17 @@ PlayerMotion::exit()
 bool
 PlayerMotion::frameStarted(const Ogre::FrameEvent &event)
 {
+	if (!_animations[ANIMATION_STAND]->hasEnded()) {
+		if (_animations[ANIMATION_STAND]->getTimePosition() + event.timeSinceLastFrame >= _animations[ANIMATION_STAND]->getLength()) {
+			_animations[ANIMATION_STAND]->setTimePosition(0.05);
+		} else {
+			_animations[ANIMATION_STAND]->addTime(event.timeSinceLastFrame);
+		}
+	} else {
+		_animations[ANIMATION_STAND]->setEnabled(true);
+		_animations[ANIMATION_STAND]->setTimePosition(0.0);
+	}
+
 	return true;
 }
 
@@ -75,12 +87,9 @@ void
 PlayerMotion::stand()
 {
 	_disableAllAnimations();
-
 	_animations[ANIMATION_STAND]->setEnabled(true);
-	_animations[ANIMATION_STAND]->setTimePosition(0);
+	_animations[ANIMATION_STAND]->setTimePosition(0.0);
 	_animations[ANIMATION_STAND]->setWeight(1.0);
-
-	stand();
 }
 
 void
