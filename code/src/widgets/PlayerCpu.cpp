@@ -85,6 +85,7 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 			Ogre::Real velocity = possibleShots[shot].second;
 
 			_ball->shotTo(destination, angle, velocity);
+			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SHOT);
 			_pointStateMachine->onBallHit(_playerData->getId());
 			timeSinceLastHit = 0;
 		}

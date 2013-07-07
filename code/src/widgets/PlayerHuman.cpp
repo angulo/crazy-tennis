@@ -180,6 +180,7 @@ PlayerHuman::_serve()
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
 			_ball->shotTo(destination, angle, velocity);
+			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SERVE);
 			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}
@@ -218,6 +219,7 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
 			_ball->shotTo(destination, angle, velocity);
+			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SHOT);
 			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}

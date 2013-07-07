@@ -22,6 +22,7 @@
 #include <OGF/OGF.h>
 
 #include "SceneFactory.h"
+#include "SoundPlayer.h"
 
 namespace CrazyTennis {
 	

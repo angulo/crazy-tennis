@@ -88,6 +88,8 @@ Splash::enter()
 
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 
+	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SPLASH);
+
 	_loadAnimations(crazyText, tennisText, adviceText);
 }
 

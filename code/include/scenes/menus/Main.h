@@ -21,9 +21,10 @@
 
 #include <OGF/OGF.h>
 
-#include "SceneFactory.h"
 #include "data/Data.h"
 #include "scenes/menus/Base.h"
+#include "SceneFactory.h"
+#include "SoundPlayer.h"
 
 namespace CrazyTennis {
 	

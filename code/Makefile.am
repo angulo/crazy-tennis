@@ -21,6 +21,7 @@ CrazyTennis_SOURCES = \
 	src/main.cpp \
 	src/InputAdapter.cpp \
 	src/Model.cpp \
+	src/SoundPlayer.cpp \
 	src/SceneFactory.cpp \
 	src/data/Loader.cpp \
 	src/data/Match.cpp \

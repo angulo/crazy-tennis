@@ -96,6 +96,9 @@ Main::enter()
 
 	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 	_setCurrentOption(OPTION_PLAY);
+
+	SoundPlayer::getSingletonPtr()->stopAll();
+	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_MAIN_TRACK, true);
 }
 
 bool

@@ -171,7 +171,7 @@ Match::_loadStaticObjects()
 	
 	// Lines
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::LINES))->buildEntity(),
-		Ogre::Vector3(0, 0.15, 0));
+		Ogre::Vector3(0, 0.05, 0));
 	
 	// Sky
 	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();
@@ -294,6 +294,8 @@ Match::preload()
 void
 Match::enter()
 {
+	SoundPlayer::getSingletonPtr()->stopAll();
+
 	_pointStateMachine = new Data::PointState::Machine(_data->getPlayer(0)->getId(), _data->getPlayer(1)->getId());
 	_pointStateMachine->addListener(this);
 
@@ -314,6 +316,8 @@ Match::exit()
 	_sceneManager->destroyAllAnimationStates();
 	_sceneManager->destroyAllLights();
 	_sceneManager->getRootSceneNode()->removeAndDestroyAllChildren();
+
+	SoundPlayer::getSingletonPtr()->stopAll();
 }
 
 void
@@ -386,6 +390,7 @@ Match::onChangeState(const Data::PointState::State &previousState, const Data::P
 				_data->missedService();
 			} else {
 				_data->wonPoint(_pointStateMachine->getWinner());
+				SoundPlayer::getSingletonPtr()->play(SOUND_AUDIENCE, false);
 			}
 
 			_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());

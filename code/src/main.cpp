@@ -20,6 +20,7 @@
 
 #include "Model.h"
 #include "SceneFactory.h"
+#include "SoundPlayer.h"
 
 int
 main(int argc, char **argv)
@@ -34,6 +35,7 @@ main(int argc, char **argv)
 
 	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
 	OGF::ModelFactory::getSingletonPtr()->initialize(CrazyTennis::Model::getModelMap());
+	CrazyTennis::SoundPlayer::getSingletonPtr()->preload();
 
 	OGF::Bootstrap::getSingletonPtr()->run();
 	OGF::Bootstrap::getSingletonPtr()->shutdown();

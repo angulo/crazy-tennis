@@ -30,6 +30,7 @@
 #include "widgets/PhysicalBase.h"
 #include "widgets/PlayerMotion.h"
 #include "Model.h"
+#include "SoundPlayer.h"
 
 namespace CrazyTennis {
 	
