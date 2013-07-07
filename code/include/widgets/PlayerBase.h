@@ -21,11 +21,6 @@
 
 #include <OGF/OGF.h>
 
-#include <OgreBulletCollisions.h>
-#include <OgreBulletDynamics.h>
-#include <Shapes/OgreBulletCollisionsBoxShape.h>
-#include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
-
 #include "data/Match.h"
 #include "data/Player.h"
 #include "data/PointState.h"
@@ -33,6 +28,7 @@
 #include "data/PointStateMachine.h"
 #include "widgets/Ball.h"
 #include "widgets/PhysicalBase.h"
+#include "widgets/PlayerMotion.h"
 #include "Model.h"
 
 namespace CrazyTennis {
@@ -50,6 +46,7 @@ namespace CrazyTennis {
 				Data::PointState::Machine *_pointStateMachine;
 
 				Widget::Ball *_ball;
+				Widget::PlayerMotion *_motionManager;
 
 				Ogre::Real _speed;
 				Ogre::Real _getSpeed() const;

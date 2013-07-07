@@ -92,13 +92,9 @@ PlayerBase::enter()
 		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode())
 		->buildNode();
 	
-	/*
-		Ogre::AnimationState *animState = static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->getAnimationState("shot");
-		animState->setLength(5);
-		animState->setEnabled(true);
-		animState->setLoop(true);
-		animState->setTimePosition(0.0);
-	*/
+	_motionManager = new Widget::PlayerMotion(_sceneManager, _playerData, _sceneNode, static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0)), _ball);
+
+	OGF::SceneController::getSingletonPtr()->addChild(_motionManager);
 }
 
 void
