@@ -32,7 +32,7 @@ bool
 Match::_isGameFinished() const
 {
 	return (std::abs(_gameScore[0] - _gameScore[1]) >= 2  &&
-		std::max(_gameScore[0], _gameScore[1]) >= 3);
+		std::max(_gameScore[0], _gameScore[1]) > 3);
 }
 
 bool
@@ -94,9 +94,8 @@ Match::wonPoint(const PlayerId &pointWinner)
 			} else {
 				_currentSet++;
 			}
-		} else {
-			_currentServer = _players[1 - playerOffset];
 		}
+		_currentServer = _players[0] == _currentServer ? _players[1] : _players[0];
 	}
 
 	_notifyListeners();
@@ -107,9 +106,8 @@ Match::missedService()
 {
 	if (_firstServe) {
 		_firstServe = false;
-		_notifyListeners();
 	} else {
-		int playerOffset = _players[0] == _currentServer? 0 : 1;
+		int playerOffset = _players[0] == _currentServer ? 0 : 1;
 		wonPoint(_players[1 - playerOffset]->getId());
 	}
 }

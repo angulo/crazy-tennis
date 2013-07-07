@@ -29,8 +29,8 @@ Machine::_hasLost(const PlayerId &loser)
 void
 Machine::_hasWon(const PlayerId &winner)
 {
-	setCurrentState(STATE_AFTER_POINT);
 	_winner = winner;
+	setCurrentState(STATE_AFTER_POINT);
 }
 
 void
@@ -124,21 +124,23 @@ Machine::onBallBounce(const PlayerId &courtOwner, const BouncePlace &where)
 {
 	if (_currentState == STATE_WAITING_FOR_SERVE_RESULT) {
 		if (courtOwner != _turn || where != _whereToServe) {
-			_hasLost(_turn);
+			_hasWon(_turn);
 		} else {
 			setCurrentState(STATE_IN_POINT);
-			_bounceCount++;
+			++_bounceCount;
 		}
 	} else if (_currentState == STATE_IN_POINT) {
+		++_bounceCount;
+
 		if (_turn != courtOwner) {
 			_hasWon(_turn);
 		} else {
-			if (where == BOUNCE_OUT) {
-				_hasWon(_turn);
-			} else {
-				if (++_bounceCount > 1) {
-					_hasLost(_turn);
+			if (_bounceCount == 1) {
+				if (where == BOUNCE_OUT) {
+					_hasWon(_turn);
 				}
+			} else {
+				_hasLost(_turn);
 			}
 		}
 	}

@@ -82,6 +82,14 @@ namespace CrazyTennis {
 				 * @return true if the ball has bounced, false otherwise.
 				 */
 				bool _checkBallStatus();
+
+				/**
+				 * Convert from a 3D position to a court place.
+				 *
+				 * @param position 3D Absolute position.
+				 * @return Place in court
+				 */
+				Data::PointState::BouncePlace _positionToCourtPlace(const Ogre::Vector3 &position);
 			
 			public:
 				

@@ -116,7 +116,7 @@ Score::_refreshGamePoints(CEGUI::Window *item0, CEGUI::Window *item1, const int 
 {
 	std::string text0, text1;
 	
-	if (number0 > 3 && number1 > 3) {
+	if (number0 >= 3 && number1 >= 3) {
 		text0 = text1 = "40";
 		if (number0 > number1) {
 			text0 = "A";

@@ -219,7 +219,7 @@ Match::_checkBallStatus()
 		return false;
 	}
 
-	bool bounce = false, bounceIn = false, bounceOut = false;
+	bool bounce = false;
 
 	Ogre::Vector3 collisionPoint = ballPosition;
 	btCollisionWorld *bulletWorld = _dynamicWorld->getBulletCollisionWorld();
@@ -233,40 +233,45 @@ Match::_checkBallStatus()
 		OgreBulletCollisions::Object *collisionObjectA = _dynamicWorld->findObject(objectA);
 		OgreBulletCollisions::Object *collisionObjectB = _dynamicWorld->findObject(objectB);
 
-		if (collisionObjectA == _ball->getRigidBody() || collisionObjectB == _ball->getRigidBody()) {
-			if (collisionObjectA == _court.second || collisionObjectB == _court.second) {
-				bounce = true;
-				bounceIn = true;
-				bounceOut = false;
-			}
+		if ((collisionObjectA == _ball->getRigidBody() || collisionObjectB == _ball->getRigidBody()) &&
+			(collisionObjectA == _court.second || collisionObjectB == _court.second)) {
+
+			bounce = true;
 		}
 	}
 
 	if (bounce) {
-
-		Data::PlayerId courtOwner = collisionPoint.x > 0 ?
+		Data::PlayerId courtOwner = ballPosition.x > 0 ?
 			_data->getPlayer(0)->getId() : _data->getPlayer(1)->getId();
-
-		Data::PointState::BouncePlace where;
-
-		if (bounceIn) {
-			if (abs(collisionPoint.x) < _configValue<float>("court_middle_x")) {
-				if (collisionPoint.x * collisionPoint.z >= 0) {
-					where = Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA;
-				} else {
-					where = Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA;
-				}
-			} else {
-				where = Data::PointState::BOUNCE_IN_COURT;
-			}
-		} else {
-			where = Data::PointState::BOUNCE_OUT;
-		}
-
-		_pointStateMachine->onBallBounce(courtOwner, where);
+		_pointStateMachine->onBallBounce(courtOwner, _positionToCourtPlace(ballPosition));
 	}
 
 	return bounce;
+}
+
+CrazyTennis::Data::PointState::BouncePlace
+Match::_positionToCourtPlace(const Ogre::Vector3 &position)
+{
+	bool bounceIn = abs(position.x) <= _configValue<float>("court_half_length") &&
+		abs(position.z) <= _configValue<float>("court_half_width");
+
+	Data::PointState::BouncePlace where;
+
+	if (bounceIn) {
+		if (abs(position.x) < _configValue<float>("court_middle_x")) {
+			if (position.x * position.z >= 0) {
+				where = Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA;
+			} else {
+				where = Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA;
+			}
+		} else {
+			where = Data::PointState::BOUNCE_IN_COURT;
+		}
+	} else {
+		where = Data::PointState::BOUNCE_OUT;
+	}
+	
+	return where;
 }
 
 Match::Match(Data::Match *data)
