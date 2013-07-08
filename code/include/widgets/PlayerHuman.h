@@ -57,6 +57,14 @@ namespace CrazyTennis {
 				Ogre::Vector3 _calculateShotDestination();
 
 				/**
+				 * Check if the player can move following the provided
+				 * direction.
+				 *
+				 * @param destination Direction to move to.
+				 */
+				bool _canMoveTo(const Ogre::Vector3 &destination);
+
+				/**
 				 * Check if the player can shot at the moment.
 				 * @return true if the player can shot, false otherwise.
 				 */

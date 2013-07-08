@@ -88,7 +88,7 @@ Match::_loadCameras()
 
 	_topCamera->setNearClipDistance(0.1);
 	_topCamera->setFarClipDistance(10000);
-	_topCamera->setFOVy(Ogre::Degree(45));
+	_topCamera->setFOVy(Ogre::Degree(_configValue<float>("camera_fovy")));
 
 	_topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
 	_topCameraNode->attachObject(_topCamera);

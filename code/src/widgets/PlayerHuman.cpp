@@ -51,6 +51,36 @@ PlayerHuman::_calculateShotDestination()
 }
 
 bool
+PlayerHuman::_canMoveTo(const Ogre::Vector3 &destination)
+{
+	bool canMove = true;
+
+	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
+	Ogre::Vector3 currentPosition = getPosition();
+
+	if (beforeServe) {
+		if (currentPosition.x > 0) {
+			if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
+				canMove = destination.z > 0;			
+			} else {
+				canMove = destination.z < 0;			
+			}
+		} else {
+			if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
+				canMove = destination.z > 0;			
+			} else {
+				canMove = destination.z < 0;			
+			}
+		}
+
+		canMove = canMove && abs(destination.z) < _configValue<float>("courtWidth") / 2.0;
+	}
+
+	return canMove;
+}
+
+bool
 PlayerHuman::_canShoot(const Controls::Action &action)
 {
 	return _shotBuffer->getValue(action) > 0;	
@@ -63,31 +93,31 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 
 	Ogre::Vector3 currentPosition = getPosition();
 	Ogre::Vector3 movement(0, 0, 0);
-	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
-		_matchData->getCurrentServer() == _playerData;
 
-	if (!beforeServe && inputAdapter->isActionActive(Controls::UP))
+	if (inputAdapter->isActionActive(Controls::UP))
 		movement.x = currentPosition.x > 0 ? -1 : 1;
-	if (!beforeServe && inputAdapter->isActionActive(Controls::DOWN))
+	if (inputAdapter->isActionActive(Controls::DOWN))
 		movement.x = currentPosition.x > 0 ? 1 : -1;
 	if (inputAdapter->isActionActive(Controls::LEFT))
 		movement.z = currentPosition.x > 0 ? 1 : -1;
 	if (inputAdapter->isActionActive(Controls::RIGHT))
 		movement.z = currentPosition.x > 0 ? -1 : 1;
-	
+
 	// Only update position in case the movement vector has positive length
 	if (movement != Ogre::Vector3::ZERO) {
 		movement = timeSinceLastFrame * _getSpeed() * movement.normalisedCopy();
 		Ogre::Vector3 destination = currentPosition + movement;
 
-		// Prevent trespassing the net
-		if (currentPosition.x >= 0) {
-			destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
-		} else {
-			destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
-		}
+		if (_canMoveTo(destination)) {
+			// Prevent trespassing the net
+			if (currentPosition.x >= 0) {
+				destination.x = std::max(destination.x, _configValue<float>("minimumDistanceToNet"));
+			} else {
+				destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
+			}
 
-		setPosition(destination);
+			setPosition(destination);
+		}
 	}
 }
 
