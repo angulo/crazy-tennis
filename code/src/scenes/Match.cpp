@@ -173,6 +173,10 @@ Match::_loadStaticObjects()
 	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::LINES))->buildEntity(),
 		Ogre::Vector3(0, 0.05, 0));
 	
+	// Ads
+	surrounding->addEntity(entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::ADS))->buildEntity(),
+		Ogre::Vector3(0, 1, 0));
+	
 	// Sky
 	entity = builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::SKY))->buildEntity();
 	entity->setMaterialName("sky");

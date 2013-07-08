@@ -25,6 +25,7 @@ Model::getModelMap()
 {
 	OGF::ModelMap modelMap;
 
+	modelMap[ADS] = "ads.mesh";
 	modelMap[BALL] = "ball.mesh";
 	modelMap[BARRIER] = "barrier.mesh";
 	modelMap[CHAIR] = "chair.mesh";

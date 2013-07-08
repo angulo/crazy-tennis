@@ -26,6 +26,7 @@ namespace CrazyTennis {
 	namespace Model {
 
 		enum ModelList {
+			ADS,
 			BALL,
 			BARRIER,
 			CHAIR,

@@ -57,7 +57,6 @@ PlayerMotion::enter()
 
 	_disableAllAnimations();
 	stand();
-	std::cout << "standing..." << std::endl;
 }
 
 void
