@@ -84,6 +84,12 @@ namespace CrazyTennis {
 				bool _checkBallStatus();
 
 				/**
+				 * Check the camera viewport to detect if the ball is visible and
+				 * adjust it otherwise.
+				 */
+				void _checkCameraViewport();
+
+				/**
 				 * Convert from a 3D position to a court place.
 				 *
 				 * @param position 3D Absolute position.

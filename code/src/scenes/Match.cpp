@@ -253,6 +253,24 @@ Match::_checkBallStatus()
 	return bounce;
 }
 
+void
+Match::_checkCameraViewport()
+{
+	Ogre::Vector3 ballPosition = _ball->getPosition();
+	Ogre::Real ballOutOffset = ballPosition.x - _configValue<float>("court_half_length") 
+		+ _configValue<float>("ballOffsetFromEndLineToMoveCamera");
+
+	if (ballOutOffset > 0) {
+		_topCamera->setPosition(
+			std::min(_configValue<float>("camera_x") + (0.5f * ballOutOffset), _configValue<float>("camera_x") + _configValue<float>("maxCameraOffset")),
+			_configValue<float>("camera_y"), _configValue<float>("camera_z"));
+
+	} else {
+		_topCamera->setPosition(_configValue<float>("camera_x"),
+			_configValue<float>("camera_y"), _configValue<float>("camera_z"));
+	}
+}
+
 CrazyTennis::Data::PointState::BouncePlace
 Match::_positionToCourtPlace(const Ogre::Vector3 &position)
 {
@@ -360,6 +378,8 @@ Match::frameStarted(const Ogre::FrameEvent &event)
 	} else {
 		lastBallCheckResult = _checkBallStatus();
 	}
+
+	_checkCameraViewport();
 
 	return true;
 }
