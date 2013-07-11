@@ -90,7 +90,7 @@ namespace CrazyTennis {
 				 *
 				 * @param isVisible Whether the item is visible or not.
 				 */
-				void setVisible(const bool &isVisible);
+				virtual void setVisible(const bool &isVisible);
 		};
 	};
 };

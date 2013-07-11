@@ -22,6 +22,7 @@
 #include <OGF/OGF.h>
 
 #include <cmath>
+#include <queue>
 
 #include <OgreBulletCollisions.h>
 #include <OgreBulletDynamics.h>
@@ -40,6 +41,13 @@ namespace CrazyTennis {
 
 		class Ball: public PhysicalBase {
 			
+			protected:
+				
+				std::list<Ogre::SceneNode *> _ghosts;
+
+				void _createGhosts();
+				void _updateGhosts();
+			
 			public:
 
 				Ball(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld);
@@ -47,12 +55,14 @@ namespace CrazyTennis {
 
 				void enter();
 				void exit();
-				void pause();
-				void resume();
-
-				bool frameEnded(const Ogre::FrameEvent& event);
 				bool frameStarted(const Ogre::FrameEvent &event);
-				bool keyPressed(const OIS::KeyEvent &event);
+
+				/**
+				 * Set the visibility of the item.
+				 *
+				 * @param isVisible Whether the item is visible or not.
+				 */
+				virtual void setVisible(const bool &isVisible);
 
 				void shotTo(const Ogre::Vector3 destination, const Ogre::Real &angle, const Ogre::Real &velocity);
 		};

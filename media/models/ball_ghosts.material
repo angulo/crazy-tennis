@@ -1,0 +1,302 @@
+material blanc_0
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.6
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.6
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_1
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.55
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.55
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_2
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.5
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.5
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_3
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.45
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.45
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_4
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.4
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.4
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_5
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.35
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.35
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_6
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.3
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.3
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_7
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.25
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.25
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_8
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.20
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.20
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material blanc_9
+{
+    technique
+    {
+        pass blanc
+        {
+						depth_write off
+            ambient 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.15
+            diffuse 0.7448529005050659 0.7448529005050659 0.7448529005050659 0.15
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+
+material vert_0 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.6
+            diffuse 0.72 0.80 0.16 0.6
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+
+material vert_1 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.55
+            diffuse 0.72 0.80 0.16 0.55
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_2 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.5
+            diffuse 0.72 0.80 0.16 0.5
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_3 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.45
+            diffuse 0.72 0.80 0.16 0.45
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_4
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.4
+            diffuse 0.72 0.80 0.16 0.4
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_5 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.35
+            diffuse 0.72 0.80 0.16 0.35
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_6
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.3
+            diffuse 0.72 0.80 0.16 0.3
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_7 
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.25
+            diffuse 0.72 0.80 0.16 0.25
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_8
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.20
+            diffuse 0.72 0.80 0.16 0.20
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}
+material vert_9
+{
+    technique
+    {
+        pass vert
+        {
+						depth_write off
+            ambient 0.72 0.80 0.16 0.15
+            diffuse 0.72 0.80 0.16 0.15
+            specular 1 1 1 20
+
+            scene_blend alpha_blend
+        }
+    }
+}

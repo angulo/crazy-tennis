@@ -20,6 +20,35 @@
 
 using namespace CrazyTennis::Widget;
 
+void
+Ball::_createGhosts()
+{
+	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, CrazyTennis::Model::BALL));
+	builder->castShadows(false)
+		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode());
+	
+	for (int i = 0; i < _configValue<int>("ghostsNumber"); i++) {
+		_ghosts.push_back(builder->buildNode());
+	}
+}
+
+void
+Ball::_updateGhosts()
+{
+	Ogre::Vector3 currentPosition = getPosition();
+	Ogre::SceneNode *lastGhost = _ghosts.front();
+	lastGhost->setPosition(getPosition());
+	_ghosts.pop_front();
+	_ghosts.push_back(lastGhost);
+
+	int count = 9;
+	for (std::list<Ogre::SceneNode *>::iterator it = _ghosts.begin(); it != _ghosts.end(); it++, count--) {
+		Ogre::Entity *object = static_cast<Ogre::Entity *>((*it)->getAttachedObject(0));
+		object->getSubEntity(0)->setMaterialName("vert_" + Ogre::StringConverter::toString(count));
+		object->getSubEntity(1)->setMaterialName("blanc_" + Ogre::StringConverter::toString(count));
+	}
+}
+
 
 Ball::Ball(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *dynamicWorld)
 	:	PhysicalBase(sceneManager, dynamicWorld)
@@ -47,6 +76,8 @@ Ball::enter()
 	_rigidBody->setShape(node, shape, _configValue<float>("restitution"),
 		_configValue<float>("friction"), _configValue<float>("weight"));
 	_rigidBody->disableDeactivation();
+
+	_createGhosts();
 }
 
 void
@@ -55,34 +86,27 @@ Ball::exit()
 
 }
 
-void
-Ball::pause()
-{
-
-}
-
-void
-Ball::resume()
-{
-
-}
-
-bool
-Ball::frameEnded(const Ogre::FrameEvent& event)
-{
-	return true;
-}
-
 bool
 Ball::frameStarted(const Ogre::FrameEvent &event)
 {
+	static float timeSinceLastGhostPaint = 0;
+
+	timeSinceLastGhostPaint += event.timeSinceLastFrame;
+	if (timeSinceLastGhostPaint >= _configValue<float>("ghostsTimeDistance")) {
+		_updateGhosts();
+		timeSinceLastGhostPaint = 0;
+	}
+
 	return true;
 }
 
-bool
-Ball::keyPressed(const OIS::KeyEvent &event)
+void
+Ball::setVisible(const bool &isVisible)
 {
-	return true;
+	PhysicalBase::setVisible(isVisible);	
+	for (std::list<Ogre::SceneNode *>::iterator it = _ghosts.begin(); it != _ghosts.end(); it++) {
+		(*it)->setVisible(isVisible);
+	}
 }
 
 void

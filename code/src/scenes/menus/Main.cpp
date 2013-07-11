@@ -95,6 +95,13 @@ Main::enter()
 	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_MAIN_TRACK, true);
 }
 
+void
+Main::resume()
+{
+	Menu::Base::resume();
+	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_MAIN_TRACK, true);
+}
+
 bool
 Main::frameStarted(const Ogre::FrameEvent &event)
 {

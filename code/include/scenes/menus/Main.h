@@ -54,6 +54,7 @@ namespace CrazyTennis {
 					~Main();
 
 					void enter();
+					void resume();
 					bool frameStarted(const Ogre::FrameEvent &event);
 			};
 		};
