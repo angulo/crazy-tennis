@@ -23,6 +23,7 @@
 
 #include "data/Data.h"
 #include "scenes/menus/Base.h"
+#include "scenes/menus/SelectPlayer.h"
 #include "SceneFactory.h"
 #include "SoundPlayer.h"
 

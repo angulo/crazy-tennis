@@ -2,6 +2,7 @@
 <GUIScheme Name="TaharezLook">
 	<Imageset Filename="TaharezLook.imageset" />
 	<Imageset Filename="Menus.imageset" />
+	<Imageset Filename="Players.imageset" />
 	<Font Filename="SFSportsNight-80.font" />
 	<LookNFeel Filename="TaharezLook.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />

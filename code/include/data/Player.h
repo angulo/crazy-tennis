@@ -35,15 +35,17 @@ namespace CrazyTennis {
 				std::string _name;
 				SkillSet _skills;
 				VisualSet _visual;
+				std::string _image;
 			
 			public:
 			
-				Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual);
+				Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual, const std::string &image);
 				~Player();
 
 				std::string getName() const;
 				PlayerId getId() const;
 				SkillSet getSkills() const;
+				std::string getImage() const;
 
 				void setSkills(SkillSet skills);
 		};

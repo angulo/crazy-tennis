@@ -36,13 +36,7 @@ Main::_processCurrentOption()
 {
 	switch(_currentOption) {
 		case OPTION_PLAY:
-			{
-				Data::Loader *dataLoader = new Data::Loader("../data/game");
-				std::list<Data::Player *> players = dataLoader->loadPlayers("players.json");
-				
-				Data::Match *matchData = new Data::Match(1, false, players.front(), players.back());
-				OGF::SceneController::getSingletonPtr()->replace(new CrazyTennis::Scene::Match(matchData));
-			}
+			OGF::SceneController::getSingletonPtr()->push(new CrazyTennis::Scene::Menu::SelectPlayer());
 			break;
 		case OPTION_SETTINGS:
 			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_SETTINGS_MAIN);

@@ -20,8 +20,8 @@
 
 using namespace CrazyTennis::Data;
 
-Player::Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual)
-	:	_id(id), _name(name), _skills(skills), _visual(visual)
+Player::Player(const PlayerId &id, const std::string &name, const SkillSet &skills, const VisualSet &visual, const std::string &image)
+	:	_id(id), _name(name), _skills(skills), _visual(visual), _image(image)
 {
 }
 
@@ -52,4 +52,10 @@ void
 Player::setSkills(SkillSet skills)
 {
 	_skills = skills;
+}
+
+std::string
+Player::getImage() const
+{
+	return _image;
 }

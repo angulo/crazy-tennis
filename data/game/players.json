@@ -1,43 +1,116 @@
 {
 	"players": [
 		{
-			"id": 1,
-			"name": "Javier Angulo",
+			"id": 5,
+			"name": "Nogal",
 			"skills": {
-				"speed": 0.8,
-				"precision": 0.8,
-				"power": 0.8
+				"speed": 0.6,
+				"precision": 0.6,
+				"power": 0.7
 			},
 			"visual": {
-				"tshirt": "red",
-				"shorts": "white"
-			}
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "nadal"
+		},
+		{
+			"id": 1,
+			"name": "Pokobic",
+			"skills": {
+				"speed": 0.9,
+				"precision": 0.5,
+				"power": 1.0 
+			},
+			"visual": {
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "djokovic"
+		},
+		{
+			"id": 6,
+			"name": "Ferdirer",
+			"skills": {
+				"speed": 0.4,
+				"precision": 1.0,
+				"power": 0.7
+			},
+			"visual": {
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "federer"
 		},
 		{
 			"id": 2,
-			"name": "Gabriel Alises",
+			"name": "Parray",
 			"skills": {
-				"speed": 0.4,
-				"precision": 0.4,
-				"power": 0.4
+				"speed": 0.7,
+				"precision": 0.9,
+				"power": 0.6 
 			},
 			"visual": {
-				"tshirt": "white",
-				"shorts": "white"
-			}
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "murray"
 		},
 		{
-			"id": 3,
-			"name": "Sergio García",
+			"id": 7,
+			"name": "Perdiz",
 			"skills": {
-				"speed": 0.2,
-				"precision": 0.2,
-				"power": 0.2
+				"speed": 0.4,
+				"precision": 0.5,
+				"power": 0.8 
 			},
 			"visual": {
 				"tshirt": "black",
 				"shorts": "black"
-			}
+			},
+			"image": "berdych"
+		},
+		{
+			"id": 3,
+			"name": "Sungo",
+			"skills": {
+				"speed": 0.3,
+				"precision": 0.5,
+				"power": 1.0
+			},
+			"visual": {
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "tsonga"
+		},
+		{
+			"id": 8,
+			"name": "Perrer",
+			"skills": {
+				"speed": 0.6,
+				"precision": 0.8,
+				"power": 0.8 
+			},
+			"visual": {
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "ferrer"
+		},
+		{
+			"id": 4,
+			"name": "Puerco",
+			"skills": {
+				"speed": 0.5,
+				"precision": 0.9,
+				"power": 0.7
+			},
+			"visual": {
+				"tshirt": "x",
+				"shorts": "x"
+			},
+			"image": "delpotro"
 		}
 	]
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<Imageset Name="Players" Imagefile="images/players.png" NativeHorzRes="1024" NativeVertRes="768" AutoScaled="true">
+	<Image Name="berdych" XPos="0" YPos="0" Width="128" Height="128" />
+	<Image Name="delpotro" XPos="128" YPos="0" Width="128" Height="128" />
+	<Image Name="djokovic" XPos="256" YPos="0" Width="128" Height="128" />
+	<Image Name="federer" XPos="384" YPos="0" Width="128" Height="128" />
+	<Image Name="ferrer" XPos="0" YPos="128" Width="128" Height="128" />
+	<Image Name="murray" XPos="128" YPos="128" Width="128" Height="128" />
+	<Image Name="nadal" XPos="256" YPos="128" Width="128" Height="128" />
+	<Image Name="tsonga" XPos="384" YPos="128" Width="128" Height="128" />
+	<Image Name="Frame1" XPos="0" YPos="256" Width="128" Height="128" />
+	<Image Name="Frame2" XPos="128" YPos="256" Width="128" Height="128" />
+</Imageset>
