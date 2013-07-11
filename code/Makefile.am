@@ -45,6 +45,7 @@ CrazyTennis_SOURCES = \
 	src/widgets/PlayerHuman.cpp \
 	src/widgets/PlayerMotion.cpp \
 	src/widgets/Score.cpp \
+	src/widgets/ServerMark.cpp \
 	src/widgets/ShotBuffer.cpp
 
 CrazyTennis_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS) $(jsoncpp_LIBS)

@@ -36,6 +36,7 @@ namespace CrazyTennis {
 			PLAYER,
 			REFEREE,
 			SEATS,
+			SERVER_MARK,
 			SKY,
 			STADIUM
 		};

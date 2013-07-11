@@ -26,6 +26,7 @@
 #include "data/PointStateMachine.h"
 #include "dynamics/ShotSimulator.h"
 #include "widgets/PlayerBase.h"
+#include "widgets/ServerMark.h"
 #include "widgets/ShotBuffer.h"
 
 namespace CrazyTennis {
@@ -36,8 +37,8 @@ namespace CrazyTennis {
 			
 			protected:
 
-				OGF::SceneId _shotBufferId;
 				Widget::ShotBuffer *_shotBuffer;
+				Widget::ServerMark *_serverMark;
 
 				bool _directionBlocked;
 

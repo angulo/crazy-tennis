@@ -21,16 +21,6 @@
 using namespace CrazyTennis::Widget;
 
 Ogre::Vector3 
-PlayerHuman::_calculateServeDestination()
-{
-	if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
-		return Ogre::Vector3(-3, 0, -2);
-	} else {
-		return Ogre::Vector3(-3, 0, 2);
-	}
-}
-
-Ogre::Vector3 
 PlayerHuman::_calculateShotDestination()
 {
 	Ogre::Real halfWidth(_configValue<float>("courtWidth") / 2.0);
@@ -57,6 +47,8 @@ PlayerHuman::_canMoveTo(const Ogre::Vector3 &destination)
 
 	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
 		_matchData->getCurrentServer() == _playerData;
+	bool inServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
 	Ogre::Vector3 currentPosition = getPosition();
 
 	if (beforeServe) {
@@ -74,7 +66,11 @@ PlayerHuman::_canMoveTo(const Ogre::Vector3 &destination)
 			}
 		}
 
-		canMove = canMove && abs(destination.z) < _configValue<float>("courtWidth") / 2.0;
+		canMove = canMove && abs(destination.z) < _configValue<float>("courtWidth") / 2.0 &&
+			destination.x == currentPosition.x;
+
+	} else if (inServe) {
+		canMove = false;
 	}
 
 	return canMove;
@@ -182,11 +178,11 @@ PlayerHuman::_serve()
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 
 	Ogre::Vector3 origin = _ball->getPosition();
-	Ogre::Vector3 destination = _calculateServeDestination();
+	Ogre::Vector3 destination = _serverMark->getPosition();
 
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
 		->setDestination(destination)
-		->calculateSet(20);
+		->calculateSet(50);
 	
 	Dynamics::CalculationSet possibleShots;
 
@@ -203,8 +199,7 @@ PlayerHuman::_serve()
 	int availableShots = possibleShots.size();
 
 	if (availableShots > 0) {
-		// TODO: adjust serve according to player skills
-		int shot = 1;
+		int shot = availableShots * (1 - _playerData->getSkills()["serve"]);
 
 		if (shot != -1) {
 			Ogre::Real angle = possibleShots[shot].first;
@@ -289,7 +284,10 @@ PlayerHuman::enter()
 	PlayerBase::enter();
 	
 	_shotBuffer = new Widget::ShotBuffer();
-	_shotBufferId = OGF::SceneController::getSingletonPtr()->addChild(_shotBuffer);
+	OGF::SceneController::getSingletonPtr()->addChild(_shotBuffer);
+	_serverMark = new Widget::ServerMark(_sceneManager, _matchData, _playerData->getId());
+	OGF::SceneController::getSingletonPtr()->addChild(_serverMark);
+	_pointStateMachine->addListener(_serverMark);
 
 	_setInServeState();
 }
@@ -385,7 +383,11 @@ PlayerHuman::onChangeState(const Data::PointState::State &previousState, const D
 	PlayerBase::onChangeState(previousState, currentState);
 
 	switch(currentState) {
+		case Data::PointState::STATE_IN_SERVE:
+			_directionBlocked = true;
+			break;
 		default:
+			_directionBlocked = false;
 			break;
 	}
 }

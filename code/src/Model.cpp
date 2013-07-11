@@ -35,6 +35,7 @@ Model::getModelMap()
 	modelMap[PLAYER] = "shoter.mesh";
 	modelMap[REFEREE] = "referee.mesh";
 	modelMap[SEATS] = "seats.mesh";
+	modelMap[SERVER_MARK] = "serverMark.mesh";
 	modelMap[SKY] = "sky.mesh";
 	modelMap[STADIUM] = "stadium.mesh";
 

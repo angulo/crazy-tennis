@@ -62,6 +62,7 @@ Loader::loadPlayers(const std::string &fileName)
 		skillSet["speed"] = skills["speed"].asFloat();
 		skillSet["precision"] = skills["precision"].asFloat();
 		skillSet["power"] = skills["power"].asFloat();
+		skillSet["serve"] = skills["serve"].asFloat();
 
 		const Json::Value visual = player["visual"];
 		visualSet["tshirt"] = visual["tshirt"].asString();
