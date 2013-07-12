@@ -4,7 +4,7 @@ material shoter
 {
     receive_shadows on 
 
-    technique
+    technique shoter
     {
         pass shoter
         {
@@ -30,13 +30,124 @@ material shoter
             shading gouraud
             transparent_sorting on
 
-            texture_unit 
+            texture_unit sprite
             {
-                texture OMO1.PNG
+                texture player_skins/white_white.png
                 tex_address_mode wrap
                 scale 1.0 1.0
                 colour_op modulate
             }
         }
     }
+}
+
+material shoter_black_black : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/black_black.png
+				}
+			}
+	}
+}
+
+material shoter_blue_blue : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/blue_blue.png
+				}
+			}
+	}
+}
+
+material shoter_blue_white : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/blue_white.png
+				}
+			}
+	}
+}
+
+material shoter_green_white : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/green_white.png
+				}
+			}
+	}
+}
+
+material shoter_red_black : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/red_black.png
+				}
+			}
+	}
+}
+
+material shoter_white_black : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/white_black.png
+				}
+			}
+	}
+}
+
+material shoter_white_blue : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/white_blue.png
+				}
+			}
+	}
+}
+material shoter_white_white : shoter
+{
+	technique shoter
+	{
+			pass shoter
+			{
+				texture_unit sprite
+				{
+					texture player_skins/white_white.png
+				}
+			}
+	}
 }

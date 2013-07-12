@@ -45,6 +45,7 @@ namespace CrazyTennis {
 				std::string getName() const;
 				PlayerId getId() const;
 				SkillSet getSkills() const;
+				VisualSet getVisual() const;
 				std::string getImage() const;
 
 				void setSkills(SkillSet skills);

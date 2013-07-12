@@ -182,7 +182,7 @@ PlayerHuman::_serve()
 
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
 		->setDestination(destination)
-		->calculateSet(50);
+		->calculateSet(500);
 	
 	Dynamics::CalculationSet possibleShots;
 
@@ -199,11 +199,12 @@ PlayerHuman::_serve()
 	int availableShots = possibleShots.size();
 
 	if (availableShots > 0) {
-		int shot = availableShots * (1 - _playerData->getSkills()["serve"]);
+		int shot = (1 - _playerData->getSkills()["serve"]) * 10;
 
 		if (shot != -1) {
 			Ogre::Real angle = possibleShots[shot].first;
 			Ogre::Real velocity = possibleShots[shot].second;
+
 			_ball->shotTo(destination, angle, velocity);
 			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SERVE);
 			_pointStateMachine->onBallHit(_playerData->getId());

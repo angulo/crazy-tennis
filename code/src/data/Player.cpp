@@ -48,6 +48,12 @@ Player::getSkills() const
 	return _skills;
 }
 
+VisualSet
+Player::getVisual() const
+{
+	return _visual;
+}
+
 void
 Player::setSkills(SkillSet skills)
 {

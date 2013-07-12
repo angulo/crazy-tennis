@@ -66,7 +66,7 @@ Loader::loadPlayers(const std::string &fileName)
 
 		const Json::Value visual = player["visual"];
 		visualSet["tshirt"] = visual["tshirt"].asString();
-		visualSet["shorts"] = visual["tshirt"].asString();
+		visualSet["shorts"] = visual["shorts"].asString();
 
 		result.push_back(new Player(id, name, skillSet, visualSet, image));
 	}

@@ -10,8 +10,8 @@
 				"serve": 0.7
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "green",
+				"shorts": "white"
 			},
 			"image": "nadal"
 		},
@@ -25,8 +25,8 @@
 				"serve": 1.0
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "white",
+				"shorts": "white"
 			},
 			"image": "djokovic"
 		},
@@ -40,8 +40,8 @@
 				"server": 0.7
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "black",
+				"shorts": "black"
 			},
 			"image": "federer"
 		},
@@ -55,8 +55,8 @@
 				"serve": 0.8
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "white",
+				"shorts": "black"
 			},
 			"image": "murray"
 		},
@@ -70,8 +70,8 @@
 				"serve": 0.7
 			},
 			"visual": {
-				"tshirt": "black",
-				"shorts": "black"
+				"tshirt": "blue",
+				"shorts": "white"
 			},
 			"image": "berdych"
 		},
@@ -85,8 +85,8 @@
 				"serve": 0.9
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "blue",
+				"shorts": "blue"
 			},
 			"image": "tsonga"
 		},
@@ -100,8 +100,8 @@
 				"serve": 0.8
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "red",
+				"shorts": "black"
 			},
 			"image": "ferrer"
 		},
@@ -115,8 +115,8 @@
 				"serve": 0.9
 			},
 			"visual": {
-				"tshirt": "x",
-				"shorts": "x"
+				"tshirt": "white",
+				"shorts": "blue"
 			},
 			"image": "delpotro"
 		}
