@@ -95,6 +95,8 @@ SelectPlayer::_moveToNextOption()
 
 	if (_selectedPlayers.size() == 1 && _selectedPlayers.front()->getId() == nextPlayerId) {
 		_moveToNextOption();
+	} else {
+		SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SLIDE);
 	}
 
 	_renderFrame();
@@ -109,6 +111,8 @@ SelectPlayer::_moveToPreviousOption()
 
 	if (_selectedPlayers.size() == 1 && _selectedPlayers.front()->getId() == nextPlayerId) {
 		_moveToPreviousOption();
+	} else {
+		SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SLIDE);
 	}
 
 	_renderFrame();
@@ -117,6 +121,7 @@ SelectPlayer::_moveToPreviousOption()
 void
 SelectPlayer::_processCurrentOption()
 {
+	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SELECT);
 	switch(_selectedPlayers.size()) {
 		case 0:
 			_selectedPlayers.push_back(_currentPlayer);
@@ -133,6 +138,7 @@ SelectPlayer::_processCurrentOption()
 void
 SelectPlayer::_goBack()
 {
+	SoundPlayer::getSingletonPtr()->play(SOUND_MENU_BACK);
 	if (_selectedPlayers.size() == 0) {
 		OGF::SceneController::getSingletonPtr()->pop();
 	} else {

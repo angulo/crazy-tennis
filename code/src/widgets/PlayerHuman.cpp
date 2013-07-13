@@ -182,7 +182,7 @@ PlayerHuman::_serve()
 
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
 		->setDestination(destination)
-		->calculateSet(500);
+		->calculateSet(200);
 	
 	Dynamics::CalculationSet possibleShots;
 

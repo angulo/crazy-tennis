@@ -56,8 +56,11 @@ SoundPlayer::preload()
 	_tracks[SOUND_AUDIENCE] = OGF::SoundTrackManager::getSingletonPtr()->load("audience.mp3");
 	_chunks[SOUND_BALL_SERVE] = OGF::SoundChunkManager::getSingletonPtr()->load("ball_serve.wav");
 	_chunks[SOUND_BALL_SHOT] = OGF::SoundChunkManager::getSingletonPtr()->load("ball_shot.wav");
+	_chunks[SOUND_MENU_BACK] = OGF::SoundChunkManager::getSingletonPtr()->load("menu_back.wav");
 	_tracks[SOUND_MENU_MAIN_TRACK] = OGF::SoundTrackManager::getSingletonPtr()->load("menu_main_track.mp3");
 	_tracks[SOUND_MENU_SPLASH] = OGF::SoundTrackManager::getSingletonPtr()->load("menu_splash.mp3");
+	_chunks[SOUND_MENU_SELECT] = OGF::SoundChunkManager::getSingletonPtr()->load("menu_select.wav");
+	_chunks[SOUND_MENU_SLIDE] = OGF::SoundChunkManager::getSingletonPtr()->load("menu_slide.wav");
 }
 
 void
@@ -66,6 +69,9 @@ SoundPlayer::play(const Sound &sound, const bool &loop)
 	switch(sound) {
 		case SOUND_BALL_SERVE:
 		case SOUND_BALL_SHOT:
+		case SOUND_MENU_BACK:
+		case SOUND_MENU_SLIDE:
+		case SOUND_MENU_SELECT:
 			_chunks[sound]->play();
 			break;
 
@@ -83,6 +89,9 @@ SoundPlayer::stop(const Sound &sound)
 	switch(sound) {
 		case SOUND_BALL_SERVE:
 		case SOUND_BALL_SHOT:
+		case SOUND_MENU_BACK:
+		case SOUND_MENU_SLIDE:
+		case SOUND_MENU_SELECT:
 			break;
 
 		case SOUND_AUDIENCE:

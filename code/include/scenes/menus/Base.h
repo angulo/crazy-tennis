@@ -19,8 +19,9 @@
 
 #include <OGF/OGF.h>
 
-#include "InputAdapter.h"
 #include "data/Data.h"
+#include "InputAdapter.h"
+#include "SoundPlayer.h"
 
 namespace CrazyTennis {
 	

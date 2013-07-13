@@ -30,6 +30,7 @@
 #include "scenes/menus/Base.h"
 #include "InputAdapter.h"
 #include "SceneFactory.h"
+#include "SoundPlayer.h"
 
 namespace CrazyTennis {
 	

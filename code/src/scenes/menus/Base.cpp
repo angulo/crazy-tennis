@@ -45,6 +45,8 @@ Base::_onActionDone(const Controls::Action &action)
 				_setCurrentOption(newOption);
 				if (!_optionsMap[newOption]->isVisible()) {
 					_onActionDone(action);
+				} else {
+					SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SLIDE);
 				}
 			}
 			break;
@@ -64,6 +66,8 @@ Base::_onActionDone(const Controls::Action &action)
 				_setCurrentOption(newOption);
 				if (!_optionsMap[newOption]->isVisible()) {
 					_onActionDone(action);
+				} else {
+					SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SLIDE);
 				}
 			}
 			break;
@@ -72,10 +76,12 @@ Base::_onActionDone(const Controls::Action &action)
 		case Controls::SHOT_DRIVE:
 		case Controls::START:
 			_processCurrentOption();
+			SoundPlayer::getSingletonPtr()->play(SOUND_MENU_SELECT);
 			break;
 		// Back to the previous menu
 		case Controls::SHOT_LOB:
 			OGF::SceneController::getSingletonPtr()->pop();
+			SoundPlayer::getSingletonPtr()->play(SOUND_MENU_BACK);
 			break;
 		default:
 			break;
