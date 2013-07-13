@@ -2,5 +2,4 @@ ball.blend - Creative Commons Zero, gabriel @ Blendswap
 reduced.blend - Creative Commons Zero, MrChimp2312 @ Blendswap
 referee.blend - Creative Commons Attributions, TiZeta @ Blendswap 
 player.blend - Creative Commons Attributions, TiZeta @ Blendswap 
-stadium.blend - Creative Commons Zero, MrChimp2312 @ Blendswap
 raquet.blend - Create Commons Zero Public Domain, Jamie Grant @ Blendswap
