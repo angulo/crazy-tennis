@@ -93,7 +93,16 @@ Score::_createServerMark()
 	}
 
 	_container->addChildWindow(_serverMark);
+}
 
+void
+Score::_createPointWinnerMessage()
+{
+	_pointWinnerMessage = _createText(std::string(""), 300, 650, _configValue<std::string>("font_point_winner"));
+	_pointWinnerMessage->setProperty("VertFormatting", "LeftAligned");
+	_pointWinnerMessage->setProperty("HorzFormatting", "LeftAligned");
+	_pointWinnerMessage->setVisible(false);
+	_container->addChildWindow(_pointWinnerMessage);
 }
 
 CEGUI::Window *
@@ -166,11 +175,12 @@ Score::_refreshGamePoints(CEGUI::Window *item0, CEGUI::Window *item1, const int 
 }
 
 Score::Score(Data::Match *matchData)
-	:	_matchData(matchData)
+	:	_matchData(matchData), _pointWinnerTimer(NULL)
 {
 	_initConfigReader("widgets/score.cfg");
 	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_names") + ".font");
 	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_numbers") + ".font");
+	CEGUI::FontManager::getSingleton().create(_configValue<std::string>("font_point_winner") + ".font");
 }
 
 Score::~Score()
@@ -189,6 +199,7 @@ Score::enter()
 	_createNames();
 	_createPoints();
 	_createServerMark();
+	_createPointWinnerMessage();
 }
 
 void
@@ -213,11 +224,45 @@ Score::resume()
 bool
 Score::frameStarted(const Ogre::FrameEvent &event)
 {
-
+	if (_pointWinnerTimer) {
+		Ogre::Real time = _pointWinnerTimer->getMilliseconds();
+		if (time >= _configValue<float>("timeBeforeShowingPointWinnerMilliseconds") &&
+			time <= _configValue<float>("timeToDisappearPointWinnerMilliseconds")) {
+			
+			if (!_pointWinnerMessage->isVisible()) {
+				_pointWinnerMessage->setVisible(true);
+			}
+		} else if (_pointWinnerMessage->isVisible()) {
+			_pointWinnerMessage->setVisible(false);
+			delete _pointWinnerTimer;
+			_pointWinnerTimer = NULL;
+		}
+	}
 }
 
 void
 Score::onMatchEvent(Data::MatchStatus matchStatus)
 {
 	_refresh(matchStatus);
+}
+
+void
+Score::onWonPoint(const Data::PlayerId &winner)
+{
+	if (_matchData->getStatus().firstServe) {
+		Data::Player *winnerPlayer = _matchData->getPlayer(0)->getId() == winner ?
+			_matchData->getPlayer(0) : _matchData->getPlayer(1);
+		
+		std::string condition =_matchData->getPlayer(0)->getId() == winner ?
+			"HUM" : "CPU";
+		
+		_pointWinnerMessage->setText("Point for " + winnerPlayer->getName() + " (" + condition + ")");
+		_pointWinnerMessage->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 150), CEGUI::UDim(0, 350)));
+	} else {
+		_pointWinnerMessage->setPosition(CEGUI::UVector2(CEGUI::UDim(0, 450), CEGUI::UDim(0, 350)));
+		_pointWinnerMessage->setText("Fault!");
+	}
+		
+	_pointWinnerTimer = new Ogre::Timer();
+	_pointWinnerTimer->reset();
 }

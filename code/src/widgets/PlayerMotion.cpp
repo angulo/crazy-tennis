@@ -131,11 +131,10 @@ void
 PlayerMotion::enter()
 {
 	/*
-	_animations[ANIMATION_RUN] = _entity->getAnimationState("run");
 	_animations[ANIMATION_SHOT_LOB] = _entity->getAnimationState("shot_lob");
-	_animations[ANIMATION_SIDE_STEP] = _entity->getAnimationState("side_step");
 	*/
 
+//	_animations[ANIMATION_RUN] = _entity->getAnimationState("run");
 	_animations[ANIMATION_SERVE] = _entity->getAnimationState("serve");
 	_animations[ANIMATION_SHOT_DRIVE] = _entity->getAnimationState("shot_drive");
 	_animations[ANIMATION_SHOT_BACK] = _entity->getAnimationState("shot_back");
@@ -214,8 +213,12 @@ void
 PlayerMotion::driveHitStart()
 {
 	Ogre::AnimationState *animation;
+	Ogre::Vector3 whereToBounce = _ball->getWhereToBounce();
+	Ogre::Vector3 playerPosition = _player->getPosition();
 
-	if (_player->getPosition().x * _player->getPosition().z > 0) {
+	if ((playerPosition.x < 0 && (whereToBounce.z > playerPosition.z)) ||
+		(playerPosition.x > 0 && (whereToBounce.z < playerPosition.z))) {
+
 		animation = _animations[ANIMATION_SHOT_DRIVE];
 	} else {
 		animation = _animations[ANIMATION_SHOT_BACK];
@@ -250,5 +253,5 @@ PlayerMotion::runTo(const Ogre::Vector3 &destination)
 void
 PlayerMotion::runDeltaTo(const Ogre::Vector3 &direction, const Ogre::Real &timeSinceLastMove)
 {
-
+	_player->setPosition(direction);	
 }

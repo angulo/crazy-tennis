@@ -75,7 +75,8 @@ namespace CrazyTennis {
 				Ogre::Vector3 getPosition() const;
 				void setPosition(const Ogre::Vector3 &position);
 				void setPosition(const Ogre::Real &x, const Ogre::Real &y, const Ogre::Real& z);
-        void rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle);
+        void rotate(const Ogre::Vector3 &axis, const Ogre::Degree& angle);
+				void lookAt(const Ogre::Vector3 &point);
 
 				virtual void onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState);
 		};

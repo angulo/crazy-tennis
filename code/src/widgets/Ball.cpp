@@ -124,4 +124,11 @@ Ball::shotTo(const Ogre::Vector3 destination, const Ogre::Real &angle, const Ogr
 	}
 
 	setLinearVelocity(direction);
+	_nextBouncePosition = destination;
+}
+
+Ogre::Vector3
+Ball::getWhereToBounce() const
+{
+	return _nextBouncePosition;
 }

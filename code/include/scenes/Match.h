@@ -63,6 +63,10 @@ namespace CrazyTennis {
 
 				CrazyTennis::Widget::Ball *_ball;
 				DynamicObjectPair _court;
+
+				Ogre::Timer *_resetTimer;
+				Widget::PlayerBase *_player1;
+				Widget::PlayerBase *_player2;
 				
 				DynamicObjectPair _createPhysicObject(const Ogre::String &name, const OGF::ModelId &modelId, const float &restitution = 1.0);
 				void _createDynamicWorld();
@@ -73,6 +77,11 @@ namespace CrazyTennis {
 				void _loadLights();
 				void _loadStaticObjects();
 				void _loadUserInterface();
+
+				/**
+				 * Reset the point after a certain delay.
+				 */
+				void _resetPoint();
 				
 				void _onActionDone(const Controls::Action &action);
 

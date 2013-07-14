@@ -23,13 +23,15 @@
 
 #include "data/Match.h"
 #include "data/MatchListener.h"
+#include "data/PointState.h"
+#include "data/PointStateListener.h"
 #include "data/Types.h"
 
 namespace CrazyTennis {
 	
 	namespace Widget {
 		
-		class Score : public OGF::Scene, public Data::MatchListener {
+		class Score : public OGF::Scene, public Data::MatchListener, public Data::PointState::Listener {
 			
 			protected:
 
@@ -38,6 +40,9 @@ namespace CrazyTennis {
 				CEGUI::Window *_container;
 				CEGUI::Window *_background;
 				CEGUI::Window *_serverMark;
+
+				Ogre::Timer *_pointWinnerTimer;
+				CEGUI::Window *_pointWinnerMessage;
 
 				std::vector<CEGUI::Window *> _names;;
 				std::vector<CEGUI::Window *> _games;
@@ -48,6 +53,8 @@ namespace CrazyTennis {
 				void _createNames();
 				void _createPoints();
 				void _createServerMark();
+				void _createPointWinnerMessage();
+
 				CEGUI::Window * _createText(const std::string &text, const float &xRel, const float &yRel, const std::string &font);
 
 				void _refresh(const Data::MatchStatus &matchStatus);
@@ -68,6 +75,7 @@ namespace CrazyTennis {
 
 				bool frameStarted(const Ogre::FrameEvent &event);
 				void onMatchEvent(Data::MatchStatus matchStatus);
+				void onWonPoint(const Data::PlayerId &winner);
 		};
 	};
 };

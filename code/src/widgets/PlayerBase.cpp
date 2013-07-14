@@ -138,6 +138,12 @@ PlayerBase::rotate(const Ogre::Vector3& axis, const Ogre::Degree& angle)
 }
 
 void
+PlayerBase::lookAt(const Ogre::Vector3 &point)
+{
+	_sceneNode->lookAt(point, Ogre::Node::TS_WORLD, Ogre::Vector3::UNIT_X);
+}
+
+void
 PlayerBase::onChangeState(const Data::PointState::State &previousState, const Data::PointState::State &currentState)
 {
 	switch(currentState) {

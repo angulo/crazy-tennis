@@ -120,18 +120,18 @@ Match::_loadDynamicObjects()
 
 	_ball->setPosition(_configValue<float>("court_middle_x"), 5, _configValue<float>("court_middle_z"));
 
-	Widget::PlayerBase *player1 = new Widget::PlayerHuman(_sceneManager,_ball, _data,
+	_player1 = new Widget::PlayerHuman(_sceneManager,_ball, _data,
 		_data->getPlayer(0), _pointStateMachine);
 
-	OGF::SceneController::getSingletonPtr()->addChild(player1);
-	player1->setPosition(12, 0, 0);
-	player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
+	OGF::SceneController::getSingletonPtr()->addChild(_player1);
+	_player1->setPosition(12, 0, 0);
+	_player1->rotate(Ogre::Vector3(0, 1, 0), Ogre::Degree(180));
 
-	Widget::PlayerBase *player2 = new Widget::PlayerCpu(_sceneManager, _ball, _data,
+	_player2 = new Widget::PlayerCpu(_sceneManager, _ball, _data,
 		_data->getPlayer(1), _pointStateMachine);
 
-	OGF::SceneController::getSingletonPtr()->addChild(player2);
-	player2->setPosition(-12, 0, 0);
+	OGF::SceneController::getSingletonPtr()->addChild(_player2);
+	_player2->setPosition(-12, 0, 0);
 }
 
 void
@@ -199,7 +199,24 @@ Match::_loadUserInterface()
 {
 	Widget::Score *scoreWidget = new Widget::Score(_data);
 	OGF::SceneController::getSingletonPtr()->addChild(scoreWidget);
+
+	_pointStateMachine->addListener(scoreWidget);
 	_data->addListener(scoreWidget);
+}
+
+void
+Match::_resetPoint()
+{
+	if (!_resetTimer) {
+		_resetTimer = new Ogre::Timer();
+		_resetTimer->reset();
+	} else {
+		if (_resetTimer->getMilliseconds() >= _configValue<float>("timeAfterPointBeforeResetMilliseconds")) {
+			delete _resetTimer;
+			_resetTimer = NULL;
+			_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());
+		}
+	}
 }
 
 void
@@ -297,7 +314,7 @@ Match::_positionToCourtPlace(const Ogre::Vector3 &position)
 }
 
 Match::Match(Data::Match *data)
-	:	_data(data)
+	:	_data(data), _resetTimer(NULL)
 {
 	_initConfigReader("scenes/match.cfg");
 }
@@ -379,6 +396,10 @@ Match::frameStarted(const Ogre::FrameEvent &event)
 		lastBallCheckResult = _checkBallStatus();
 	}
 
+	if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_AFTER_POINT) {
+		_resetPoint();
+	}
+
 	_checkCameraViewport();
 
 	return true;
@@ -416,8 +437,6 @@ Match::onChangeState(const Data::PointState::State &previousState, const Data::P
 				_data->wonPoint(_pointStateMachine->getWinner());
 				SoundPlayer::getSingletonPtr()->play(SOUND_AUDIENCE, false);
 			}
-
-			_pointStateMachine->reset(_data->getCurrentServer()->getId(), _data->getWhereToServe());
 			break;
 		default:
 			_ball->setVisible(true);

@@ -31,7 +31,7 @@ PlayerHuman::_calculateShotDestination()
 		_shotBuffer->getValue(Controls::LEFT);
 	Ogre::Real verticalBalance = _shotBuffer->getValue(Controls::UP) - 
 		_shotBuffer->getValue(Controls::DOWN);
-	
+
 	Ogre::Vector3 destination(((0.5 * length) * (1 + verticalBalance)) + errorRate, 0,
 		(halfWidth * horizontalBalance) + errorRate);
 
@@ -114,7 +114,7 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 				destination.x = std::min(destination.x, _configValue<float>("minimumDistanceToNet"));
 			}
 
-			setPosition(destination);
+			_motionManager->runDeltaTo(destination, timeSinceLastFrame);
 		}
 	}
 }
