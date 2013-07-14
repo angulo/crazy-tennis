@@ -56,12 +56,34 @@ PlayerMotion::_updateAnimationShotDrive(const Ogre::Real &timePassed)
 
 	if (!animation->hasEnded()) {
 		Ogre::Real percentRemaining = 1 - (animation->getTimePosition() / animation->getLength());
-		if (percentRemaining <= 0.5) {
+		if (percentRemaining <= 0.70) {
 			if (_driveHitSecondPhase) {
-				animation->addTime(timePassed * 40);
+				animation->addTime(timePassed * 30);
 			}
 		} else {
-			animation->addTime(timePassed * 40);
+			animation->addTime(timePassed * 20);
+		}
+	} else {
+		animation->setEnabled(false);
+		animation->setWeight(0);
+		_animations[ANIMATION_STAND]->setWeight(1.0);
+		animation->setTimePosition(0.0);
+	}
+}
+
+void
+PlayerMotion::_updateAnimationShotBack(const Ogre::Real &timePassed)
+{
+	Ogre::AnimationState *animation = _animations[ANIMATION_SHOT_BACK];
+
+	if (!animation->hasEnded()) {
+		Ogre::Real percentRemaining = 1 - (animation->getTimePosition() / animation->getLength());
+		if (percentRemaining <= 0.65) {
+			if (_driveHitSecondPhase) {
+				animation->addTime(timePassed * 30);
+			}
+		} else {
+			animation->addTime(timePassed * 20);
 		}
 	} else {
 		animation->setEnabled(false);
@@ -93,6 +115,7 @@ PlayerMotion::enter()
 	*/
 
 	_animations[ANIMATION_SHOT_DRIVE] = _entity->getAnimationState("shot_drive");
+	_animations[ANIMATION_SHOT_BACK] = _entity->getAnimationState("shot_back");
 	_animations[ANIMATION_STAND] = _entity->getAnimationState("stand");
 
 	_disableAllAnimations();
@@ -116,6 +139,9 @@ PlayerMotion::frameStarted(const Ogre::FrameEvent &event)
 				case ANIMATION_STAND:
 					_updateAnimationStand(event.timeSinceLastFrame);
 					break;
+				case ANIMATION_SHOT_BACK:
+					_updateAnimationShotBack(event.timeSinceLastFrame);
+					break;
 				case ANIMATION_SHOT_DRIVE:
 					_updateAnimationShotDrive(event.timeSinceLastFrame);
 					break;
@@ -137,17 +163,24 @@ PlayerMotion::stand()
 	_animations[ANIMATION_STAND]->setWeight(1.0);
 
 	_driveHitSecondPhase = false;
-	_backHitSecondPhase = false;
 }
 
 void
 PlayerMotion::driveHitStart()
 {
-	_animations[ANIMATION_SHOT_DRIVE]->setEnabled(true);
-	_animations[ANIMATION_SHOT_DRIVE]->setTimePosition(0.0);
+	Ogre::AnimationState *animation;
+
+	if (_player->getPosition().x * _player->getPosition().z > 0) {
+		animation = _animations[ANIMATION_SHOT_DRIVE];
+	} else {
+		animation = _animations[ANIMATION_SHOT_BACK];
+	}
+
+	animation->setEnabled(true);
+	animation->setTimePosition(0.0);
 	_animations[ANIMATION_STAND]->setWeight(0.2);
-	_animations[ANIMATION_SHOT_DRIVE]->setWeight(0.8);
-	_animations[ANIMATION_SHOT_DRIVE]->setLoop(false);
+	animation->setWeight(0.8);
+	animation->setLoop(false);
 	_driveHitSecondPhase = false;
 }
 

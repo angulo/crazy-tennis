@@ -41,6 +41,7 @@ namespace CrazyTennis {
 
 			enum Animation {
 				ANIMATION_RUN,
+				ANIMATION_SHOT_BACK,
 				ANIMATION_SHOT_DRIVE,
 				ANIMATION_SHOT_LOB,
 				ANIMATION_SIDE_STEP,
@@ -60,12 +61,12 @@ namespace CrazyTennis {
 				std::map<Animation, Ogre::AnimationState *> _animations;	
 
 				bool _driveHitSecondPhase;
-				bool _backHitSecondPhase;
 
 				void _disableAllAnimations();
 
 				void _updateAnimationStand(const Ogre::Real &timePassed);
 				void _updateAnimationShotDrive(const Ogre::Real &timePassed);
+				void _updateAnimationShotBack(const Ogre::Real &timePassed);
 
 			public:
 				
