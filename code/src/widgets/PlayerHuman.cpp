@@ -23,15 +23,17 @@ using namespace CrazyTennis::Widget;
 Ogre::Vector3 
 PlayerHuman::_calculateShotDestination()
 {
+	Ogre::Real errorRate = (drand48() / 10.0) + (drand48() * (1 - _playerData->getSkills()["precision"]) * _configValue<float>("maxDistanceError"));
+
 	Ogre::Real halfWidth(_configValue<float>("courtWidth") / 2.0);
 	Ogre::Real length(_configValue<float>("courtLength"));
-
 	Ogre::Real horizontalBalance = _shotBuffer->getValue(Controls::RIGHT) - 
 		_shotBuffer->getValue(Controls::LEFT);
 	Ogre::Real verticalBalance = _shotBuffer->getValue(Controls::UP) - 
 		_shotBuffer->getValue(Controls::DOWN);
 	
-	Ogre::Vector3 destination((0.5 * length) * (1 + verticalBalance), 0, halfWidth * horizontalBalance);
+	Ogre::Vector3 destination(((0.5 * length) * (1 + verticalBalance)) + errorRate, 0,
+		(halfWidth * horizontalBalance) + errorRate);
 
 	if (_ball->getPosition().x > 0) {
 		destination = (-1) * destination;
@@ -79,7 +81,7 @@ PlayerHuman::_canMoveTo(const Ogre::Vector3 &destination)
 bool
 PlayerHuman::_canShoot(const Controls::Action &action)
 {
-	return _shotBuffer->getValue(action) > 0;	
+	return _shotBuffer->getValue(action) > 0 && getPosition().squaredDistance(_ball->getPosition()) < 5;
 }
 
 void

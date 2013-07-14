@@ -25,7 +25,8 @@
 int
 main(int argc, char **argv)
 {
-	std::srand(unsigned(std::time(0)));
+	srand(unsigned(std::time(0)));
+	srand48(unsigned(std::time(0)));
 
 	OGF::ISceneFactory *sceneFactory = new CrazyTennis::SceneFactory();
 

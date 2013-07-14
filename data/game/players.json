@@ -20,9 +20,9 @@
 			"name": "Pokobic",
 			"skills": {
 				"speed": 0.9,
-				"precision": 0.5,
+				"precision": 0.7,
 				"power": 1.0,
-				"serve": 1.0
+				"serve": 0.9 
 			},
 			"visual": {
 				"tshirt": "white",
