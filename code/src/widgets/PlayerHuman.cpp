@@ -320,6 +320,9 @@ PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
 
 		_directionBlocked = true;
+		if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+			_motionManager->driveHitStart();
+		}
 	}
 
 	return true;
@@ -335,6 +338,9 @@ PlayerHuman::keyReleased(const OIS::KeyEvent &event)
 		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
 			if (_canShoot(action)) {
 				_shoot(action);
+			}
+			if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+				_motionManager->driveHitEnd();
 			}
 		}
 	}
@@ -354,6 +360,9 @@ PlayerHuman::buttonPressed(const OIS::JoyStickEvent &event, int button)
 		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
 
 		_directionBlocked = true;
+		if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+			_motionManager->driveHitStart();
+		}
 	}
 
 	return true;
@@ -369,6 +378,9 @@ PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
 			if (_canShoot(action)) {
 				_shoot(action);
+			}
+			if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+				_motionManager->driveHitEnd();
 			}
 		}
 	}

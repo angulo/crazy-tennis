@@ -32,9 +32,48 @@ PlayerMotion::_disableAllAnimations()
 	}
 }
 
+void
+PlayerMotion::_updateAnimationStand(const Ogre::Real &timePassed)
+{
+	Ogre::AnimationState *animation = _animations[ANIMATION_STAND];
+
+	if (!animation->hasEnded()) {
+		if (animation->getTimePosition() + timePassed >= animation->getLength()) {
+			animation->setTimePosition(0.05);
+		} else {
+			animation->addTime(timePassed);
+		}
+	} else {
+		animation->setEnabled(true);
+		animation->setTimePosition(0.0);
+	}
+}
+
+void
+PlayerMotion::_updateAnimationShotDrive(const Ogre::Real &timePassed)
+{
+	Ogre::AnimationState *animation = _animations[ANIMATION_SHOT_DRIVE];
+
+	if (!animation->hasEnded()) {
+		Ogre::Real percentRemaining = 1 - (animation->getTimePosition() / animation->getLength());
+		if (percentRemaining <= 0.5) {
+			if (_driveHitSecondPhase) {
+				animation->addTime(timePassed * 40);
+			}
+		} else {
+			animation->addTime(timePassed * 40);
+		}
+	} else {
+		animation->setEnabled(false);
+		animation->setWeight(0);
+		_animations[ANIMATION_STAND]->setWeight(1.0);
+		animation->setTimePosition(0.0);
+	}
+}
+
 PlayerMotion::PlayerMotion(Ogre::SceneManager *sceneManager, Data::Player *data, Ogre::SceneNode *node,
-	Ogre::Entity *entity, Widget::Ball *ball)
-		:	OGF::Widget(sceneManager), _data(data), _node(node), _entity(entity), _ball(ball)
+	Ogre::Entity *entity, Widget::Ball *ball, Widget::PlayerBase *player)
+		:	OGF::Widget(sceneManager), _data(data), _node(node), _entity(entity), _ball(ball), _player(player)
 {
 
 }
@@ -49,10 +88,11 @@ PlayerMotion::enter()
 {
 	/*
 	_animations[ANIMATION_RUN] = _entity->getAnimationState("run");
-	_animations[ANIMATION_SHOT_DRIVE] = _entity->getAnimationState("shot_drive");
 	_animations[ANIMATION_SHOT_LOB] = _entity->getAnimationState("shot_lob");
 	_animations[ANIMATION_SIDE_STEP] = _entity->getAnimationState("side_step");
 	*/
+
+	_animations[ANIMATION_SHOT_DRIVE] = _entity->getAnimationState("shot_drive");
 	_animations[ANIMATION_STAND] = _entity->getAnimationState("stand");
 
 	_disableAllAnimations();
@@ -68,15 +108,21 @@ PlayerMotion::exit()
 bool
 PlayerMotion::frameStarted(const Ogre::FrameEvent &event)
 {
-	if (!_animations[ANIMATION_STAND]->hasEnded()) {
-		if (_animations[ANIMATION_STAND]->getTimePosition() + event.timeSinceLastFrame >= _animations[ANIMATION_STAND]->getLength()) {
-			_animations[ANIMATION_STAND]->setTimePosition(0.05);
-		} else {
-			_animations[ANIMATION_STAND]->addTime(event.timeSinceLastFrame);
+	for (std::map<Animation, Ogre::AnimationState *>::iterator it = _animations.begin();
+		it != _animations.end(); it++) {
+
+		if (it->second->getEnabled()) {
+			switch(it->first) {
+				case ANIMATION_STAND:
+					_updateAnimationStand(event.timeSinceLastFrame);
+					break;
+				case ANIMATION_SHOT_DRIVE:
+					_updateAnimationShotDrive(event.timeSinceLastFrame);
+					break;
+				default:
+					break;
+			}
 		}
-	} else {
-		_animations[ANIMATION_STAND]->setEnabled(true);
-		_animations[ANIMATION_STAND]->setTimePosition(0.0);
 	}
 
 	return true;
@@ -89,12 +135,26 @@ PlayerMotion::stand()
 	_animations[ANIMATION_STAND]->setEnabled(true);
 	_animations[ANIMATION_STAND]->setTimePosition(0.0);
 	_animations[ANIMATION_STAND]->setWeight(1.0);
+
+	_driveHitSecondPhase = false;
+	_backHitSecondPhase = false;
 }
 
 void
-PlayerMotion::driveHit()
+PlayerMotion::driveHitStart()
 {
+	_animations[ANIMATION_SHOT_DRIVE]->setEnabled(true);
+	_animations[ANIMATION_SHOT_DRIVE]->setTimePosition(0.0);
+	_animations[ANIMATION_STAND]->setWeight(0.2);
+	_animations[ANIMATION_SHOT_DRIVE]->setWeight(0.8);
+	_animations[ANIMATION_SHOT_DRIVE]->setLoop(false);
+	_driveHitSecondPhase = false;
+}
 
+void
+PlayerMotion::driveHitEnd()
+{
+	_driveHitSecondPhase = true;
 }
 
 void

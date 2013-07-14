@@ -65,10 +65,7 @@ ShotBuffer::frameStarted(const Ogre::FrameEvent &event)
 			// Check minimum and maximum distance to hit
 		if (ballPlayerDistance < _maxRadius && ballPlayerDistance > _minRadius &&
 			// Check that the ball and the player are in the same side
-			((_ballPosition.x > 0 && _playerPosition.x > 0) || (_ballPosition.x < 0 && _playerPosition.x < 0)) &&
-			// Check that the player has the ball in front of/side of him
-			((_playerPosition.x < 0 && (_ballPosition.x >= _playerPosition.x)) ||
-			_playerPosition.y >= 0 && (_ballPosition.x <= _playerPosition.x))) {
+			((_ballPosition.x > 0 && _playerPosition.x > 0) || (_ballPosition.x < 0 && _playerPosition.x < 0))) { 
 				
 			_outOfRange = false;
 

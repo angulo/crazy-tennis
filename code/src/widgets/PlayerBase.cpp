@@ -96,7 +96,7 @@ PlayerBase::enter()
 	
 	static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0))->setMaterialName("shoter_" + clothes);
 	
-	_motionManager = new Widget::PlayerMotion(_sceneManager, _playerData, _sceneNode, static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0)), _ball);
+	_motionManager = new Widget::PlayerMotion(_sceneManager, _playerData, _sceneNode, static_cast<Ogre::Entity *>(_sceneNode->getAttachedObject(0)), _ball, this);
 
 	OGF::SceneController::getSingletonPtr()->addChild(_motionManager);
 }

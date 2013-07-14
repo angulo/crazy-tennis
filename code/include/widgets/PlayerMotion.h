@@ -16,6 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace CrazyTennis {
+	namespace Widget {
+		class PlayerMotion;
+	};
+};
+
 #ifndef _WIDGETS_PLAYER_MOTION_H_
 #define _WIDGETS_PLAYER_MOTION_H_
 
@@ -25,6 +31,7 @@
 
 #include "data/Player.h"
 #include "widgets/Ball.h"
+#include "widgets/PlayerBase.h"
 
 namespace CrazyTennis {
 
@@ -48,15 +55,22 @@ namespace CrazyTennis {
 				Ogre::Entity *_entity;
 
 				Widget::Ball *_ball;
+				Widget::PlayerBase *_player;
 
 				std::map<Animation, Ogre::AnimationState *> _animations;	
 
+				bool _driveHitSecondPhase;
+				bool _backHitSecondPhase;
+
 				void _disableAllAnimations();
+
+				void _updateAnimationStand(const Ogre::Real &timePassed);
+				void _updateAnimationShotDrive(const Ogre::Real &timePassed);
 
 			public:
 				
 				PlayerMotion(Ogre::SceneManager *sceneManager, Data::Player *data, Ogre::SceneNode *node,
-					Ogre::Entity *entity, Widget::Ball *ball);
+					Ogre::Entity *entity, Widget::Ball *ball, Widget::PlayerBase *player);
 				~PlayerMotion();
 
 				void enter();
@@ -71,7 +85,12 @@ namespace CrazyTennis {
 				/**
 				 * Hit the ball with a drive shot.
 				 */
-				void driveHit();
+				void driveHitStart();
+
+				/**
+				 * Hit the ball with a drive shot (second phase)
+				 */
+				void driveHitEnd();
 
 				/**
 				 * Hit the ball with a lob shot.

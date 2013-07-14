@@ -16,6 +16,12 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+namespace CrazyTennis {
+	namespace Widget {
+		class PlayerBase;
+	};
+};
+
 #ifndef _WIDGET_PLAYER_BASE_H_
 #define _WIDGET_PLAYER_BASE_H_
 
