@@ -119,31 +119,46 @@ PlayerHuman::_move(const Ogre::Real &timeSinceLastFrame)
 	}
 }
 
-bool
-PlayerHuman::_onActionDone(const Controls::Action &action)
+void
+PlayerHuman::_onActionStart(const Controls::Action &action)
 {
-	bool handled = false;
+	if (!_directionBlocked &&
+		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
 
-	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
-		_matchData->getCurrentServer() == _playerData;
-	bool inServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_SERVE &&
-		_matchData->getCurrentServer() == _playerData;
+		_directionBlocked = true;
 
-	switch(action) {
-		case Controls::SHOT_DRIVE:
-		case Controls::SHOT_LOB:
-			if (beforeServe) {
-				_pointStateMachine->onContinue(_playerData->getId());
-				_startToServe();
-				handled = true;
-			} else if (inServe) {
-				_serve();
-				handled = true;
-			}
-			break;
+		bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
+			_matchData->getCurrentServer() == _playerData;
+		bool inPoint = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT;
+
+		if (beforeServe) {
+			_pointStateMachine->onContinue(_playerData->getId());
+			_startToServe();
+		} else if (inPoint) {
+			_motionManager->driveHitStart();
+		}
 	}
-	
-	return handled;
+}
+
+void
+PlayerHuman::_onActionEnd(const Controls::Action &action)
+{
+	if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
+		bool inServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_SERVE &&
+			_matchData->getCurrentServer() == _playerData;
+		bool inPoint = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT;
+
+		if (inServe) {
+			_serve();
+		} else if (inPoint) {
+			if (_canShoot(action)) {
+				_shoot(action);
+			}
+			_motionManager->driveHitEnd();
+		}
+	}
+
+	_directionBlocked = false;
 }
 
 int
@@ -210,6 +225,7 @@ PlayerHuman::_serve()
 			_ball->shotTo(destination, angle, velocity);
 			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SERVE);
 			_pointStateMachine->onBallHit(_playerData->getId());
+			_motionManager->serveEnd();
 		}
 	}
 }
@@ -266,6 +282,7 @@ PlayerHuman::_startToServe()
 
 	_ball->setPosition(position);
 	_ball->setLinearVelocity(Ogre::Vector3(0, 7, 0));
+	_motionManager->serveStart();
 }
 
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
@@ -316,16 +333,7 @@ bool
 PlayerHuman::keyPressed(const OIS::KeyEvent &event)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-	Controls::Action action = inputAdapter->inputToAction(event);
-	
-	if (!_directionBlocked &&
-		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
-
-		_directionBlocked = true;
-		if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
-			_motionManager->driveHitStart();
-		}
-	}
+	_onActionStart(inputAdapter->inputToAction(event));
 
 	return true;
 }
@@ -334,20 +342,7 @@ bool
 PlayerHuman::keyReleased(const OIS::KeyEvent &event)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-	Controls::Action action = inputAdapter->inputToAction(event);
-
-	if (!_onActionDone(action)) {
-		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-			if (_canShoot(action)) {
-				_shoot(action);
-			}
-			if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
-				_motionManager->driveHitEnd();
-			}
-		}
-	}
-
-	_directionBlocked = false;
+	_onActionEnd(inputAdapter->inputToAction(event));
 
 	return true;
 }
@@ -356,17 +351,8 @@ bool
 PlayerHuman::buttonPressed(const OIS::JoyStickEvent &event, int button)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-	Controls::Action action = inputAdapter->inputToAction(event, button);
+	_onActionStart(inputAdapter->inputToAction(event, button));
 	
-	if (!_directionBlocked &&
-		(action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB)) {
-
-		_directionBlocked = true;
-		if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
-			_motionManager->driveHitStart();
-		}
-	}
-
 	return true;
 }
 
@@ -374,20 +360,7 @@ bool
 PlayerHuman::buttonReleased(const OIS::JoyStickEvent &event, int button)
 {
 	InputAdapter *inputAdapter = InputAdapter::getSingletonPtr();
-	Controls::Action action = inputAdapter->inputToAction(event, button);
-
-	if (!_onActionDone(action)) {
-		if (action == Controls::SHOT_DRIVE || action == Controls::SHOT_LOB) {
-			if (_canShoot(action)) {
-				_shoot(action);
-			}
-			if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
-				_motionManager->driveHitEnd();
-			}
-		}
-	}
-
-	_directionBlocked = false;
+	_onActionEnd(inputAdapter->inputToAction(event, button));
 
 	return true;
 }

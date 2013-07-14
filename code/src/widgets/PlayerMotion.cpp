@@ -33,6 +33,28 @@ PlayerMotion::_disableAllAnimations()
 }
 
 void
+PlayerMotion::_updateAnimationServe(const Ogre::Real &timePassed)
+{
+	Ogre::AnimationState *animation = _animations[ANIMATION_SERVE];
+
+	if (!animation->hasEnded()) {
+		Ogre::Real percentRemaining = 1 - (animation->getTimePosition() / animation->getLength());
+		if (percentRemaining <= 0.50) {
+			if (_driveHitSecondPhase) {
+				animation->addTime(timePassed * 50);
+			}
+		} else {
+			animation->addTime(timePassed * 10);
+		}
+	} else {
+		animation->setEnabled(false);
+		animation->setWeight(0);
+		_animations[ANIMATION_STAND]->setWeight(1.0);
+		animation->setTimePosition(0.0);
+	}
+}
+
+void
 PlayerMotion::_updateAnimationStand(const Ogre::Real &timePassed)
 {
 	Ogre::AnimationState *animation = _animations[ANIMATION_STAND];
@@ -114,6 +136,7 @@ PlayerMotion::enter()
 	_animations[ANIMATION_SIDE_STEP] = _entity->getAnimationState("side_step");
 	*/
 
+	_animations[ANIMATION_SERVE] = _entity->getAnimationState("serve");
 	_animations[ANIMATION_SHOT_DRIVE] = _entity->getAnimationState("shot_drive");
 	_animations[ANIMATION_SHOT_BACK] = _entity->getAnimationState("shot_back");
 	_animations[ANIMATION_STAND] = _entity->getAnimationState("stand");
@@ -136,6 +159,9 @@ PlayerMotion::frameStarted(const Ogre::FrameEvent &event)
 
 		if (it->second->getEnabled()) {
 			switch(it->first) {
+				case ANIMATION_SERVE:
+					_updateAnimationServe(event.timeSinceLastFrame);
+					break;
 				case ANIMATION_STAND:
 					_updateAnimationStand(event.timeSinceLastFrame);
 					break;
@@ -152,6 +178,25 @@ PlayerMotion::frameStarted(const Ogre::FrameEvent &event)
 	}
 
 	return true;
+}
+
+void
+PlayerMotion::serveStart()
+{
+	Ogre::AnimationState *animation = _animations[ANIMATION_SERVE];
+
+	animation->setEnabled(true);
+	animation->setTimePosition(0.0);
+	_animations[ANIMATION_STAND]->setWeight(0.1);
+	animation->setWeight(0.9);
+	animation->setLoop(false);
+	_driveHitSecondPhase = false;
+}
+
+void
+PlayerMotion::serveEnd()
+{
+	_driveHitSecondPhase = true;
 }
 
 void

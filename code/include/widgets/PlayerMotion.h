@@ -41,6 +41,7 @@ namespace CrazyTennis {
 
 			enum Animation {
 				ANIMATION_RUN,
+				ANIMATION_SERVE,
 				ANIMATION_SHOT_BACK,
 				ANIMATION_SHOT_DRIVE,
 				ANIMATION_SHOT_LOB,
@@ -64,6 +65,7 @@ namespace CrazyTennis {
 
 				void _disableAllAnimations();
 
+				void _updateAnimationServe(const Ogre::Real &timePassed);
 				void _updateAnimationStand(const Ogre::Real &timePassed);
 				void _updateAnimationShotDrive(const Ogre::Real &timePassed);
 				void _updateAnimationShotBack(const Ogre::Real &timePassed);
@@ -77,6 +79,17 @@ namespace CrazyTennis {
 				void enter();
 				void exit();
 				bool frameStarted(const Ogre::FrameEvent &event);
+
+				
+				/**
+				 * Start the serve throwing the ball up.
+				 */
+				void serveStart();
+
+				/**
+				 * Hit the ball serving.
+				 */
+				void serveEnd();
 
 				/**
 				 * Set the player in a standing position.

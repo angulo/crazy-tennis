@@ -77,12 +77,18 @@ namespace CrazyTennis {
 				void _move(const Ogre::Real &timeSinceLastFrame);
 
 				/**
-				 * Process the result of an action.
+				 * Process the start of an action.
 				 *
-				 * @param Action done.
-				 * @return true if the action is handled, false otherwise
+				 * @param action Action starting.
 				 */
-				bool _onActionDone(const Controls::Action &action);
+				void _onActionStart(const Controls::Action &action);
+
+				/**
+				 * Process the end of an action.
+				 *
+				 * @param action Action ending.
+				 */
+				void _onActionEnd(const Controls::Action &action);
 
 				/**
 				 * Select the shot to be executed depending on the shot buffer status
