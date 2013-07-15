@@ -42,6 +42,12 @@ PlayerHuman::_calculateShotDestination()
 	return destination;
 }
 
+Ogre::Vector3
+PlayerHuman::_calculateServeDestination()
+{
+	return _serverMark->getPosition();
+}
+
 bool
 PlayerHuman::_canMoveTo(const Ogre::Vector3 &destination)
 {
@@ -190,47 +196,6 @@ PlayerHuman::_selectShot(const Controls::Action &action, const int &availableSho
 }
 
 void
-PlayerHuman::_serve()
-{
-	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
-
-	Ogre::Vector3 origin = _ball->getPosition();
-	Ogre::Vector3 destination = _serverMark->getPosition();
-
-	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
-		->setDestination(destination)
-		->calculateSet(200);
-	
-	Dynamics::CalculationSet possibleShots;
-
-	for (int i = 0; i < allShots.size(); i++) {
-		Ogre::Real angle = allShots[i].first;
-		Ogre::Real velocity = allShots[i].second;
-
-		// Discard impossible angles and directions
-		if (!isnan(velocity) && !isnan(angle) && velocity > 0) {
-			possibleShots.push_back(allShots[i]);
-		}
-	}
-
-	int availableShots = possibleShots.size();
-
-	if (availableShots > 0) {
-		int shot = (1 - _playerData->getSkills()["serve"]) * 10;
-
-		if (shot != -1) {
-			Ogre::Real angle = possibleShots[shot].first;
-			Ogre::Real velocity = possibleShots[shot].second;
-
-			_ball->shotTo(destination, angle, velocity);
-			SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SERVE);
-			_pointStateMachine->onBallHit(_playerData->getId());
-			_motionManager->serveEnd();
-		}
-	}
-}
-
-void
 PlayerHuman::_shoot(const Controls::Action &action)
 {
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
@@ -267,22 +232,6 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}
-}
-
-void
-PlayerHuman::_startToServe()
-{
-	Ogre::Vector3 position = getPosition();
-
-	position.x += getPosition().x > 0 ? - _configValue<float>("ballServeXOffset") : 
-		_configValue<float>("ballServeXOffset");
-	position.y = 1;
-	position.z += getPosition().x > 0 ? - _configValue<float>("ballServeZOffset") : 
-		_configValue<float>("ballServeZOffset");
-
-	_ball->setPosition(position);
-	_ball->setLinearVelocity(Ogre::Vector3(0, 7, 0));
-	_motionManager->serveStart();
 }
 
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
@@ -372,7 +321,7 @@ PlayerHuman::onChangeState(const Data::PointState::State &previousState, const D
 
 	switch(currentState) {
 		case Data::PointState::STATE_IN_SERVE:
-			_directionBlocked = true;
+			_directionBlocked =_matchData->getCurrentServer() == _playerData;
 			break;
 		default:
 			_directionBlocked = false;

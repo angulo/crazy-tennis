@@ -48,13 +48,54 @@ PlayerCpu::_endHit()
 	_shot();
 }
 
+Ogre::Vector3
+PlayerCpu::_calculateShotDestination()
+{
+	Ogre::Real errorRate = (drand48() / 10.0) + (drand48() * (1 - _playerData->getSkills()["precision"]) * _configValue<float>("maxDistanceError"));
+
+	Ogre::Real halfWidth(_configValue<float>("courtWidth") / 2.0);
+	Ogre::Real length(_configValue<float>("courtLength"));
+	Ogre::Real horizontalBalance = drand48() - drand48();
+	Ogre::Real verticalBalance = drand48() - drand48();
+
+	Ogre::Vector3 destination(((0.5 * length) * (1 + verticalBalance)) + errorRate, 0,
+		(halfWidth * horizontalBalance) + errorRate);
+
+	if (_ball->getPosition().x > 0) {
+		destination = (-1) * destination;
+	}
+
+	return destination;
+}
+
+Ogre::Vector3
+PlayerCpu::_calculateServeDestination()
+{
+	Ogre::Real initialX = _configValue<float>("serveXCenter");
+	Ogre::Real initialZ = _configValue<float>("serveZCenter");
+	Ogre::Vector3 position(initialX, 0.10, initialZ);
+
+	if (_playerData->getId() == _matchData->getPlayer(0)->getId()) {
+		if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
+			position.x = -initialX;
+			position.z = -initialZ;
+		} else {
+			position.x = -initialX;
+		}
+	} else if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_RIGHT_SERVE_AREA) {
+		position.z = -initialZ;
+	}
+
+	return position;
+}
+
 void
 PlayerCpu::_shot()
 {
 	Ogre::Vector3 ballPosition = _ball->getPosition();
 	Ogre::Vector3 origin = ballPosition;
 
-	Ogre::Vector3 destination(6, 0, 0);
+	Ogre::Vector3 destination = _calculateShotDestination();
 
 	Dynamics::ShotSimulator *simulator = new Dynamics::ShotSimulator();
 	Dynamics::CalculationSet allShots = simulator->setOrigin(origin)
@@ -76,7 +117,7 @@ PlayerCpu::_shot()
 	int availableShots = possibleShots.size();
 
 	if (availableShots > 0) {
-		int shot = availableShots / 3;
+		int shot = std::max(0.0, ((availableShots - 2) * drand48()) - 1);
 		Ogre::Real angle = possibleShots[shot].first;
 		Ogre::Real velocity = possibleShots[shot].second;
 
@@ -113,7 +154,19 @@ PlayerCpu::exit()
 bool
 PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 {
-	if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+	bool beforeServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_BEFORE_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
+	bool inServe = _pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_SERVE &&
+		_matchData->getCurrentServer() == _playerData;
+	
+	if (beforeServe) {
+		_pointStateMachine->onContinue(_playerData->getId());
+		_startToServe();
+	} else if (inServe) {
+		if (_ball->getPosition().y > 3.2) {
+			_serve();	
+		}
+	} else if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
 		if (_pointStateMachine->getTurn() == _playerData->getId()) {
 			if (!_hitting) {
 				Ogre::Vector3 bounceDirectionIncrement = _ball->getDirection().normalisedCopy() * 3;

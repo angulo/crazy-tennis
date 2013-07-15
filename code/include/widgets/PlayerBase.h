@@ -58,14 +58,27 @@ namespace CrazyTennis {
 				Ogre::Real _speed;
 				Ogre::Real _getSpeed() const;
 
+				/**
+				 * Calculate the serve destination
+				 *
+				 * @return Destination of the serve.
+				 */
+				virtual Ogre::Vector3 _calculateServeDestination() = 0;
+
 				void _setInReturnState();
 				void _setInServeState();
+
+				/**
+				 * Throw the ball up to start the serve.
+				 */
+				void _startToServe();
+				void _serve();
 
 			public:
 
 				PlayerBase(Ogre::SceneManager *sceneManager, Widget::Ball *ball,
 					Data::Match *matchData, Data::Player *playerData, Data::PointState::Machine *pointStateMachine);
-				~PlayerBase();
+				virtual ~PlayerBase();
 
 				virtual void enter();
 				void exit();

@@ -101,11 +101,6 @@ namespace CrazyTennis {
 				int _selectShot(const Controls::Action &action, const int &availableShots);
 
 				/**
-				 * Serve the ball taking in consideration the serve direction and ball height.
-				 */
-				void _serve();
-
-				/**
 				 * Execute a shot by hitting the ball in the appropiate direction,
 				 * depending on the current shot buffer status.
 				 *
@@ -113,11 +108,6 @@ namespace CrazyTennis {
 				 */
 				void _shoot(const Controls::Action &action);
 
-				/**
-				 * Throw the ball up to start the serve.
-				 */
-				void _startToServe();
-			
 			public:
 				
 				PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,

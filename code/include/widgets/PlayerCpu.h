@@ -43,6 +43,8 @@ namespace CrazyTennis {
 				void _startHit();
 				void _endHit();
 
+				Ogre::Vector3 _calculateShotDestination();
+				Ogre::Vector3 _calculateServeDestination();
 				void _shot();
 			
 			public:
