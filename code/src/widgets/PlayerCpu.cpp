@@ -73,7 +73,7 @@ PlayerCpu::_calculateServeDestination()
 {
 	Ogre::Real initialX = _configValue<float>("serveXCenter");
 	Ogre::Real initialZ = _configValue<float>("serveZCenter");
-	Ogre::Vector3 position(initialX, 0.10, initialZ);
+	Ogre::Vector3 position(initialX, 0, initialZ);
 
 	if (_playerData->getId() == _matchData->getPlayer(0)->getId()) {
 		if (_matchData->getWhereToServe() == Data::PointState::BOUNCE_IN_LEFT_SERVE_AREA) {
@@ -125,6 +125,8 @@ PlayerCpu::_shot()
 		SoundPlayer::getSingletonPtr()->play(SOUND_BALL_SHOT);
 		_pointStateMachine->onBallHit(_playerData->getId());
 	}
+
+	delete simulator;
 }
 
 PlayerCpu::PlayerCpu(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
@@ -166,7 +168,9 @@ PlayerCpu::frameStarted(const Ogre::FrameEvent &event)
 		if (_ball->getPosition().y > 3.2) {
 			_serve();	
 		}
-	} else if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT) {
+	} else if (_pointStateMachine->getCurrentState() == Data::PointState::STATE_IN_POINT ||
+		_pointStateMachine->getCurrentState() == Data::PointState::STATE_WAITING_FOR_SERVE_RESULT) {
+
 		if (_pointStateMachine->getTurn() == _playerData->getId()) {
 			if (!_hitting) {
 				Ogre::Vector3 bounceDirectionIncrement = _ball->getDirection().normalisedCopy() * 3;

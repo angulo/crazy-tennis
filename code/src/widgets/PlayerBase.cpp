@@ -113,7 +113,7 @@ PlayerBase::_serve()
 	int availableShots = possibleShots.size();
 
 	if (availableShots > 0) {
-		int shot = (1 - _playerData->getSkills()["serve"]) * 10;
+		int shot = (1 - _playerData->getSkills()["serve"]) * 30;
 
 		if (shot != -1) {
 			Ogre::Real angle = possibleShots[shot].first;
@@ -125,6 +125,8 @@ PlayerBase::_serve()
 			_motionManager->serveEnd();
 		}
 	}
+
+	delete simulator;
 }
 
 

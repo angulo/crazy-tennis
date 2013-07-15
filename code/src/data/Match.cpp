@@ -56,7 +56,7 @@ Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Playe
 {
 	_players.push_back(playerA);
 	_players.push_back(playerB);
-	_currentServer = playerB;
+	_currentServer = playerA;
 
 	for (int i = 0; i < games; i++) {
 		SetScore setScore;

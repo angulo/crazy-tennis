@@ -7,7 +7,7 @@
 				"speed": 0.6,
 				"precision": 0.6,
 				"power": 0.7,
-				"serve": 0.7
+				"serve": 0.8
 			},
 			"visual": {
 				"tshirt": "green",
@@ -37,7 +37,7 @@
 				"speed": 0.4,
 				"precision": 1.0,
 				"power": 0.7,
-				"server": 0.7
+				"server": 0.8
 			},
 			"visual": {
 				"tshirt": "black",
@@ -67,7 +67,7 @@
 				"speed": 0.4,
 				"precision": 0.5,
 				"power": 0.8 ,
-				"serve": 0.7
+				"serve": 0.8
 			},
 			"visual": {
 				"tshirt": "blue",

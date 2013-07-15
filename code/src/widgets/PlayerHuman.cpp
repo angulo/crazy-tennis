@@ -232,6 +232,8 @@ PlayerHuman::_shoot(const Controls::Action &action)
 			_pointStateMachine->onBallHit(_playerData->getId());
 		}
 	}
+
+	delete simulator;
 }
 
 PlayerHuman::PlayerHuman(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,
