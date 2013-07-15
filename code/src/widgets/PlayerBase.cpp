@@ -45,7 +45,7 @@ PlayerBase::_setInReturnState()
 	}
 
 	setPosition(returnPosition);
-
+	_motionManager->stand();
 }
 
 void 
@@ -67,6 +67,7 @@ PlayerBase::_setInServeState()
 	}
 
 	setPosition(servePosition);
+	_motionManager->stand();
 }
 
 PlayerBase::PlayerBase(Ogre::SceneManager *sceneManager, Widget::Ball *ball, Data::Match *matchData,

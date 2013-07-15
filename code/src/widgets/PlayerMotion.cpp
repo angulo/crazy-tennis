@@ -90,6 +90,7 @@ PlayerMotion::_updateAnimationShotDrive(const Ogre::Real &timePassed)
 		animation->setWeight(0);
 		_animations[ANIMATION_STAND]->setWeight(1.0);
 		animation->setTimePosition(0.0);
+		stand();
 	}
 }
 
@@ -112,6 +113,7 @@ PlayerMotion::_updateAnimationShotBack(const Ogre::Real &timePassed)
 		animation->setWeight(0);
 		_animations[ANIMATION_STAND]->setWeight(1.0);
 		animation->setTimePosition(0.0);
+		stand();
 	}
 }
 

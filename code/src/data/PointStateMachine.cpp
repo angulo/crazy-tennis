@@ -100,6 +100,12 @@ Machine::setTurn(const PlayerId &playerToHit)
 	_turn = playerToHit;
 }
 
+CrazyTennis::Data::PlayerId
+Machine::getTurn() const
+{
+	return _turn;
+}
+
 void
 Machine::onBallHit(const PlayerId &hitter)
 {

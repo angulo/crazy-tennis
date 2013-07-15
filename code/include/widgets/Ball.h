@@ -44,7 +44,8 @@ namespace CrazyTennis {
 			protected:
 				
 				std::list<Ogre::SceneNode *> _ghosts;
-				Ogre::Vector3 _nextBouncePosition;
+				Ogre::Vector3 _direction;
+				Ogre::Vector3 _whereToBounce;
 
 				void _createGhosts();
 				void _updateGhosts();
@@ -67,6 +68,7 @@ namespace CrazyTennis {
 
 				void shotTo(const Ogre::Vector3 destination, const Ogre::Real &angle, const Ogre::Real &velocity);
 
+				Ogre::Vector3 getDirection() const;
 				Ogre::Vector3 getWhereToBounce() const;
 		};
 	};

@@ -115,6 +115,11 @@ namespace CrazyTennis {
 					void setTurn(const PlayerId &playerToHit);
 
 					/**
+					 * Get the player to hit.
+					 */
+					PlayerId getTurn() const;
+
+					/**
 					 * Handle a ball hit.
 					 *
 					 * @param hitter Player who hit the ball.

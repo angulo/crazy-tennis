@@ -34,9 +34,16 @@ namespace CrazyTennis {
 		class PlayerCpu : public PlayerBase {
 			
 			protected:
+				
+				bool _hitting;
 
-				OGF::SceneId _shotBufferId;
-				Widget::ShotBuffer *_shotBuffer;
+				bool _canStartHit();
+				bool _canEndHit();
+
+				void _startHit();
+				void _endHit();
+
+				void _shot();
 			
 			public:
 				
@@ -48,7 +55,6 @@ namespace CrazyTennis {
 				void exit();
 
 				bool frameStarted(const Ogre::FrameEvent &event);
-				bool keyPressed(const OIS::KeyEvent &event);
 		};
 	};
 };

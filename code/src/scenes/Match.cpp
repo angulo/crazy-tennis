@@ -261,7 +261,7 @@ Match::_checkBallStatus()
 		}
 	}
 
-	if (bounce) {
+	if (bounce || abs(ballPosition.x) > 25) {
 		Data::PlayerId courtOwner = ballPosition.x > 0 ?
 			_data->getPlayer(0)->getId() : _data->getPlayer(1)->getId();
 		_pointStateMachine->onBallBounce(courtOwner, _positionToCourtPlace(ballPosition));
@@ -273,13 +273,13 @@ Match::_checkBallStatus()
 void
 Match::_checkCameraViewport()
 {
-	Ogre::Vector3 ballPosition = _ball->getPosition();
-	Ogre::Real ballOutOffset = ballPosition.x - _configValue<float>("court_half_length") 
-		+ _configValue<float>("ballOffsetFromEndLineToMoveCamera");
+	Ogre::Vector3 playerPosition = _player1->getPosition();
+	Ogre::Real offset = playerPosition.x - _configValue<float>("court_half_length") 
+		+ _configValue<float>("offsetFromEndLineToMoveCamera");
 
-	if (ballOutOffset > 0) {
+	if (offset > 0) {
 		_topCamera->setPosition(
-			std::min(_configValue<float>("camera_x") + (0.5f * ballOutOffset), _configValue<float>("camera_x") + _configValue<float>("maxCameraOffset")),
+			std::min(_configValue<float>("camera_x") + (0.5f * offset), _configValue<float>("camera_x") + _configValue<float>("maxCameraOffset")),
 			_configValue<float>("camera_y"), _configValue<float>("camera_z"));
 
 	} else {
