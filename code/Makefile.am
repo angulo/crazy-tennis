@@ -28,6 +28,7 @@ CrazyTennis_SOURCES = \
 	src/data/Player.cpp \
 	src/data/PointStateListener.cpp \
 	src/data/PointStateMachine.cpp \
+	src/data/RecordsStorage.cpp \
 	src/data/Tournament.cpp \
 	src/data/TournamentFactory.cpp \
 	src/dynamics/ShotSimulator.cpp \
@@ -35,6 +36,7 @@ CrazyTennis_SOURCES = \
 	src/scenes/Splash.cpp \
 	src/scenes/menus/Base.cpp \
 	src/scenes/menus/Main.cpp \
+	src/scenes/menus/Records.cpp \
 	src/scenes/menus/SettingsControls.cpp \
 	src/scenes/menus/SettingsMain.cpp \
 	src/scenes/menus/SelectPlayer.cpp \

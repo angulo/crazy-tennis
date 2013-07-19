@@ -26,6 +26,7 @@
 #include "data/MatchListener.h"
 #include "data/Player.h"
 #include "data/PointState.h"
+#include "data/RecordsStorage.h"
 #include "data/Types.h"
 
 namespace CrazyTennis {
@@ -59,6 +60,7 @@ namespace CrazyTennis {
 				bool _isGameFinished() const;
 				bool _isSetFinished() const;
 				bool _isMatchFinished() const;
+				void _addGameToRecords(Player *player) const;
 				
 			public:
 				

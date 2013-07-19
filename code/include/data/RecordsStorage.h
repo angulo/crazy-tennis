@@ -1,5 +1,5 @@
 /* 
- * Scenes.h -- Scenes header file to include all of them with a single include
+ * RecordsStorage.h -- Records data storage.
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,16 +16,40 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENES_SCENES_H_
-#define _SCENES_SCENES_H_
 
-#include "scenes/Match.h"
-#include "scenes/menus/Main.h"
-#include "scenes/menus/Records.h"
-#include "scenes/menus/SettingsControls.h"
-#include "scenes/menus/SettingsMain.h"
-#include "scenes/menus/SelectPlayer.h"
-#include "scenes/Splash.h"
-#include "widgets/Score.h"
+#ifndef _RECORDS_STORAGE_H
+#define _RECORDS_STORAGE_H
+
+#define RECORDS_FILE "../data/records.dat"
+
+#include <list>
+#include <string>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+namespace CrazyTennis {
+	
+	namespace Data {
+
+		typedef std::list<std::pair<std::string, long int> > RecordsList;
+		
+		class RecordsStorage {
+
+			private:
+				
+				std::fstream _storedFile;
+				void _save(RecordsList records);
+			
+			public:
+
+				RecordsStorage();
+				~RecordsStorage();
+
+				RecordsList read();
+				void addGamePoint(const std::string& name);
+		};
+	};
+};
 
 #endif

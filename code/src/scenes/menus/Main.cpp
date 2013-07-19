@@ -38,10 +38,11 @@ Main::_processCurrentOption()
 		case OPTION_PLAY:
 			OGF::SceneController::getSingletonPtr()->push(new CrazyTennis::Scene::Menu::SelectPlayer());
 			break;
+		case OPTION_RECORDS:
+			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_RECORDS);
+			break;
 		case OPTION_SETTINGS:
 			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_SETTINGS_MAIN);
-			break;
-		case OPTION_RECORDS:
 			break;
 		case OPTION_EXIT:
 			_exit = true;

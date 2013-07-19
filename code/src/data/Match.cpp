@@ -49,6 +49,13 @@ Match::_isMatchFinished() const
 	return _matchScore.end() - _currentSet == 1 && _isSetFinished();
 }
 
+void
+Match::_addGameToRecords(Player *player) const
+{
+	RecordsStorage *recordsStorage = new RecordsStorage();
+	recordsStorage->addGamePoint(player->getName());
+}
+
 Match::Match(const short &games, const bool &hasTiebreak, Player *playerA, Player *playerB)
 	:	_hasTiebreak(hasTiebreak), _inTiebreak(false), _firstServe(true), _isFinished(false),
 		_whereToServe(PointState::BOUNCE_IN_RIGHT_SERVE_AREA)
@@ -84,6 +91,7 @@ Match::wonPoint(const PlayerId &pointWinner)
 	_gameScore[playerOffset] += 1;
 
 	if (_isGameFinished()) {
+		_addGameToRecords(_players[playerOffset]);
 		_gameScore[0] = _gameScore[1] = 0;
 		(*_currentSet)[playerOffset] += 1;
 

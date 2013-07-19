@@ -32,6 +32,9 @@ SceneFactory::create(OGF::SceneId sceneId)
 		case Scene::MENU_MAIN:
 			scene = new Scene::Menu::Main();
 			break;
+		case Scene::MENU_RECORDS:
+			scene = new Scene::Menu::Records();
+			break;
 		case Scene::MENU_SELECT_PLAYER:
 			scene = new Scene::Menu::SelectPlayer();
 			break;

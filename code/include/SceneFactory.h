@@ -29,17 +29,18 @@ namespace CrazyTennis {
 		enum { 
 			SPLASH = 0,
 			MENU_MAIN = 1,
-			MENU_SELECT_PLAYER = 2,
-			MENU_SETTINGS_MAIN = 3,
-			MENU_SETTINGS_CONTROLS = 4,
-			MATCH = 5,
+			MENU_RECORDS = 2,
+			MENU_SELECT_PLAYER = 3,
+			MENU_SETTINGS_MAIN = 4,
+			MENU_SETTINGS_CONTROLS = 5,
+			MATCH = 6,
 		};
 	};
 
 	namespace Widget {
 		enum {
-			BALL = 6,
-			SCORE = 7
+			BALL = 7,
+			SCORE = 8
 		};
 	};
 

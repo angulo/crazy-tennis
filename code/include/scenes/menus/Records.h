@@ -1,5 +1,5 @@
 /* 
- * Scenes.h -- Scenes header file to include all of them with a single include
+ * Records.h -- Records menu header file.
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,16 +16,42 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENES_SCENES_H_
-#define _SCENES_SCENES_H_
+#ifndef _SCENE_MENU_RECORDS_MAIN_H_
+#define _SCENE_MENU_RECORDS_MAIN_H_
 
-#include "scenes/Match.h"
-#include "scenes/menus/Main.h"
-#include "scenes/menus/Records.h"
-#include "scenes/menus/SettingsControls.h"
-#include "scenes/menus/SettingsMain.h"
-#include "scenes/menus/SelectPlayer.h"
-#include "scenes/Splash.h"
-#include "widgets/Score.h"
+#include <OGF/OGF.h>
+
+#include "data/RecordsStorage.h"
+#include "scenes/menus/Base.h"
+#include "SceneFactory.h"
+
+namespace CrazyTennis {
+	
+	namespace Scene {
+		
+		namespace Menu {
+
+			class Records: public Base {
+				
+				enum Options {
+					OPTION_BACK = 0
+				};
+				
+				protected:
+					
+					CEGUI::Window * _createRecordEntry(const std::string name, const int &points, const int &number);
+					void _processCurrentOption();
+					void _paintRecords();
+
+				public:
+					
+					Records();
+					~Records();
+
+					void enter();
+			};
+		};
+	};
+};
 
 #endif
