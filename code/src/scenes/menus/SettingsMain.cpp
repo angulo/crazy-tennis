@@ -27,8 +27,6 @@ SettingsMain::_processCurrentOption()
 		case OPTION_CONTROLS:
 			OGF::SceneController::getSingletonPtr()->push(CrazyTennis::Scene::MENU_SETTINGS_CONTROLS);
 			break;
-		case OPTION_SOUND:
-			break;
 		case OPTION_BACK:
 			OGF::SceneController::getSingletonPtr()->pop();
 			break;
@@ -60,8 +58,6 @@ SettingsMain::enter()
 
 	_optionsMap[OPTION_CONTROLS] = _createOptionText("CONTROLS", _configValue<std::string>("font"), fontColor,
 		_configValue<int>("controls_x"), _configValue<int>("controls_y"));
-	_optionsMap[OPTION_SOUND] = _createOptionText("SOUND", _configValue<std::string>("font"), fontColor,
-		_configValue<int>("sound_x"), _configValue<int>("sound_y"));
 	_optionsMap[OPTION_BACK] = _createOptionText("BACK", _configValue<std::string>("font"), fontColor,
 		_configValue<int>("back_x"), _configValue<int>("back_y"));
 

@@ -34,8 +34,7 @@ namespace CrazyTennis {
 				
 				enum Option {
 					OPTION_CONTROLS = 0,
-					OPTION_SOUND = 1,
-					OPTION_BACK = 2
+					OPTION_BACK = 1
 				};
 
 				protected:
